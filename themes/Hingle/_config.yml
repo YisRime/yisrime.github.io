@@ -8,7 +8,7 @@ social: # 社交链接
   - title: '首页'
     icon: 'home'
     link: 'https://yisrime.link/'
-background: 'https://api.paugram.com/wallpaper?source=gh' # 主题背景
+background: '/static/img/hutao.jpg' # 主题背景
 menu: # 页眉菜单项目
   '关于我': /about
   '朋友们': /friends
