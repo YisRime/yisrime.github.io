@@ -14,15 +14,21 @@ html {
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.6;
-  color: var(--color-text);
-  background-color: var(--color-background);
-  overflow-x: hidden;
+  color: #333;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  overflow: hidden;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 #app {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 
 /* 链接样式 */
