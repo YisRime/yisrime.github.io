@@ -9,8 +9,8 @@
       <div class="contact-content">
         <div class="contact-info">
           <div class="info-card">
-            <h3>让我们开始对话</h3>
-            <p>我很乐意听到您的想法并讨论可能的合作机会。无论是项目咨询、技术交流还是简单的问候，都欢迎联系我。</p>
+            <h3>联系方式</h3>
+            <p>选择最适合您的联系方式</p>
             
             <div class="contact-methods">
               <div class="contact-method">
@@ -22,18 +22,18 @@
               </div>
               
               <div class="contact-method">
-                <div class="method-icon">💬</div>
+                <div class="method-icon">🐙</div>
                 <div class="method-content">
-                  <h4>微信</h4>
-                  <span>YisRime2024</span>
+                  <h4>GitHub</h4>
+                  <a href="https://github.com/yisrime" target="_blank">@yisrime</a>
                 </div>
               </div>
               
               <div class="contact-method">
-                <div class="method-icon">📱</div>
+                <div class="method-icon">💬</div>
                 <div class="method-content">
-                  <h4>QQ</h4>
-                  <span>123456789</span>
+                  <h4>微信</h4>
+                  <span>yisrime_wechat</span>
                 </div>
               </div>
             </div>
@@ -42,7 +42,7 @@
               <h4>社交媒体</h4>
               <div class="social-icons">
                 <a href="https://github.com/yisrime" target="_blank" class="social-link">
-                  <span class="social-icon">📂</span>
+                  <span class="social-icon">🐙</span>
                   <span>GitHub</span>
                 </a>
                 <a href="#" target="_blank" class="social-link">
@@ -52,10 +52,6 @@
                 <a href="#" target="_blank" class="social-link">
                   <span class="social-icon">🐦</span>
                   <span>Twitter</span>
-                </a>
-                <a href="#" target="_blank" class="social-link">
-                  <span class="social-icon">📝</span>
-                  <span>Blog</span>
                 </a>
               </div>
             </div>
@@ -71,10 +67,10 @@
                 <label for="name">姓名 *</label>
                 <input 
                   type="text" 
-                  id="name" 
-                  v-model="form.name" 
-                  required
+                  id="name"
+                  v-model="form.name"
                   :class="{ error: errors.name }"
+                  placeholder="请输入您的姓名"
                 >
                 <span v-if="errors.name" class="error-message">{{ errors.name }}</span>
               </div>
@@ -83,10 +79,10 @@
                 <label for="email">邮箱 *</label>
                 <input 
                   type="email" 
-                  id="email" 
-                  v-model="form.email" 
-                  required
+                  id="email"
+                  v-model="form.email"
                   :class="{ error: errors.email }"
+                  placeholder="请输入您的邮箱"
                 >
                 <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
               </div>
@@ -96,28 +92,26 @@
               <label for="subject">主题</label>
               <input 
                 type="text" 
-                id="subject" 
+                id="subject"
                 v-model="form.subject"
-                placeholder="简短描述您要讨论的内容"
+                placeholder="请输入邮件主题（可选）"
               >
             </div>
             
             <div class="form-group">
               <label for="message">消息 *</label>
               <textarea 
-                id="message" 
-                v-model="form.message" 
-                rows="6"
-                required
+                id="message"
+                v-model="form.message"
                 :class="{ error: errors.message }"
-                placeholder="请详细描述您的需求或想法..."
+                rows="5"
+                placeholder="请输入您想说的话..."
               ></textarea>
               <span v-if="errors.message" class="error-message">{{ errors.message }}</span>
             </div>
             
             <button type="submit" class="submit-btn" :disabled="isSubmitting">
-              <span v-if="isSubmitting">发送中...</span>
-              <span v-else>发送消息 🚀</span>
+              {{ isSubmitting ? '发送中...' : '发送消息' }}
             </button>
           </form>
           
@@ -133,7 +127,7 @@
             <div class="status-dot"></div>
             <span class="status-text">当前状态：可接项目</span>
           </div>
-          <p>我目前正在寻找新的合作机会和有趣的项目。如果您有想法需要实现，让我们聊一聊！</p>
+          <p>我目前有时间接受新的项目和合作机会。无论是短期项目还是长期合作，都欢迎联系讨论。</p>
         </div>
       </div>
     </div>
@@ -219,25 +213,27 @@ const submitForm = async () => {
 
 <style scoped>
 .contact {
-  padding: 6rem 0;
-  background: white;
+  padding: 3rem 2rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
+  width: 100%;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .section-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #2c3e50;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   position: relative;
 }
 
@@ -254,76 +250,80 @@ const submitForm = async () => {
 }
 
 .section-subtitle {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #7f8c8d;
-  max-width: 600px;
-  margin: 0 auto;
   line-height: 1.6;
 }
 
 .contact-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  margin-bottom: 4rem;
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .info-card {
-  background: #f8f9fa;
-  padding: 2.5rem;
-  border-radius: 15px;
-  border: 1px solid #e9ecef;
+  background: rgba(248, 249, 250, 0.7);
+  padding: 1.5rem;
+  border-radius: 12px;
+  height: fit-content;
 }
 
 .info-card h3 {
   color: #2c3e50;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
 }
 
 .info-card > p {
   color: #666;
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
 }
 
 .contact-methods {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .contact-method {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.contact-method:hover {
+  transform: translateY(-2px);
 }
 
 .method-icon {
-  font-size: 1.5rem;
-  width: 50px;
-  height: 50px;
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(45deg, #3498db, #2ecc71);
-  border-radius: 10px;
+  border-radius: 8px;
   color: white;
 }
 
 .method-content h4 {
   color: #2c3e50;
-  margin-bottom: 0.3rem;
-  font-size: 1rem;
+  margin-bottom: 0.2rem;
+  font-size: 0.9rem;
 }
 
 .method-content a,
 .method-content span {
   color: #666;
   text-decoration: none;
+  font-size: 0.8rem;
   transition: color 0.3s ease;
 }
 
@@ -333,78 +333,78 @@ const submitForm = async () => {
 
 .social-links h4 {
   color: #2c3e50;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
 }
 
 .social-icons {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .social-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1rem;
-  background: white;
-  border-radius: 25px;
+  gap: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
   text-decoration: none;
   color: #666;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   transition: all 0.3s ease;
+  font-size: 0.8rem;
 }
 
 .social-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   color: #3498db;
 }
 
 .social-icon {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .form {
-  background: #f8f9fa;
-  padding: 2.5rem;
-  border-radius: 15px;
-  border: 1px solid #e9ecef;
+  background: rgba(248, 249, 250, 0.7);
+  padding: 1.5rem;
+  border-radius: 12px;
 }
 
 .form h3 {
   color: #2c3e50;
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .form-group label {
   display: block;
   color: #2c3e50;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 0.8rem;
+  padding: 0.6rem;
   border: 2px solid #e9ecef;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  background: white;
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .form-group input:focus,
@@ -421,19 +421,19 @@ const submitForm = async () => {
 
 .error-message {
   color: #e74c3c;
-  font-size: 0.8rem;
-  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
   display: block;
 }
 
 .submit-btn {
   width: 100%;
-  padding: 1rem;
+  padding: 0.8rem;
   background: linear-gradient(45deg, #3498db, #2ecc71);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -450,11 +450,12 @@ const submitForm = async () => {
 }
 
 .submit-status {
-  margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 8px;
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  border-radius: 6px;
   text-align: center;
   font-weight: 500;
+  font-size: 0.8rem;
 }
 
 .submit-status.success {
@@ -476,8 +477,8 @@ const submitForm = async () => {
 .availability-card {
   background: linear-gradient(45deg, #3498db, #2ecc71);
   color: white;
-  padding: 2rem;
-  border-radius: 15px;
+  padding: 1.5rem;
+  border-radius: 12px;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -487,12 +488,12 @@ const submitForm = async () => {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .status-dot {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   background: #2ecc71;
   border-radius: 50%;
   animation: pulse 2s infinite;
@@ -500,11 +501,11 @@ const submitForm = async () => {
 
 .status-text {
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .availability-card p {
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.6;
   opacity: 0.9;
 }
@@ -525,9 +526,13 @@ const submitForm = async () => {
 }
 
 @media (max-width: 768px) {
+  .contact {
+    padding: 2rem 1rem;
+  }
+
   .contact-content {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .form-row {
@@ -539,20 +544,20 @@ const submitForm = async () => {
   }
 
   .section-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .info-card,
   .form {
-    padding: 1.5rem;
+    padding: 1rem;
+  }
+
+  .availability-card {
+    padding: 1rem;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  .contact {
-    background: #1a1a1a;
-  }
-
   .section-title {
     color: #ffffff;
   }
@@ -563,8 +568,7 @@ const submitForm = async () => {
 
   .info-card,
   .form {
-    background: #2a2a2a;
-    border: 1px solid #333;
+    background: rgba(42, 42, 42, 0.7);
   }
 
   .info-card h3,
@@ -578,7 +582,7 @@ const submitForm = async () => {
 
   .contact-method,
   .social-link {
-    background: #333;
+    background: rgba(60, 60, 60, 0.8);
   }
 
   .method-content h4 {
@@ -604,8 +608,8 @@ const submitForm = async () => {
 
   .form-group input,
   .form-group textarea {
-    background: #333;
-    border-color: #444;
+    background: rgba(60, 60, 60, 0.8);
+    border-color: #555;
     color: #ffffff;
   }
 

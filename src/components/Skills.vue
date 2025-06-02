@@ -3,102 +3,92 @@
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">技能专长</h2>
-        <p class="section-subtitle">这些是我熟练掌握的技术栈和工具</p>
+        <p class="section-subtitle">我在以下技术领域拥有丰富的经验和深入的理解</p>
       </div>
-      
-      <div class="skills-content">
-        <div class="skills-categories">
-          <div class="category">
-            <h3 class="category-title">前端开发</h3>
-            <div class="skills-grid">
-              <div class="skill-item" v-for="skill in frontendSkills" :key="skill.name">
-                <div class="skill-icon">{{ skill.icon }}</div>
-                <div class="skill-info">
-                  <h4>{{ skill.name }}</h4>
-                  <div class="skill-bar">
-                    <div class="skill-progress" :style="{ width: skill.level + '%' }"></div>
-                  </div>
-                  <span class="skill-percentage">{{ skill.level }}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="category">
-            <h3 class="category-title">后端开发</h3>
-            <div class="skills-grid">
-              <div class="skill-item" v-for="skill in backendSkills" :key="skill.name">
-                <div class="skill-icon">{{ skill.icon }}</div>
-                <div class="skill-info">
-                  <h4>{{ skill.name }}</h4>
-                  <div class="skill-bar">
-                    <div class="skill-progress" :style="{ width: skill.level + '%' }"></div>
-                  </div>
-                  <span class="skill-percentage">{{ skill.level }}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="category">
-            <h3 class="category-title">工具 & 其他</h3>
-            <div class="skills-grid">
-              <div class="skill-item" v-for="skill in toolsSkills" :key="skill.name">
-                <div class="skill-icon">{{ skill.icon }}</div>
-                <div class="skill-info">
-                  <h4>{{ skill.name }}</h4>
-                  <div class="skill-bar">
-                    <div class="skill-progress" :style="{ width: skill.level + '%' }"></div>
-                  </div>
-                  <span class="skill-percentage">{{ skill.level }}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
+
+      <div class="skills-container">
+        <!-- 技能分类标签 -->
+        <div class="skill-tabs">
+          <button 
+            v-for="category in skillCategories" 
+            :key="category.id"
+            :class="['tab-button', { active: activeCategory === category.id }]"
+            @click="activeCategory = category.id"
+          >
+            <span class="tab-icon">{{ category.icon }}</span>
+            <span class="tab-label">{{ category.name }}</span>
+          </button>
         </div>
-        
+
+        <!-- 技能内容展示 -->
+        <div class="skills-content">
+          <transition name="fade" mode="out-in">
+            <div :key="activeCategory" class="skill-category-content">
+              <div class="skills-grid">
+                <div 
+                  v-for="skill in currentSkills" 
+                  :key="skill.name"
+                  class="skill-card"
+                  @mouseenter="skill.isHovered = true"
+                  @mouseleave="skill.isHovered = false"
+                >
+                  <div class="skill-header">
+                    <div class="skill-icon">{{ skill.icon }}</div>
+                    <div class="skill-info">
+                      <h3 class="skill-name">{{ skill.name }}</h3>
+                      <p class="skill-level">{{ skill.level }}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="skill-progress">
+                    <div class="progress-bar">
+                      <div 
+                        class="progress-fill" 
+                        :style="{ width: skill.percentage + '%' }"
+                      ></div>
+                    </div>
+                    <span class="progress-text">{{ skill.percentage }}%</span>
+                  </div>
+                  
+                  <p class="skill-description">{{ skill.description }}</p>
+                  
+                  <div class="skill-tags">
+                    <span 
+                      v-for="tag in skill.tags" 
+                      :key="tag"
+                      class="skill-tag"
+                    >{{ tag }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </transition>
+        </div>
+
+        <!-- 技能总结卡片 -->
         <div class="skills-summary">
           <div class="summary-card">
-            <h3>核心优势</h3>
-            <ul>
-              <li>🚀 快速学习新技术的能力</li>
-              <li>💡 创新思维和问题解决能力</li>
-              <li>🤝 良好的团队协作精神</li>
-              <li>📱 响应式设计和移动优先开发</li>
-              <li>🔧 代码质量和性能优化</li>
-            </ul>
-          </div>
-          
-          <div class="experience-timeline">
-            <h3>学习历程</h3>
-            <div class="timeline">
-              <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <h4>2021</h4>
-                  <p>开始学习前端开发</p>
+            <div class="summary-header">
+              <div class="summary-icon">📊</div>
+              <h3>技能概览</h3>
+            </div>
+            <div class="summary-content">
+              <div class="summary-stats">
+                <div class="stat-item">
+                  <div class="stat-number">5+</div>
+                  <div class="stat-label">年开发经验</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number">15+</div>
+                  <div class="stat-label">掌握技术</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number">50+</div>
+                  <div class="stat-label">完成项目</div>
                 </div>
               </div>
-              <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <h4>2022</h4>
-                  <p>掌握Vue.js和React</p>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <h4>2023</h4>
-                  <p>深入后端开发</p>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <h4>2024</h4>
-                  <p>全栈开发专家</p>
-                </div>
+              <div class="summary-text">
+                <p>持续学习和实践各种前沿技术，专注于构建高质量、可维护的代码。</p>
               </div>
             </div>
           </div>
@@ -109,40 +99,180 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-const frontendSkills = ref([
-  { name: 'HTML/CSS', icon: '🌐', level: 95 },
-  { name: 'JavaScript', icon: '⚡', level: 90 },
-  { name: 'Vue.js', icon: '💚', level: 88 },
-  { name: 'React', icon: '⚛️', level: 85 },
-  { name: 'TypeScript', icon: '📘', level: 80 },
-  { name: 'Sass/SCSS', icon: '🎨', level: 85 }
-])
+const activeCategory = ref('frontend')
 
-const backendSkills = ref([
-  { name: 'Node.js', icon: '🟢', level: 82 },
-  { name: 'Python', icon: '🐍', level: 78 },
-  { name: 'Express.js', icon: '🚀', level: 80 },
-  { name: 'MongoDB', icon: '🍃', level: 75 },
-  { name: 'MySQL', icon: '🐬', level: 70 },
-  { name: 'REST API', icon: '🔌', level: 85 }
-])
+const skillCategories = [
+  { id: 'frontend', name: '前端开发', icon: '🎨' },
+  { id: 'backend', name: '后端开发', icon: '⚙️' },
+  { id: 'tools', name: '工具 & 部署', icon: '🔧' },
+  { id: 'design', name: '设计 & UI', icon: '✨' }
+]
 
-const toolsSkills = ref([
-  { name: 'Git', icon: '📝', level: 88 },
-  { name: 'Docker', icon: '🐳', level: 70 },
-  { name: 'Webpack', icon: '📦', level: 75 },
-  { name: 'Vite', icon: '⚡', level: 85 },
-  { name: 'Figma', icon: '🎨', level: 72 },
-  { name: 'VS Code', icon: '💻', level: 95 }
-])
+const skills = {
+  frontend: [
+    {
+      name: 'Vue.js',
+      icon: '💚',
+      level: '高级',
+      percentage: 90,
+      description: '精通Vue.js生态系统，包括Vue Router、Vuex/Pinia等',
+      tags: ['组件化', '响应式', 'Composition API'],
+      isHovered: false
+    },
+    {
+      name: 'React',
+      icon: '⚛️',
+      level: '高级',
+      percentage: 85,
+      description: '熟练使用React及其生态系统开发现代Web应用',
+      tags: ['Hooks', 'Context', 'Redux'],
+      isHovered: false
+    },
+    {
+      name: 'TypeScript',
+      icon: '🔷',
+      level: '高级',
+      percentage: 88,
+      description: '使用TypeScript提高代码质量和开发效率',
+      tags: ['类型安全', '接口', '泛型'],
+      isHovered: false
+    },
+    {
+      name: 'CSS/Sass',
+      icon: '🎭',
+      level: '高级',
+      percentage: 85,
+      description: '现代CSS技术和预处理器，响应式设计专家',
+      tags: ['Flexbox', 'Grid', 'Animation'],
+      isHovered: false
+    }
+  ],
+  backend: [
+    {
+      name: 'Node.js',
+      icon: '🟢',
+      level: '高级',
+      percentage: 85,
+      description: '使用Node.js构建高性能的服务端应用',
+      tags: ['Express', 'Koa', 'API设计'],
+      isHovered: false
+    },
+    {
+      name: 'Python',
+      icon: '🐍',
+      level: '中级',
+      percentage: 75,
+      description: 'Python web开发和数据处理',
+      tags: ['Django', 'Flask', '数据分析'],
+      isHovered: false
+    },
+    {
+      name: 'MongoDB',
+      icon: '🍃',
+      level: '中级',
+      percentage: 78,
+      description: 'NoSQL数据库设计和优化',
+      tags: ['聚合', '索引', '复制集'],
+      isHovered: false
+    },
+    {
+      name: 'MySQL',
+      icon: '🐬',
+      level: '中级',
+      percentage: 72,
+      description: '关系型数据库设计和查询优化',
+      tags: ['索引优化', '事务', '存储过程'],
+      isHovered: false
+    }
+  ],
+  tools: [
+    {
+      name: 'Git',
+      icon: '📝',
+      level: '高级',
+      percentage: 90,
+      description: '版本控制和团队协作工具使用专家',
+      tags: ['分支管理', '合并策略', 'CI/CD'],
+      isHovered: false
+    },
+    {
+      name: 'Docker',
+      icon: '🐳',
+      level: '中级',
+      percentage: 75,
+      description: '容器化部署和微服务架构',
+      tags: ['容器编排', '镜像优化', 'Docker Compose'],
+      isHovered: false
+    },
+    {
+      name: 'Webpack',
+      icon: '📦',
+      level: '中级',
+      percentage: 80,
+      description: '模块打包和构建优化工具',
+      tags: ['代码分割', '热更新', '性能优化'],
+      isHovered: false
+    },
+    {
+      name: 'AWS',
+      icon: '☁️',
+      level: '初级',
+      percentage: 65,
+      description: '云服务平台部署和运维',
+      tags: ['EC2', 'S3', 'Lambda'],
+      isHovered: false
+    }
+  ],
+  design: [
+    {
+      name: 'UI设计',
+      icon: '🎨',
+      level: '中级',
+      percentage: 75,
+      description: '用户界面设计和用户体验优化',
+      tags: ['Figma', '原型设计', '设计系统'],
+      isHovered: false
+    },
+    {
+      name: '响应式设计',
+      icon: '📱',
+      level: '高级',
+      percentage: 88,
+      description: '跨设备和平台的自适应设计',
+      tags: ['移动优先', '断点设计', '流式布局'],
+      isHovered: false
+    },
+    {
+      name: '动画效果',
+      icon: '⚡',
+      level: '中级',
+      percentage: 70,
+      description: 'CSS和JavaScript动画效果制作',
+      tags: ['CSS Animation', 'GSAP', '微交互'],
+      isHovered: false
+    },
+    {
+      name: '可访问性',
+      icon: '♿',
+      level: '中级',
+      percentage: 72,
+      description: 'Web可访问性标准和最佳实践',
+      tags: ['ARIA', '键盘导航', '屏幕阅读器'],
+      isHovered: false
+    }
+  ]
+}
+
+const currentSkills = computed(() => skills[activeCategory.value] || [])
 </script>
 
 <style scoped>
 .skills {
-  padding: 6rem 0;
-  background: white;
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
 }
 
 .container {
@@ -158,268 +288,357 @@ const toolsSkills = ref([
 
 .section-title {
   font-size: 2.5rem;
-  color: #2c3e50;
+  font-weight: 700;
+  color: white;
   margin-bottom: 1rem;
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(45deg, #3498db, #2ecc71);
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 2px;
 }
 
 .section-subtitle {
   font-size: 1.1rem;
-  color: #7f8c8d;
+  color: rgba(255, 255, 255, 0.8);
   max-width: 600px;
   margin: 0 auto;
-  line-height: 1.6;
 }
 
-.skills-content {
+.skills-container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 4rem;
-}
-
-.skills-categories {
-  display: flex;
-  flex-direction: column;
   gap: 3rem;
 }
 
-.category {
-  background: #f8f9fa;
-  padding: 2rem;
-  border-radius: 15px;
-  border: 1px solid #e9ecef;
+/* 技能分类标签 */
+.skill-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.category-title {
-  font-size: 1.5rem;
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-  text-align: center;
+.tab-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.tab-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.tab-button.active {
+  background: rgba(255, 255, 255, 0.9);
+  color: #667eea;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.tab-icon {
+  font-size: 1.2rem;
+}
+
+.tab-label {
+  font-weight: 600;
+}
+
+/* 技能内容 */
+.skills-content {
+  min-height: 600px;
 }
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
-.skill-item {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+.skill-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.skill-header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.skill-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  margin-bottom: 1.5rem;
 }
 
 .skill-icon {
   font-size: 2rem;
-  width: 50px;
-  height: 50px;
+  width: 3.5rem;
+  height: 3.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(45deg, #3498db, #2ecc71);
-  border-radius: 10px;
-  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .skill-info {
   flex: 1;
 }
 
-.skill-info h4 {
-  font-size: 1rem;
+.skill-name {
+  font-size: 1.2rem;
+  font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.3rem 0;
 }
 
-.skill-bar {
-  width: 100%;
-  height: 8px;
-  background: #e9ecef;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 0.5rem;
+.skill-level {
+  font-size: 0.9rem;
+  color: #667eea;
+  font-weight: 500;
+  margin: 0;
 }
 
 .skill-progress {
-  height: 100%;
-  background: linear-gradient(45deg, #3498db, #2ecc71);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(102, 126, 234, 0.1);
   border-radius: 4px;
-  transition: width 1s ease-in-out;
+  overflow: hidden;
 }
 
-.skill-percentage {
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+
+.progress-text {
   font-size: 0.8rem;
-  color: #7f8c8d;
   font-weight: 600;
+  color: #667eea;
+  min-width: 40px;
 }
 
+.skill-description {
+  font-size: 0.9rem;
+  color: #5a6c7d;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+/* 技能总结 */
 .skills-summary {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  justify-content: center;
 }
 
-.summary-card,
-.experience-timeline {
-  background: #f8f9fa;
+.summary-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
   padding: 2rem;
-  border-radius: 15px;
-  border: 1px solid #e9ecef;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 500px;
+  width: 100%;
 }
 
-.summary-card h3,
-.experience-timeline h3 {
-  color: #2c3e50;
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   margin-bottom: 1.5rem;
+}
+
+.summary-icon {
+  font-size: 1.5rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.summary-header h3 {
   font-size: 1.3rem;
-}
-
-.summary-card ul {
-  list-style: none;
-  padding: 0;
-}
-
-.summary-card li {
-  margin-bottom: 0.8rem;
-  color: #555;
-  line-height: 1.5;
-}
-
-.timeline {
-  position: relative;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 10px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(45deg, #3498db, #2ecc71);
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 1.5rem;
-  padding-left: 2rem;
-}
-
-.timeline-dot {
-  position: absolute;
-  left: -8px;
-  top: 5px;
-  width: 20px;
-  height: 20px;
-  background: white;
-  border: 3px solid #3498db;
-  border-radius: 50%;
-}
-
-.timeline-content h4 {
+  font-weight: 600;
   color: #2c3e50;
-  font-size: 1.1rem;
+  margin: 0;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #667eea;
   margin-bottom: 0.3rem;
 }
 
-.timeline-content p {
-  color: #666;
+.stat-label {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.summary-text p {
   font-size: 0.9rem;
+  color: #5a6c7d;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
 }
 
-@media (max-width: 1024px) {
-  .skills-content {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
+/* 过渡动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
 
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 响应式设计 */
 @media (max-width: 768px) {
-  .skills-grid {
-    grid-template-columns: 1fr;
+  .skills {
+    padding: 3rem 0;
   }
-
-  .skill-item {
-    flex-direction: column;
-    text-align: center;
+  
+  .container {
+    padding: 0 1.5rem;
   }
-
+  
   .section-title {
     font-size: 2rem;
   }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .skill-card,
+  .summary-card {
+    padding: 1.5rem;
+  }
+  
+  .skill-tabs {
+    gap: 0.5rem;
+  }
+  
+  .tab-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .summary-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  .skills {
-    background: #1a1a1a;
-  }
-
+@media (max-width: 480px) {
   .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .skill-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tab-button {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+  
+  .skill-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.8rem;
+  }
+  
+  .summary-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .skill-card,
+  .summary-card {
+    background: rgba(45, 55, 72, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .skill-name,
+  .summary-header h3 {
     color: #ffffff;
   }
-
-  .section-subtitle {
-    color: #cccccc;
+  
+  .skill-description,
+  .summary-text p {
+    color: #a8b3c5;
   }
-
-  .category,
-  .summary-card,
-  .experience-timeline {
-    background: #2a2a2a;
-    border: 1px solid #333;
+  
+  .stat-label {
+    color: #b8c6db;
   }
-
-  .category-title,
-  .summary-card h3,
-  .experience-timeline h3 {
-    color: #ffffff;
-  }
-
-  .skill-item {
-    background: #333;
-  }
-
-  .skill-info h4 {
-    color: #ffffff;
-  }
-
-  .skill-bar {
-    background: #444;
-  }
-
-  .summary-card li,
-  .timeline-content p {
-    color: #cccccc;
-  }
-
-  .timeline-content h4 {
-    color: #ffffff;
-  }
-
-  .timeline-dot {
-    background: #2a2a2a;
+  
+  .skill-tag {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.3);
   }
 }
 </style>

@@ -2,118 +2,121 @@
   <section id="projects" class="projects">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">我的项目</h2>
-        <p class="section-subtitle">这里展示了我最近的一些作品和项目</p>
+        <h2 class="section-title">精选项目</h2>
+        <p class="section-subtitle">以下是我参与开发的一些代表性项目，展示了我的技术能力和创意思维</p>
       </div>
-      
-      <div class="projects-filter">
+
+      <!-- 项目筛选 -->
+      <div class="project-filters">
         <button 
-          v-for="category in categories" 
-          :key="category"
-          :class="['filter-btn', { active: activeFilter === category }]"
-          @click="setActiveFilter(category)"
+          v-for="filter in filters" 
+          :key="filter"
+          :class="['filter-button', { active: activeFilter === filter }]"
+          @click="activeFilter = filter"
         >
-          {{ category }}
+          {{ filter }}
         </button>
       </div>
-      
+
+      <!-- 项目网格 -->
       <div class="projects-grid">
         <div 
           v-for="project in filteredProjects" 
           :key="project.id"
           class="project-card"
-          @click="openProject(project)"
+          @mouseenter="project.isHovered = true"
+          @mouseleave="project.isHovered = false"
         >
           <div class="project-image">
-            <div class="image-placeholder">
-              <span class="project-icon">{{ project.icon }}</span>
-            </div>
+            <img :src="project.image" :alt="project.title" />
             <div class="project-overlay">
-              <div class="overlay-content">
-                <button class="btn-view">查看详情</button>
-                <a :href="project.github" target="_blank" class="btn-github" @click.stop>
-                  📂 GitHub
+              <div class="project-actions">
+                <a 
+                  v-if="project.liveUrl" 
+                  :href="project.liveUrl" 
+                  target="_blank" 
+                  class="action-button"
+                  title="查看在线演示"
+                >
+                  <span class="action-icon">🔗</span>
+                  <span class="action-text">在线演示</span>
+                </a>
+                <a 
+                  v-if="project.githubUrl" 
+                  :href="project.githubUrl" 
+                  target="_blank" 
+                  class="action-button"
+                  title="查看源代码"
+                >
+                  <span class="action-icon">💻</span>
+                  <span class="action-text">源代码</span>
                 </a>
               </div>
             </div>
           </div>
           
           <div class="project-content">
-            <h3 class="project-title">{{ project.title }}</h3>
+            <div class="project-header">
+              <h3 class="project-title">{{ project.title }}</h3>
+              <div class="project-category">{{ project.category }}</div>
+            </div>
+            
             <p class="project-description">{{ project.description }}</p>
             
+            <div class="project-features">
+              <h4>主要功能</h4>
+              <ul>
+                <li v-for="feature in project.features" :key="feature">{{ feature }}</li>
+              </ul>
+            </div>
+            
             <div class="project-tech">
-              <span 
-                v-for="tech in project.technologies" 
-                :key="tech"
-                class="tech-tag"
-              >
-                {{ tech }}
-              </span>
+              <h4>技术栈</h4>
+              <div class="tech-tags">
+                <span 
+                  v-for="tech in project.technologies" 
+                  :key="tech"
+                  class="tech-tag"
+                >{{ tech }}</span>
+              </div>
             </div>
             
-            <div class="project-meta">
-              <span class="project-status" :class="project.status">
-                {{ getStatusText(project.status) }}
-              </span>
-              <span class="project-date">{{ project.date }}</span>
+            <div class="project-stats">
+              <div class="stat-item">
+                <span class="stat-label">开发时间</span>
+                <span class="stat-value">{{ project.duration }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">团队规模</span>
+                <span class="stat-value">{{ project.teamSize }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">我的角色</span>
+                <span class="stat-value">{{ project.role }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <div class="more-projects">
-        <a href="https://github.com/yisrime" target="_blank" class="btn-more">
-          查看更多项目 →
-        </a>
-      </div>
-    </div>
-    
-    <!-- 项目详情模态框 -->
-    <div v-if="selectedProject" class="modal-overlay" @click="closeProject">
-      <div class="modal-content" @click.stop>
-        <button class="modal-close" @click="closeProject">×</button>
-        <div class="modal-header">
-          <h2>{{ selectedProject.title }}</h2>
-          <div class="modal-links">
-            <a :href="selectedProject.demo" target="_blank" class="btn btn-primary">
-              🚀 在线演示
-            </a>
-            <a :href="selectedProject.github" target="_blank" class="btn btn-outline">
-              📂 GitHub
-            </a>
+
+      <!-- 项目统计 -->
+      <div class="projects-summary">
+        <div class="summary-container">
+          <div class="summary-item">
+            <div class="summary-number">{{ totalProjects }}</div>
+            <div class="summary-label">完成项目</div>
           </div>
-        </div>
-        
-        <div class="modal-body">
-          <div class="project-details">
-            <h3>项目描述</h3>
-            <p>{{ selectedProject.fullDescription }}</p>
-            
-            <h3>主要功能</h3>
-            <ul>
-              <li v-for="feature in selectedProject.features" :key="feature">
-                {{ feature }}
-              </li>
-            </ul>
-            
-            <h3>技术栈</h3>
-            <div class="tech-stack">
-              <span 
-                v-for="tech in selectedProject.technologies" 
-                :key="tech"
-                class="tech-tag"
-              >
-                {{ tech }}
-              </span>
-            </div>
-            
-            <h3>开发亮点</h3>
-            <ul>
-              <li v-for="highlight in selectedProject.highlights" :key="highlight">
-                {{ highlight }}
-              </li>
-            </ul>
+          <div class="summary-item">
+            <div class="summary-number">{{ collaborativeProjects }}</div>
+            <div class="summary-label">团队项目</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-number">{{ openSourceProjects }}</div>
+            <div class="summary-label">开源项目</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-number">{{ totalTechnologies }}</div>
+            <div class="summary-label">使用技术</div>
           </div>
         </div>
       </div>
@@ -125,140 +128,135 @@
 import { ref, computed } from 'vue'
 
 const activeFilter = ref('全部')
-const selectedProject = ref(null)
 
-const categories = ['全部', '前端', '全栈', '工具']
+const filters = ['全部', 'Web应用', '移动应用', '工具库', '个人项目']
 
 const projects = ref([
   {
     id: 1,
-    title: '响应式个人作品集',
-    description: '使用Vue.js构建的现代化个人作品集网站，具有响应式设计和流畅的动画效果。',
-    fullDescription: '这是一个完全响应式的个人作品集网站，采用现代化的设计理念和用户体验。网站使用Vue.js构建，具有流畅的页面切换动画、暗黑模式支持和多语言功能。',
-    icon: '🌐',
-    category: '前端',
-    technologies: ['Vue.js', 'CSS3', 'JavaScript', 'Vite'],
-    status: 'completed',
-    date: '2024-01',
-    github: 'https://github.com/yisrime/portfolio',
-    demo: 'https://yisrime.github.io',
+    title: '电商管理系统',
+    category: 'Web应用',
+    description: '一个功能完整的电商后台管理系统，支持商品管理、订单处理、用户管理等功能。采用现代化的前端技术栈，提供优秀的用户体验。',
+    image: '/api/placeholder/400/250',
     features: [
-      '响应式设计，支持所有设备',
-      '流畅的页面切换动画',
-      '暗黑模式切换',
-      '项目展示和技能图表',
-      '联系表单集成'
+      '商品信息管理和库存跟踪',
+      '订单处理和状态管理',
+      '用户权限和角色管理',
+      '数据可视化报表',
+      '实时通知系统'
     ],
-    highlights: [
-      '使用CSS Grid和Flexbox实现复杂布局',
-      '优化了页面加载性能',
-      '实现了无障碍访问标准',
-      'SEO友好的结构设计'
-    ]
+    technologies: ['Vue.js', 'Element Plus', 'Node.js', 'MongoDB', 'Socket.io'],
+    duration: '3个月',
+    teamSize: '4人',
+    role: '前端负责人',
+    liveUrl: 'https://demo.example.com',
+    githubUrl: 'https://github.com/example/project',
+    isHovered: false
   },
   {
     id: 2,
     title: '任务管理应用',
-    description: '功能完整的任务管理应用，支持项目分组、优先级设置和团队协作。',
-    fullDescription: '一个功能强大的任务管理应用，帮助个人和团队更好地组织和跟踪工作进度。应用支持多项目管理、任务优先级、截止日期提醒等功能。',
-    icon: '📋',
-    category: '全栈',
-    technologies: ['React', 'Node.js', 'MongoDB', 'Express'],
-    status: 'in-progress',
-    date: '2024-02',
-    github: 'https://github.com/yisrime/task-manager',
-    demo: 'https://task-app-demo.com',
+    category: '移动应用',
+    description: '一款跨平台的任务管理应用，帮助用户高效管理个人和团队任务，支持实时协作和进度跟踪。',
+    image: '/api/placeholder/400/250',
     features: [
-      '项目和任务管理',
-      '优先级和标签系统',
-      '团队协作功能',
-      '实时通知',
-      '数据可视化面板'
+      '任务创建和分配',
+      '团队协作和评论',
+      '进度跟踪和报告',
+      '文件附件管理',
+      '离线同步功能'
     ],
-    highlights: [
-      '实现了实时数据同步',
-      '用户友好的拖拽界面',
-      '高效的数据库查询优化',
-      '完整的用户认证系统'
-    ]
+    technologies: ['React Native', 'Redux', 'Firebase', 'TypeScript'],
+    duration: '4个月',
+    teamSize: '3人',
+    role: '全栈开发',
+    liveUrl: 'https://app.example.com',
+    githubUrl: 'https://github.com/example/task-app',
+    isHovered: false
   },
   {
     id: 3,
-    title: '天气预报小程序',
-    description: '基于微信小程序开发的天气预报应用，提供详细的天气信息和预警。',
-    fullDescription: '一个功能丰富的天气预报小程序，提供当前天气、7天预报、空气质量指数、天气预警等功能。界面简洁美观，操作流畅。',
-    icon: '🌤️',
-    category: '前端',
-    technologies: ['微信小程序', 'JavaScript', 'CSS3'],
-    status: 'completed',
-    date: '2023-12',
-    github: 'https://github.com/yisrime/weather-app',
-    demo: '#',
+    title: 'UI组件库',
+    category: '工具库',
+    description: '一套企业级的Vue.js UI组件库，提供丰富的组件和完善的文档，帮助开发团队快速构建一致性的用户界面。',
+    image: '/api/placeholder/400/250',
     features: [
-      '实时天气信息',
-      '7天天气预报',
-      '空气质量监测',
-      '天气预警通知',
-      '城市搜索和定位'
+      '50+ 高质量组件',
+      'TypeScript 类型支持',
+      '主题定制系统',
+      '响应式设计',
+      '完整的单元测试'
     ],
-    highlights: [
-      '集成了多个天气API',
-      '优化了小程序性能',
-      '实现了离线数据缓存',
-      '支持地理位置自动获取'
-    ]
+    technologies: ['Vue.js', 'TypeScript', 'Vite', 'Jest', 'Storybook'],
+    duration: '6个月',
+    teamSize: '2人',
+    role: '核心开发者',
+    liveUrl: 'https://ui.example.com',
+    githubUrl: 'https://github.com/example/ui-library',
+    isHovered: false
   },
   {
     id: 4,
-    title: '代码片段管理器',
-    description: '为开发者设计的代码片段管理工具，支持语法高亮和分类整理。',
-    fullDescription: '一个专为开发者设计的代码片段管理工具，帮助开发者收集、整理和快速使用常用的代码片段。支持多种编程语言的语法高亮。',
-    icon: '💻',
-    category: '工具',
-    technologies: ['Electron', 'Vue.js', 'SQLite'],
-    status: 'completed',
-    date: '2023-10',
-    github: 'https://github.com/yisrime/code-snippets',
-    demo: 'https://code-snippets-demo.com',
+    title: '个人博客系统',
+    category: '个人项目',
+    description: '基于现代技术栈构建的个人博客系统，支持Markdown编辑、标签分类、评论系统等功能。',
+    image: '/api/placeholder/400/250',
     features: [
-      '多语言语法高亮',
+      'Markdown 文章编辑',
       '标签和分类管理',
-      '快速搜索功能',
-      '导入导出功能',
-      '快捷键支持'
+      '搜索和筛选功能',
+      '评论和互动系统',
+      'SEO 优化'
     ],
-    highlights: [
-      '使用Electron构建跨平台应用',
-      '实现了高效的搜索算法',
-      '支持自定义主题',
-      '本地数据存储和同步'
-    ]
+    technologies: ['Nuxt.js', 'Tailwind CSS', 'Strapi', 'PostgreSQL'],
+    duration: '2个月',
+    teamSize: '1人',
+    role: '独立开发',
+    liveUrl: 'https://blog.example.com',
+    githubUrl: 'https://github.com/example/blog',
+    isHovered: false
   },
   {
     id: 5,
-    title: '在线图片编辑器',
-    description: '基于Canvas的在线图片编辑工具，支持基础的图片处理和滤镜效果。',
-    fullDescription: '一个基于HTML5 Canvas的在线图片编辑器，提供基础的图片编辑功能，包括裁剪、旋转、滤镜、文字添加等功能。',
-    icon: '🎨',
-    category: '前端',
-    technologies: ['Canvas', 'JavaScript', 'CSS3'],
-    status: 'planning',
-    date: '2024-03',
-    github: 'https://github.com/yisrime/image-editor',
-    demo: '#',
+    title: '数据可视化平台',
+    category: 'Web应用',
+    description: '企业级数据可视化平台，支持多种图表类型、实时数据更新和交互式仪表板。',
+    image: '/api/placeholder/400/250',
     features: [
-      '图片裁剪和旋转',
-      '多种滤镜效果',
-      '文字和贴纸添加',
-      '撤销重做功能',
-      '多格式导出'
+      '多种图表类型支持',
+      '实时数据更新',
+      '交互式仪表板',
+      '数据导出功能',
+      '权限控制系统'
     ],
-    highlights: [
-      '使用Canvas API实现图片处理',
-      '优化了大图片的处理性能',
-      '实现了复杂的滤镜算法',
-      '响应式的操作界面'
-    ]
+    technologies: ['React', 'D3.js', 'Express.js', 'Redis', 'WebSocket'],
+    duration: '5个月',
+    teamSize: '5人',
+    role: '前端架构师',
+    liveUrl: 'https://dashboard.example.com',
+    githubUrl: 'https://github.com/example/dashboard',
+    isHovered: false
+  },
+  {
+    id: 6,
+    title: '开发者工具插件',
+    category: '工具库',
+    description: 'VS Code扩展插件，为前端开发者提供代码片段、智能提示和项目模板等实用功能。',
+    image: '/api/placeholder/400/250',
+    features: [
+      '智能代码片段',
+      '项目模板生成',
+      '代码质量检查',
+      '快捷命令面板',
+      '主题和配置同步'
+    ],
+    technologies: ['TypeScript', 'VS Code API', 'Node.js', 'Webpack'],
+    duration: '2个月',
+    teamSize: '1人',
+    role: '独立开发',
+    liveUrl: 'https://marketplace.visualstudio.com/items?itemName=example',
+    githubUrl: 'https://github.com/example/vscode-extension',
+    isHovered: false
   }
 ])
 
@@ -269,32 +267,20 @@ const filteredProjects = computed(() => {
   return projects.value.filter(project => project.category === activeFilter.value)
 })
 
-const setActiveFilter = (category) => {
-  activeFilter.value = category
-}
-
-const openProject = (project) => {
-  selectedProject.value = project
-}
-
-const closeProject = () => {
-  selectedProject.value = null
-}
-
-const getStatusText = (status) => {
-  const statusMap = {
-    'completed': '已完成',
-    'in-progress': '进行中',
-    'planning': '计划中'
-  }
-  return statusMap[status] || status
-}
+const totalProjects = computed(() => projects.value.length)
+const collaborativeProjects = computed(() => projects.value.filter(p => parseInt(p.teamSize) > 1).length)
+const openSourceProjects = computed(() => projects.value.filter(p => p.githubUrl).length)
+const totalTechnologies = computed(() => {
+  const allTech = projects.value.flatMap(p => p.technologies)
+  return new Set(allTech).size
+})
 </script>
 
 <style scoped>
 .projects {
-  padding: 6rem 0;
-  background: #f8f9fa;
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
 }
 
 .container {
@@ -310,32 +296,25 @@ const getStatusText = (status) => {
 
 .section-title {
   font-size: 2.5rem;
+  font-weight: 700;
   color: #2c3e50;
   margin-bottom: 1rem;
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(45deg, #3498db, #2ecc71);
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 2px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .section-subtitle {
   font-size: 1.1rem;
   color: #7f8c8d;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
 }
 
-.projects-filter {
+/* 项目筛选 */
+.project-filters {
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -343,43 +322,52 @@ const getStatusText = (status) => {
   flex-wrap: wrap;
 }
 
-.filter-btn {
+.filter-button {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  color: #667eea;
   padding: 0.6rem 1.5rem;
-  border: 2px solid #e9ecef;
-  background: white;
-  color: #6c757d;
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
+  backdrop-filter: blur(10px);
 }
 
-.filter-btn:hover,
-.filter-btn.active {
-  border-color: #3498db;
-  background: #3498db;
+.filter-button:hover {
+  background: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.filter-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
+/* 项目网格 */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
 .project-card {
-  background: white;
-  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
 }
 
 .project-image {
@@ -388,18 +376,15 @@ const getStatusText = (status) => {
   overflow: hidden;
 }
 
-.image-placeholder {
+.project-image img {
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, #3498db, #2ecc71);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-.project-icon {
-  font-size: 4rem;
-  color: white;
+.project-card:hover .project-image img {
+  transform: scale(1.05);
 }
 
 .project-overlay {
@@ -408,7 +393,7 @@ const getStatusText = (status) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -420,314 +405,302 @@ const getStatusText = (status) => {
   opacity: 1;
 }
 
-.overlay-content {
+.project-actions {
   display: flex;
   gap: 1rem;
 }
 
-.btn-view,
-.btn-github {
-  padding: 0.6rem 1.2rem;
-  border-radius: 5px;
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
   text-decoration: none;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 500;
   transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
+  backdrop-filter: blur(10px);
 }
 
-.btn-view {
-  background: #3498db;
-  color: white;
+.action-button:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.btn-github {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
+.action-icon {
+  font-size: 1rem;
 }
 
 .project-content {
-  padding: 1.5rem;
+  padding: 2rem;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 
 .project-title {
   font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  flex: 1;
+}
+
+.project-category {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.project-description {
+  color: #5a6c7d;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.project-features h4,
+.project-tech h4 {
+  font-size: 1rem;
+  font-weight: 600;
   color: #2c3e50;
   margin-bottom: 0.8rem;
 }
 
-.project-description {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+.project-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
 }
 
-.project-tech {
+.project-features li {
+  color: #5a6c7d;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.project-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.tech-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
 }
 
 .tech-tag {
-  background: #e9ecef;
-  color: #495057;
-  padding: 0.3rem 0.8rem;
-  border-radius: 15px;
-  font-size: 0.8rem;
+  background: rgba(118, 75, 162, 0.1);
+  color: #764ba2;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.7rem;
   font-weight: 500;
+  border: 1px solid rgba(118, 75, 162, 0.2);
 }
 
-.project-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.project-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.project-status {
-  padding: 0.3rem 0.8rem;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.project-status.completed {
-  background: #d4edda;
-  color: #155724;
-}
-
-.project-status.in-progress {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.project-status.planning {
-  background: #d1ecf1;
-  color: #0c5460;
-}
-
-.project-date {
-  color: #6c757d;
-  font-size: 0.9rem;
-}
-
-.more-projects {
+.stat-item {
   text-align: center;
 }
 
-.btn-more {
-  display: inline-block;
-  padding: 1rem 2rem;
-  background: linear-gradient(45deg, #3498db, #2ecc71);
-  color: white;
-  text-decoration: none;
-  border-radius: 25px;
+.stat-label {
+  display: block;
+  font-size: 0.7rem;
+  color: #7f8c8d;
+  margin-bottom: 0.3rem;
+}
+
+.stat-value {
+  display: block;
+  font-size: 0.8rem;
   font-weight: 600;
-  transition: transform 0.3s ease;
-}
-
-.btn-more:hover {
-  transform: translateY(-2px);
-}
-
-/* 模态框样式 */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 15px;
-  max-width: 800px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-}
-
-.modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: #e9ecef;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.modal-header {
-  padding: 2rem;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.modal-header h2 {
   color: #2c3e50;
-  margin-bottom: 1rem;
 }
 
-.modal-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: #3498db;
-  color: white;
-}
-
-.btn-outline {
-  background: transparent;
-  color: #3498db;
-  border: 2px solid #3498db;
-}
-
-.modal-body {
+/* 项目统计 */
+.projects-summary {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
   padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.project-details h3 {
-  color: #2c3e50;
-  margin: 1.5rem 0 0.8rem 0;
+.summary-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
 }
 
-.project-details h3:first-child {
-  margin-top: 0;
+.summary-item {
+  text-align: center;
 }
 
-.project-details p {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+.summary-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #667eea;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.project-details ul {
-  color: #666;
-  line-height: 1.8;
-  margin-bottom: 1rem;
+.summary-label {
+  font-size: 1rem;
+  color: #7f8c8d;
+  font-weight: 500;
 }
 
-.tech-stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
+/* 响应式设计 */
 @media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
+  .projects {
+    padding: 3rem 0;
   }
-
-  .modal-overlay {
-    padding: 1rem;
+  
+  .container {
+    padding: 0 1.5rem;
   }
-
-  .modal-header {
-    padding: 1.5rem;
-  }
-
-  .modal-body {
-    padding: 1.5rem;
-  }
-
+  
   .section-title {
     font-size: 2rem;
   }
-
-  .overlay-content {
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .project-content {
+    padding: 1.5rem;
+  }
+  
+  .project-header {
     flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .project-stats {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .summary-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .summary-number {
+    font-size: 2rem;
   }
 }
 
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .project-filters {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  
+  .filter-button {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .project-actions {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .summary-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* 深色模式支持 */
 @media (prefers-color-scheme: dark) {
   .projects {
-    background: #1a1a1a;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
   }
-
+  
+  .project-card,
+  .projects-summary {
+    background: rgba(45, 55, 72, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
   .section-title {
     color: #ffffff;
   }
-
+  
   .section-subtitle {
-    color: #cccccc;
+    color: #b8c6db;
   }
-
-  .filter-btn {
-    background: #2a2a2a;
-    border-color: #444;
-    color: #cccccc;
-  }
-
-  .project-card {
-    background: #2a2a2a;
-  }
-
-  .project-title {
+  
+  .project-title,
+  .project-features h4,
+  .project-tech h4 {
     color: #ffffff;
   }
-
-  .project-description {
-    color: #cccccc;
+  
+  .project-description,
+  .project-features li {
+    color: #a8b3c5;
   }
-
+  
+  .stat-label,
+  .summary-label {
+    color: #b8c6db;
+  }
+  
+  .stat-value {
+    color: #ffffff;
+  }
+  
+  .filter-button {
+    background: rgba(45, 55, 72, 0.8);
+    border-color: rgba(102, 126, 234, 0.3);
+  }
+  
+  .project-category,
   .tech-tag {
-    background: #444;
-    color: #cccccc;
-  }
-
-  .project-date {
-    color: #999;
-  }
-
-  .modal-content {
-    background: #2a2a2a;
-  }
-
-  .modal-header {
-    border-bottom-color: #444;
-  }
-
-  .modal-header h2 {
-    color: #ffffff;
-  }
-
-  .modal-close {
-    background: #444;
-    color: #ffffff;
-  }
-
-  .project-details h3 {
-    color: #ffffff;
-  }
-
-  .project-details p,
-  .project-details ul {
-    color: #cccccc;
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.3);
   }
 }
 </style>
