@@ -6,10 +6,12 @@ import SocialLinks from './components/SocialLinks.vue'
 import TimeDisplay from './components/TimeDisplay.vue'
 import HitokotoDisplay from './components/HitokotoDisplay.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
+import RSSFeed from './components/RSSFeed.vue'
 
 // 响应式功能
 const deviceType = ref('')
 const isMobile = ref(false)
+const backgroundImage = ref('')
 
 const updateResponsiveData = () => {
   const width = window.innerWidth
@@ -26,8 +28,18 @@ const updateResponsiveData = () => {
   }
 }
 
+const loadRandomBackground = () => {
+  const isMobileDevice = window.innerWidth <= 768
+  const apiUrl = isMobileDevice 
+    ? 'https://api.fuukei.org/random-img/default/mobile.php'
+    : 'https://api.fuukei.org/random-img/default/pc.php'
+  
+  backgroundImage.value = apiUrl
+}
+
 onMounted(() => {
   updateResponsiveData()
+  loadRandomBackground()
   window.addEventListener('resize', updateResponsiveData)
 })
 
@@ -38,7 +50,7 @@ onUnmounted(() => {
 
 <template>
   <div id="app">
-    <div class="background-image"></div>
+    <div class="background-image" :style="{ backgroundImage: `url(${backgroundImage})` }"></div>
     <div class="background-overlay"></div>
     
     <div class="profile-container" :class="`device-${deviceType}`">
@@ -52,18 +64,32 @@ onUnmounted(() => {
         
         <!-- 社交链接 -->
         <SocialLinks />
+        
+        <!-- 时间和一言（移动端显示） -->
+        <div class="mobile-info" v-if="isMobile">
+          <TimeDisplay />
+          <HitokotoDisplay />
+        </div>
+        
+        <!-- 音乐播放器（移动端显示） -->
+        <div class="mobile-music" v-if="isMobile">
+          <MusicPlayer />
+        </div>
       </div>
       
-      <!-- 右侧内容（在大屏幕时显示） -->
-      <div class="right-content" :class="{ 'mobile-stack': isMobile }">
+      <!-- 右侧内容（仅桌面端显示） -->
+      <div class="right-content" v-if="!isMobile">
         <!-- 时间和一言 -->
-        <div class="info-section" :class="{ 'mobile-layout': isMobile }">
+        <div class="info-section">
           <TimeDisplay />
           <HitokotoDisplay />
         </div>
         
         <!-- 音乐播放器 -->
         <MusicPlayer />
+        
+        <!-- RSS订阅 -->
+        <RSSFeed />
       </div>
     </div>
   </div>
@@ -85,12 +111,11 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('/wallpaper.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  filter: blur(2px);
+  filter: blur(3px);
   z-index: -2;
 }
 
