@@ -20,10 +20,7 @@ export class ColorExtractor {
         }
       }
       
-      img.onerror = () => {
-        reject(new Error('图片加载失败'))
-      }
-      
+      img.onerror = () => reject(new Error('图片加载失败'))
       img.src = imageUrl
     })
   }
@@ -106,7 +103,6 @@ export class ColorExtractor {
       segmentGlow: this.getColorWithAlpha(primaryColor, 0.6)
     }
   }
-
   // 选择主色调（选择饱和度和亮度适中的颜色）
   selectPrimaryColor(colors) {
     return colors.find(color => {
@@ -114,6 +110,7 @@ export class ColorExtractor {
       return hsl.s > 0.3 && hsl.l > 0.2 && hsl.l < 0.8
     }) || colors[0]
   }
+  
   // 获取对比文本颜色
   getContrastText(bgColor) {
     const luminance = this.getLuminance(bgColor.r, bgColor.g, bgColor.b)

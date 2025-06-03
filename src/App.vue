@@ -9,7 +9,6 @@ import MusicPlayer from './components/MusicPlayer.vue'
 import RSSFeed from './components/RSSFeed.vue'
 
 const MOBILE_BREAKPOINT = 768
-
 const isMobile = ref(false)
 const backgroundImage = ref('')
 const colorExtractor = new ColorExtractor()

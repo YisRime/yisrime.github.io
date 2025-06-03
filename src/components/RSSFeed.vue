@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import configData from '@/config.json'
 
 const allRssItems = ref([])
@@ -7,7 +7,6 @@ const isLoading = ref(true)
 const error = ref('')
 const loadingProgress = ref(0)
 const totalFeeds = ref(configData.rss.feeds.length)
-const rssContainer = ref(null)
 
 const fetchRSSFeed = async (feedUrl) => {
   try {
@@ -100,7 +99,6 @@ const fetchAllFeeds = async () => {
 onMounted(() => {
   fetchAllFeeds()
   window.addEventListener('scroll', handleScroll)
-  // 初始检查已在视口中的元素
   setTimeout(handleScroll, 100)
 })
 

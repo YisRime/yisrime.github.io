@@ -1,8 +1,7 @@
 {
   "profile": {
     "name": "苡淞",
-    "avatar": "/avatar.webp",
-    "intro": "天山云水 上下一白"
+    "avatar": "/avatar.webp"
   },
   "socialLinks": [
     { "name": "Blog", "url": "https://blog.yisrime.link", "icon": "fas fa-blog" },

@@ -11,11 +11,9 @@ const loadMeting = () => {
     const loadScript = (src) => {
       const script = document.createElement('script')
       script.src = src
-      return new Promise(res => {
-        script.onload = res
-        script.onerror = () => res()
-        document.head.appendChild(script)
-      })
+      script.onload = () => resolve()
+      script.onerror = () => resolve()
+      document.head.appendChild(script)
     }
 
     // 加载 CSS
@@ -26,10 +24,11 @@ const loadMeting = () => {
       document.head.appendChild(css)
     }
 
-    // 依次加载脚本
-    loadScript('https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js')
-      .then(() => loadScript('https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js'))
-      .then(() => setTimeout(resolve, 100))
+    // 加载脚本
+    Promise.all([
+      loadScript('https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'),
+      loadScript('https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js')
+    ]).then(() => setTimeout(resolve, 100))
   })
 }
 
@@ -39,7 +38,7 @@ const initMeting = async () => {
     
     if (metingContainer.value) {
       const metingElement = document.createElement('meting-js')
-      const attributes = {
+      Object.entries({
         server: configData.music.server,
         type: configData.music.type,
         id: configData.music.id,
@@ -47,15 +46,11 @@ const initMeting = async () => {
         loop: configData.music.loop,
         preload: configData.music.preload,
         autoplay: configData.music.autoplay,
-        volume: parseFloat(configData.music.volume),
+        volume: configData.music.volume,
         mutex: configData.music.mutex,
         listfolded: configData.music.listfolded,
         auto: 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r'
-      }
-      
-      Object.entries(attributes).forEach(([key, value]) => 
-        metingElement.setAttribute(key, value)
-      )
+      }).forEach(([key, value]) => metingElement.setAttribute(key, value))
       
       metingContainer.value.appendChild(metingElement)
     }

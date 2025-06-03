@@ -91,10 +91,6 @@ const fetchHitokoto = async (retryCount = 0) => {
 onMounted(() => {
   fetchHitokoto()
 })
-
-onUnmounted(() => {
-  // 清理资源
-})
 </script>
 
 <template>

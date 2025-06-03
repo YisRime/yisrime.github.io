@@ -7,7 +7,6 @@ const currentDate = ref('')
 const separatorBlink = ref(true)
 let timeInterval = null
 
-// 七段数码管的数字映射
 const segmentMapping = {
   0: [1, 1, 1, 1, 1, 1, 0],
   1: [0, 1, 1, 0, 0, 0, 0],

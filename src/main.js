@@ -14,8 +14,7 @@ const loadFontAwesome = () => {
 
 // 应用基础主题配置
 const applyBaseTheme = () => {
-  const root = document.documentElement
-  root.style.setProperty('--transition-normal', '0.3s ease-out')
+  document.documentElement.style.setProperty('--transition-normal', '0.3s ease-out')
 }
 
 loadFontAwesome()
