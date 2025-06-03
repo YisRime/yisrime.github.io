@@ -40,8 +40,7 @@ export const socialLinksConfig = [
 export const profileConfig = {
   name: 'Yis_Rime',
   avatar: '/avatar.webp',
-  intro: '天山云水 上下一白',
-  status: 'online' // online, away, busy, offline
+  intro: '天山云水 上下一白'
 }
 
 export const musicConfig = {

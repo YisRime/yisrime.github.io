@@ -2,11 +2,9 @@
 import { profileConfig } from '@/config'
 </script>
 
-<template>
-  <div class="profile-header">
+<template>  <div class="profile-header">
     <div class="avatar">
       <img :src="profileConfig.avatar" :alt="profileConfig.name" />
-      <div class="status-indicator" :class="profileConfig.status"></div>
     </div>
     <h1 class="name">{{ profileConfig.name }}</h1>
   </div>
@@ -58,24 +56,6 @@ import { profileConfig } from '@/config'
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-}
-
-.status-indicator {
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
-  width: 16px;
-  height: 16px;
-  background: #10b981;
-  border-radius: 50%;
-  border: 2px solid var(--bg-primary);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
 .name {

@@ -1,7 +1,7 @@
 <template>
-  <div class="profile-container">
-    <!-- 主要内容区 -->
-    <div class="main-content">
+  <div class="profile-container" :class="`device-${deviceType}`">
+    <!-- 左侧主要内容 -->
+    <div class="left-content">
       <!-- 头像和昵称 -->
       <ProfileHeader />
       
@@ -10,7 +10,10 @@
       
       <!-- 社交链接 -->
       <SocialLinks />
-      
+    </div>
+    
+    <!-- 右侧内容（在大屏幕时显示） -->
+    <div class="right-content" :class="{ 'mobile-stack': isMobile }">
       <!-- 时间和一言 -->
       <div class="info-section" :class="{ 'mobile-layout': isMobile }">
         <TimeDisplay />
@@ -63,16 +66,22 @@ onUnmounted(() => {
 
 <style scoped>
 .profile-container {
-  max-width: 500px;
+  max-width: 1200px;
   width: 100%;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.left-content {
+  flex: 0 0 400px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  align-items: center;
 }
 
-.main-content {
-  width: 100%;
+.right-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -85,14 +94,43 @@ onUnmounted(() => {
   gap: 1.5rem;
 }
 
+/* 桌面端布局 */
+@media (min-width: 1024px) {
+  .profile-container.device-desktop {
+    flex-direction: row;
+  }
+}
+
+/* 平板端布局 */
+@media (max-width: 1023px) {
+  .profile-container {
+    flex-direction: column;
+    max-width: 500px;
+  }
+  
+  .left-content {
+    flex: none;
+    width: 100%;
+  }
+  
+  .right-content {
+    width: 100%;
+  }
+}
+
 /* 响应式布局 */
 @media (max-width: 768px) {
   .profile-container {
     max-width: 100%;
     padding: 1rem;
+    gap: 1rem;
   }
   
-  .main-content {
+  .left-content {
+    gap: 1rem;
+  }
+  
+  .right-content {
     gap: 1rem;
   }
   
