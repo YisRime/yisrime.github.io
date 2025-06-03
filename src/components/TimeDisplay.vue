@@ -98,6 +98,7 @@ onUnmounted(() => {
 .time-display {
   text-align: center;
   max-width: 200px;
+  margin: 0 auto;
 }
 
 .digital-clock {

@@ -10,7 +10,7 @@ const fetchRSSFeed = async () => {
   error.value = ''
   
   try {
-    const response = await fetch(`https://rss2json.com/api.json?rss_url=${encodeURIComponent('https://blog.yisrime.link/?feed=rss')}&count=5`)
+    const response = await fetch(`https://rss2json.com/api.json?rss_url=${encodeURIComponent('https://blog.yisrime.link/?feed=rss')}`)
     if (response.ok) {
       const data = await response.json()
       if (data.status === 'ok' && data.items) {
@@ -18,7 +18,7 @@ const fetchRSSFeed = async () => {
           title: item.title,
           link: item.link,
           pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
-          description: item.description?.replace(/<[^>]*>/g, '').substring(0, 100) + '...'
+          description: item.description?.replace(/<[^>]*>/g, '') + '...'
         }))
       } else {
         throw new Error('RSS解析失败')
@@ -157,7 +157,7 @@ onMounted(fetchRSSFeed)
 
 .rss-content {
   flex: 1;
-  overflow-y: auto;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }

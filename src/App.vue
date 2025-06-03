@@ -104,60 +104,64 @@ onUnmounted(() => {
 
 .main-container {
   max-width: none;
-  width: 90%;
+  width: 100%;
+  height: 100vh;
   display: flex;
-  gap: 3rem;
+  gap: 0;
   align-items: stretch;
-  min-height: 85vh;
+  min-height: 100vh;
 }
 
 .left-content {
-  flex: 0 0 40%;
-  max-width: 450px;
-  min-width: 350px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 40%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1.5rem;
-  position: relative;
+  padding: 2rem;
+  overflow-y: auto;
+  z-index: 10;
 }
 
 .right-content {
-  flex: 1;
+  margin-left: 40%;
+  width: 55%;
   display: flex;
   flex-direction: column;
-  min-height: 85vh;
-  align-self: stretch;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 @media (max-width: 1200px) {
-  .main-container {
-    width: 95%;
-    gap: 2rem;
+  .left-content {
+    width: 35%;
   }
   
-  .left-content {
-    flex: 0 0 45%;
-    max-width: 400px;
-    min-width: 320px;
+  .right-content {
+    margin-left: 40%;
+    width: 55%;
   }
 }
 
 @media (max-width: 1023px) {
   .main-container {
     flex-direction: column;
-    width: 95%;
-    gap: 2rem;
   }
   
   .left-content {
-    flex: none;
-    width: 100%;
-    min-width: unset;
-    max-width: none;
     position: relative;
+    width: 100%;
+    height: auto;
+    flex: none;
   }
   
   .right-content {
+    margin-left: 0;
     width: 100%;
     min-height: 50vh;
   }
@@ -170,11 +174,12 @@ onUnmounted(() => {
   
   .main-container {
     gap: 1.5rem;
-    width: 98%;
+    width: 100%;
   }
   
   .left-content {
     gap: 1rem;
+    padding: 1.5rem;
   }
 }
 </style>
