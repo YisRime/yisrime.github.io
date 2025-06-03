@@ -120,15 +120,15 @@ onUnmounted(() => {
   max-width: none;
   width: 90%;
   display: flex;
-  gap: 3rem;
+  gap: 6rem;
   align-items: stretch;
   min-height: 85vh;
 }
 
 .left-content {
-  flex: 0 0 40%;
-  max-width: 450px;
-  min-width: 350px;
+  flex: 0 0 35%;
+  max-width: 400px;
+  min-width: 320px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -141,6 +141,7 @@ onUnmounted(() => {
   flex-direction: column;
   min-height: 85vh;
   align-self: stretch;
+  margin-left: 2rem;
 }
 
 @media (max-width: 1200px) {

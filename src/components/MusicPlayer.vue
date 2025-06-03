@@ -100,13 +100,14 @@ onUnmounted(() => {
   background: transparent !important;
   flex: 1 !important;
   display: flex !important;
-  flex-direction: column !important;
+  flex-direction: row !important;
   position: relative !important;
   z-index: 1 !important;
   width: 100% !important;
   max-width: 100% !important;
   padding: 0 !important;
   overflow: hidden !important;
+  align-items: stretch !important;
 }
 
 :deep(.aplayer-body::before),
@@ -118,17 +119,21 @@ onUnmounted(() => {
 :deep(.aplayer-pic) {
   position: relative !important;
   z-index: 2 !important;
-  width: 100% !important;
-  max-width: 100% !important;
+  width: 200px !important;
+  min-width: 200px !important;
   height: 200px !important;
   flex-shrink: 0 !important;
 }
 
 :deep(.aplayer-info) {
   background: transparent !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: none !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
   padding: 16px 20px 12px !important;
-  order: 2 !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
 }
 
 :deep(.aplayer-music) {
@@ -367,7 +372,18 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
+  :deep(.aplayer-body) {
+    flex-direction: column !important;
+  }
+  
+  :deep(.aplayer-pic) {
+    width: 100% !important;
+    height: 150px !important;
+  }
+  
   :deep(.aplayer-info) {
+    border-left: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
     padding: 8px 12px !important;
   }
   
