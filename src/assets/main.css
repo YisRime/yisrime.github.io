@@ -26,6 +26,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  height: 100%;
 }
 
 body {
@@ -34,7 +35,7 @@ body {
   color: var(--text-primary);
   background: var(--gradient-bg);
   background-attachment: fixed;
-  min-height: 100vh;
+  height: 100%;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -42,11 +43,9 @@ body {
 
 #app {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  width: 100vw;
   position: relative;
+  overflow-x: hidden;
 }
 
 /* 滚动条样式 */

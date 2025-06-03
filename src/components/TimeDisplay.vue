@@ -119,7 +119,23 @@ onUnmounted(() => {
 <style scoped>
 .time-display {
   text-align: center;
-  max-width: 200px;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.current-time {
+  font-size: clamp(3rem, 8vw, 4rem);
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.current-date {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
 }
 
 .digital-clock {

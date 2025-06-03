@@ -49,42 +49,19 @@ onUnmounted(() => {
 
 <template>
   <div id="app">
-    <div class="background-image" :style="{ backgroundImage: `url(${backgroundImage})` }"></div>
-    <div class="background-overlay"></div>
+    <div class="background" :style="{ backgroundImage: `url(${backgroundImage})` }"></div>
     
-    <div class="main-container">
-      <!-- 左侧内容 -->
-      <div class="left-content">
-        <!-- 中央主要内容 -->
-        <div class="center-content">
-          <!-- 时间显示 -->
-          <div class="time-section">
-            <TimeDisplay />
-          </div>
-
-          <!-- 头像和昵称 -->
-          <ProfileCard />
-          
-          <!-- 社交链接 -->
-          <SocialLinks />
-          
-          <!-- 一言 -->
-          <div class="hitokoto-section">
-            <HitokotoDisplay />
-          </div>
-        </div>
-        
-        <!-- 音乐播放器 -->
-        <div class="music-section">
-          <MusicPlayer />
-        </div>
-      </div>
-      
-      <!-- 右侧RSS -->
-      <div class="right-content">
-        <RSSFeed />
-      </div>
-    </div>
+    <main class="main-content">
+      <TimeDisplay />
+      <ProfileCard />
+      <SocialLinks />
+      <HitokotoDisplay />
+      <MusicPlayer />
+    </main>
+    
+    <aside class="side-content">
+      <RSSFeed />
+    </aside>
   </div>
 </template>
 
@@ -92,14 +69,15 @@ onUnmounted(() => {
 #app {
   position: relative;
   min-height: 100vh;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
+  width: 100vw;
+  overflow-x: hidden;
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
   padding: 2rem;
-  width: 100%;
 }
 
-.background-image {
+.background {
   position: fixed;
   top: 0;
   left: 0;
@@ -113,8 +91,9 @@ onUnmounted(() => {
   z-index: -2;
 }
 
-.background-overlay {
-  position: fixed;
+.background::after {
+  content: '';
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -122,77 +101,54 @@ onUnmounted(() => {
   background: rgba(15, 23, 42, 0.15);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: -1;
 }
 
-.main-container {
-  max-width: 1400px;
-  width: 100%;
-  display: flex;
-  gap: 2rem;
-  align-items: stretch;
-}
-
-.left-content {
-  flex: 0 0 400px;
+.main-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  position: relative;
-}
-
-.right-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 80vh;
-  align-self: stretch;
-}
-
-.center-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   gap: 2rem;
+  max-width: 500px;
+  margin: 0 auto;
+  z-index: 1;
 }
 
-.music-section {
-  margin-top: 1rem;
+.side-content {
+  height: 100vh;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-@media (max-width: 1023px) {
-  .main-container {
-    flex-direction: column;
+@media (max-width: 1200px) {
+  #app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
     max-width: 500px;
+    margin: 0 auto;
+    gap: 1rem;
   }
   
-  .left-content {
-    flex: none;
-    width: 100%;
+  .main-content {
+    max-width: none;
+    gap: 1.5rem;
+  }
+  
+  .side-content {
+    height: auto;
     position: relative;
-  }
-  
-  .center-content {
-    padding-top: 2rem;
-  }
-  
-  .right-content {
-    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   #app {
     padding: 1rem;
-  }
-  
-  .main-container {
     gap: 1rem;
   }
   
-  .left-content {
+  .main-content {
     gap: 1rem;
   }
 }

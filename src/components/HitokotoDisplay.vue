@@ -55,9 +55,71 @@ onMounted(() => {
 
 <style scoped>
 .hitokoto-display {
-  padding: 1.5rem;
-  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 2rem;
   text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.hitokoto-display:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.hitokoto-content {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-style: italic;
+  quotes: '"' '"';
+}
+
+.hitokoto-content::before {
+  content: open-quote;
+}
+
+.hitokoto-content::after {
+  content: close-quote;
+}
+
+.hitokoto-from {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.loading {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.error {
+  color: #ef4444;
+}
+
+.refresh-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .quote-content {
