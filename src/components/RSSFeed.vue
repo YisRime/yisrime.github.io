@@ -15,7 +15,7 @@ const fetchRSSFeed = async () => {
     if (response.ok) {
       const data = await response.json()
       if (data.status === 'ok' && data.items) {
-        rssItems.value = data.items.slice(0, rssConfig.maxItems).map(item => ({
+        rssItems.value = data.items.slice(0, 10).map(item => ({
           title: item.title,
           link: item.link,
           pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
@@ -30,8 +30,7 @@ const fetchRSSFeed = async () => {
   } catch (err) {
     console.error('RSS获取失败:', err)
     error.value = '暂时无法获取RSS内容'
-    // 显示示例数据
-    rssItems.value = rssConfig.fallbackItems
+    rssItems.value = []
   } finally {
     isLoading.value = false
   }

@@ -13,7 +13,7 @@ const fetchHitokoto = async () => {
     const data = await response.json()
     quote.value = { text: data.hitokoto, author: data.from || '未知' }
   } catch {
-    quote.value = { text: hitokotoConfig.fallbackText, author: hitokotoConfig.fallbackAuthor }
+    quote.value = { text: '', author: '' }
   } finally {
     isLoading.value = false
   }

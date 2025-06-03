@@ -99,7 +99,7 @@ onUnmounted(() => {
 <style scoped>
 .time-display {
   text-align: center;
-  max-width: 280px;
+  width: 280px;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -238,7 +238,7 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .time-display {
     padding: 0.6rem;
-    max-width: 240px;
+    width: 240px;
   }
   
   .digit {

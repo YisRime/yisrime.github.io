@@ -79,25 +79,15 @@ export const hitokotoConfig = {
   apiUrl: 'https://v1.hitokoto.cn/',
   enableRefresh: true,
   autoRefreshInterval: 30000, // 30秒自动刷新
-  categories: [], // 空数组表示所有分类，可指定如 ['a', 'b', 'c']
-  fallbackText: '网络请求失败，请稍后再试',
-  fallbackAuthor: ''
+  categories: [] // 空数组表示所有分类，可指定如 ['a', 'b', 'c']
 }
 
 // RSS配置
 export const rssConfig = {
   feedUrl: 'https://blog.yisrime.link/?feed=rss',
   apiUrl: 'https://rss2json.com/api.json',
-  maxItems: 10,
   enableRefresh: true,
-  autoRefreshInterval: 300000, // 5分钟自动刷新
-  fallbackItems: [
-    {
-      title: '欢迎访问我的博客',
-      link: 'https://blog.yisrime.link',
-      description: '这里会显示最新的博客文章，目前RSS服务暂时不可用...'
-    }
-  ]
+  autoRefreshInterval: 300000 // 5分钟自动刷新
 }
 
 // 背景图片配置
@@ -106,36 +96,10 @@ export const backgroundConfig = {
     desktop: 'https://api.fuukei.org/random-img/default/pc.php',
     mobile: 'https://api.fuukei.org/random-img/default/mobile.php'
   },
-  fallbackImages: {
-    desktop: '/bg-desktop.jpg',
-    mobile: '/bg-mobile.jpg'
-  },
   enableBlur: true,
   blurAmount: '0.5px',
   overlayOpacity: 0.15,
   overlayColor: 'rgba(15, 23, 42, 0.15)'
-}
-
-// 应用布局配置
-export const layoutConfig = {
-  leftContentWidth: {
-    desktop: '40%',
-    tablet: '35%'
-  },
-  rightContentWidth: {
-    desktop: '55%',
-    tablet: '55%'
-  },
-  gap: '1.5rem',
-  padding: {
-    desktop: '2rem',
-    mobile: '1rem'
-  },
-  breakpoints: {
-    mobile: 768,
-    tablet: 1023,
-    desktop: 1200
-  }
 }
 
 // 字体配置
@@ -171,45 +135,4 @@ export const themeConfig = {
   // 数码管相关颜色
   segmentGlow: 'rgba(99, 102, 241, 0.6)',
   segmentShadow: 'rgba(99, 102, 241, 0.4)'
-}
-
-// 播放器样式配置
-export const playerStyleConfig = {
-  width: '60%',
-  background: 'rgba(255, 255, 255, 0.08)',
-  borderRadius: '16px',
-  blur: '30px',
-  minHeight: '120px',
-  padding: '12px',
-  gap: '12px'
-}
-
-// 时间显示样式配置
-export const timeStyleConfig = {
-  maxWidth: '280px',
-  digitWidth: '28px',
-  digitHeight: '40px',
-  segmentHeight: '3px',
-  segmentWidth: '20px',
-  separatorSize: '1.8rem',
-  dateSize: '0.85rem',
-  mobile: {
-    maxWidth: '240px',
-    digitWidth: '16px',
-    digitHeight: '24px',
-    segmentWidth: '12px',
-    separatorSize: '1rem',
-    dateSize: '0.6rem'
-  }
-}
-
-// RSS样式配置
-export const rssStyleConfig = {
-  padding: '2rem',
-  itemPadding: '1.2rem',
-  titleSize: '1rem',
-  descriptionSize: '0.85rem',
-  dateSize: '0.75rem',
-  headerSize: '1.3rem',
-  refreshButtonSize: '32px'
 }

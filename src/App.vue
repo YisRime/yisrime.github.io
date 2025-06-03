@@ -1,21 +1,24 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { backgroundConfig, layoutConfig } from '@/config'
+import { backgroundConfig } from '@/config'
 import ProfileCard from './components/ProfileCard.vue'
 import TimeDisplay from './components/TimeDisplay.vue'
 import HitokotoDisplay from './components/HitokotoDisplay.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
 import RSSFeed from './components/RSSFeed.vue'
 
+// 内联布局配置
+const MOBILE_BREAKPOINT = 768
+
 const isMobile = ref(false)
 const backgroundImage = ref('')
 
 const updateResponsiveData = () => {
-  isMobile.value = window.innerWidth <= layoutConfig.breakpoints.mobile
+  isMobile.value = window.innerWidth <= MOBILE_BREAKPOINT
 }
 
 const loadRandomBackground = () => {
-  const apiUrl = window.innerWidth <= layoutConfig.breakpoints.mobile
+  const apiUrl = window.innerWidth <= MOBILE_BREAKPOINT
     ? backgroundConfig.apiUrls.mobile
     : backgroundConfig.apiUrls.desktop
   
@@ -100,7 +103,6 @@ onUnmounted(() => {
 }
 
 .main-container {
-  max-width: none;
   width: 100%;
   height: 100vh;
   display: flex;
