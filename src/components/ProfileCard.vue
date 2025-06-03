@@ -1,113 +1,96 @@
 <template>
-  <div class="profile-container" :class="layoutClass">
-    <!-- 主要信息区块 -->
-    <section class="main-section">
-      <div class="profile-header">
-        <div class="avatar-container">
-          <div class="avatar">
-            <img src="/avatar.webp" alt="Yis_Rime" />
-            <div class="status-indicator"></div>
-          </div>
+  <div class="profile-container">
+    <!-- 左侧个人信息 -->
+    <div class="left-panel">
+      <div class="avatar-section">
+        <div class="avatar">
+          <img src="/avatar.webp" alt="Yis_Rime" />
+          <div class="status-indicator"></div>
         </div>
-        <div class="profile-info">
-          <h1 class="name text-gradient">Yis_Rime</h1>
-          <p class="title">全栈开发者</p>
-          <div class="location">
-            <i class="location-icon">📍</i>
-            <span>中国 • 在线</span>
-          </div>
+        <h1 class="name">Yis_Rime</h1>
+        <p class="description">热爱编程，专注于现代Web技术开发 ✨</p>
+      </div>
+      
+      <div class="social-links">
+        <a 
+          v-for="link in socialLinks" 
+          :key="link.name"
+          :href="link.url" 
+          target="_blank" 
+          class="social-link"
+          :title="link.name"
+        >
+          <i>{{ link.icon }}</i>
+          <span>{{ link.name }}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 右侧功能区 -->
+    <div class="right-panel">
+      <!-- 时间和一言 -->
+      <div class="info-section">
+        <div class="time-display">
+          <div class="current-time">{{ currentTime }}</div>
+          <div class="current-date">{{ currentDate }}</div>
+        </div>
+        
+        <div class="quote-section">
+          <div class="quote-text">{{ quote.text }}</div>
+          <div class="quote-author">—— {{ quote.author }}</div>
         </div>
       </div>
       
-      <div class="about-content">
-        <p class="bio">
-          热爱编程，专注于现代Web技术开发。
-          擅长 Vue.js、React、Node.js 等技术栈，
-          致力于创造优雅高效的用户体验。
-        </p>
-        <div class="stats">
-          <div class="stat-item">
-            <span class="stat-number">3+</span>
-            <span class="stat-label">年经验</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">50+</span>
-            <span class="stat-label">项目</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">1000+</span>
-            <span class="stat-label">提交</span>
-          </div>
+      <!-- 音乐播放器 -->
+      <div class="music-section">
+        <div class="section-header">
+          <h3>音乐播放器</h3>
         </div>
-      </div>
-    </section>
-
-    <!-- 技能和联系区块 -->
-    <section class="secondary-section">
-      <div class="skills-section">
-        <h2>技能专长</h2>
-        <div class="skills-grid">
-          <div class="skill-category">
-            <h3>前端</h3>
-            <div class="skills-list">
-              <div class="skill-item" v-for="skill in frontendSkills" :key="skill.name">
-                <span class="skill-name">{{ skill.name }}</span>
-                <div class="progress-bar">
-                  <div class="progress-fill" :style="{ width: skill.level + '%' }"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+        
+        <div class="player-container">
+          <div id="meting-player" ref="metingPlayer"></div>
           
-          <div class="skill-category">
-            <h3>后端</h3>
-            <div class="skills-list">
-              <div class="skill-item" v-for="skill in backendSkills" :key="skill.name">
-                <span class="skill-name">{{ skill.name }}</span>
-                <div class="progress-bar">
-                  <div class="progress-fill" :style="{ width: skill.level + '%' }"></div>
-                </div>
+          <div class="custom-controls">
+            <div class="now-playing">
+              <div class="album-art">
+                <img :src="currentSong.cover" :alt="currentSong.title" />
+              </div>
+              <div class="song-info">
+                <div class="song-title">{{ currentSong.title }}</div>
+                <div class="song-artist">{{ currentSong.artist }}</div>
+              </div>
+            </div>
+            
+            <div class="player-controls">
+              <button class="control-btn" @click="previousSong">
+                <i>⏮</i>
+              </button>
+              <button class="control-btn play-pause" @click="togglePlay">
+                <i>{{ isPlaying ? '⏸' : '▶' }}</i>
+              </button>
+              <button class="control-btn" @click="nextSong">
+                <i>⏭</i>
+              </button>
+            </div>
+            
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill" :style="{ width: progress + '%' }"></div>
+              </div>
+              <div class="time-info">
+                <span>{{ formatTime(currentTimeMusic) }}</span>
+                <span>{{ formatTime(duration) }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="contact-section">
-        <h2>联系方式</h2>
-        <div class="social-links">
-          <a 
-            v-for="link in socialLinks" 
-            :key="link.name"
-            :href="link.url" 
-            target="_blank" 
-            class="icon-btn"
-            :title="link.name"
-          >
-            <i>{{ link.icon }}</i>
-          </a>
-        </div>
-      </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-
-const frontendSkills = ref([
-  { name: 'Vue.js', level: 90 },
-  { name: 'React', level: 85 },
-  { name: 'TypeScript', level: 80 },
-  { name: 'CSS/SCSS', level: 88 }
-])
-
-const backendSkills = ref([
-  { name: 'Node.js', level: 85 },
-  { name: 'Python', level: 80 },
-  { name: 'MongoDB', level: 75 },
-  { name: 'PostgreSQL', level: 70 }
-])
 
 const socialLinks = ref([
   {
@@ -142,221 +125,583 @@ const socialLinks = ref([
   }
 ])
 
-const layoutClass = ref('desktop-horizontal')
+// 时间相关
+const currentTime = ref('')
+const currentDate = ref('')
 
-const updateLayout = () => {
-  const width = window.innerWidth
-  const height = window.innerHeight
-  const ratio = width / height
+// 一言相关
+const quote = ref({
+  text: '生活就像一盒巧克力，你永远不知道下一个会是什么味道。',
+  author: '阿甘正传'
+})
 
-  if (width <= 768) {
-    layoutClass.value = 'mobile-vertical'
-  } else if (ratio > 1.2) {
-    layoutClass.value = 'desktop-horizontal'
-  } else {
-    layoutClass.value = 'desktop-vertical'
+// 音乐播放器相关
+const metingPlayer = ref(null)
+const isPlaying = ref(false)
+const currentTimeMusic = ref(0)
+const duration = ref(0)
+const progress = ref(0)
+
+const currentSong = ref({
+  title: '加载中...',
+  artist: '未知艺术家',
+  cover: '/default-cover.jpg'
+})
+
+let metingInstance = null
+let progressInterval = null
+let timeInterval = null
+
+// 更新时间
+const updateTime = () => {
+  const now = new Date()
+  currentTime.value = now.toLocaleTimeString('zh-CN', { 
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+  currentDate.value = now.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+  })
+}
+
+// 获取一言
+const fetchQuote = async () => {
+  try {
+    const response = await fetch('https://v1.hitokoto.cn/')
+    const data = await response.json()
+    quote.value = {
+      text: data.hitokoto,
+      author: data.from
+    }
+  } catch (error) {
+    console.log('获取一言失败:', error)
+    quote.value = {
+      text: '代码是诗，开发者是诗人。',
+      author: '程序员格言'
+    }
   }
 }
 
 onMounted(() => {
-  updateLayout()
-  window.addEventListener('resize', updateLayout)
-  window.addEventListener('orientationchange', () => {
-    setTimeout(updateLayout, 100)
-  })
+  updateTime()
+  timeInterval = setInterval(updateTime, 1000)
+  fetchQuote()
+  loadMetingJS()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', updateLayout)
-  window.removeEventListener('orientationchange', updateLayout)
+  if (progressInterval) {
+    clearInterval(progressInterval)
+  }
+  if (timeInterval) {
+    clearInterval(timeInterval)
+  }
 })
+
+// 音乐播放器相关函数
+const loadMetingJS = () => {
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css'
+  document.head.appendChild(link)
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
+  script.onload = () => {
+    const metingScript = document.createElement('script')
+    metingScript.src = 'https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js'
+    metingScript.onload = initMeting
+    document.head.appendChild(metingScript)
+  }
+  document.head.appendChild(script)
+}
+
+const initMeting = () => {
+  const metingElement = document.createElement('meting-js')
+  metingElement.setAttribute('server', 'netease')
+  metingElement.setAttribute('type', 'playlist')
+  metingElement.setAttribute('id', '9167231423')
+  metingElement.setAttribute('fixed', 'false')
+  metingElement.setAttribute('autoplay', 'false')
+  metingElement.setAttribute('theme', '#6366f1')
+  metingElement.setAttribute('loop', 'all')
+  metingElement.setAttribute('order', 'random')
+  metingElement.setAttribute('preload', 'auto')
+  metingElement.setAttribute('volume', '0.7')
+  metingElement.setAttribute('mutex', 'true')
+  
+  metingPlayer.value.appendChild(metingElement)
+  
+  setTimeout(() => {
+    const aplayerElement = metingPlayer.value.querySelector('.aplayer')
+    if (aplayerElement && window.aplayers && window.aplayers.length > 0) {
+      metingInstance = window.aplayers[window.aplayers.length - 1]
+      setupPlayerEvents()
+    }
+  }, 2000)
+}
+
+const setupPlayerEvents = () => {
+  if (!metingInstance) return
+
+  metingInstance.on('play', () => {
+    isPlaying.value = true
+    startProgressUpdate()
+  })
+
+  metingInstance.on('pause', () => {
+    isPlaying.value = false
+    stopProgressUpdate()
+  })
+
+  metingInstance.on('loadedmetadata', () => {
+    duration.value = metingInstance.audio.duration
+    updateCurrentSong()
+  })
+
+  metingInstance.on('timeupdate', () => {
+    currentTimeMusic.value = metingInstance.audio.currentTime
+    progress.value = (currentTimeMusic.value / duration.value) * 100
+  })
+}
+
+const togglePlay = () => {
+  if (metingInstance) {
+    if (isPlaying.value) {
+      metingInstance.pause()
+    } else {
+      metingInstance.play()
+    }
+  }
+}
+
+const previousSong = () => {
+  if (metingInstance) {
+    metingInstance.skipBack()
+  }
+}
+
+const nextSong = () => {
+  if (metingInstance) {
+    metingInstance.skipForward()
+  }
+}
+
+const startProgressUpdate = () => {
+  progressInterval = setInterval(() => {
+    if (metingInstance && metingInstance.audio) {
+      currentTimeMusic.value = metingInstance.audio.currentTime
+      progress.value = (currentTimeMusic.value / duration.value) * 100
+    }
+  }, 1000)
+}
+
+const stopProgressUpdate = () => {
+  if (progressInterval) {
+    clearInterval(progressInterval)
+    progressInterval = null
+  }
+}
+
+const updateCurrentSong = () => {
+  if (metingInstance && metingInstance.list && metingInstance.list.audios[metingInstance.list.index]) {
+    const current = metingInstance.list.audios[metingInstance.list.index]
+    currentSong.value = {
+      title: current.name,
+      artist: current.artist,
+      cover: current.cover
+    }
+  }
+}
+
+const formatTime = (seconds) => {
+  const mins = Math.floor(seconds / 60)
+  const secs = Math.floor(seconds % 60)
+  return `${mins}:${secs.toString().padStart(2, '0')}`
+}
 </script>
 
 <style scoped>
-@import '../assets/common.css';
-
 .profile-container {
   max-width: 1200px;
   width: 100%;
   display: grid;
-  gap: 2rem;
-  transition: all var(--transition-normal);
-}
-
-/* 横屏布局 - 左右两栏 */
-.profile-container.desktop-horizontal {
   grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  min-height: 80vh;
   align-items: start;
 }
 
-/* 竖屏布局 - 上下两栏 */
-.profile-container.desktop-vertical,
-.profile-container.mobile-vertical {
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
-}
-
-/* 主要信息区块 */
-.main-section {
+/* 左侧面板 */
+.left-panel {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 2.5rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.profile-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.left-panel:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.avatar-section {
   text-align: center;
-  gap: 1.5rem;
-}
-
-.avatar-container {
-  position: relative;
 }
 
 .avatar {
   width: 120px;
   height: 120px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
   border: 3px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  transition: all 0.3s ease;
   background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
   padding: 3px;
 }
 
-.profile-info .name {
-  font-size: 2.5rem;
+.avatar:hover {
+  transform: scale(1.05);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  background: #10b981;
+  border-radius: 50%;
+  border: 3px solid var(--bg-primary);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.name {
+  font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.title {
-  font-size: 1.2rem;
+.description {
+  font-size: 1rem;
   color: var(--text-secondary);
-  font-weight: 500;
-  margin-bottom: 1rem;
+  line-height: 1.6;
+  margin: 0;
 }
 
-.location {
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.social-link {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-.about-content {
-  text-align: center;
-}
-
-.bio {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-}
-
-.stat-item {
-  text-align: center;
   padding: 1rem;
-  background: var(--glass-bg);
-  border-radius: 12px;
-  border: 1px solid var(--glass-border);
-  transition: all var(--transition-normal);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.stat-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-2px);
+.social-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
 }
 
-.stat-number {
-  display: block;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 0.25rem;
+.social-link:hover::before {
+  left: 100%;
 }
 
-.stat-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.social-link:hover {
+  transform: translateX(8px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
 }
 
-/* 次要信息区块 */
-.secondary-section {
+.social-link i {
+  font-size: 1.3rem;
+  width: 35px;
+  display: flex;
+  justify-content: center;
+}
+
+.social-link span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* 右侧面板 */
+.right-panel {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.skills-section h2,
-.contact-section h2 {
-  font-size: 1.5rem;
+.info-section {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.info-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.time-display {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.current-time {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  font-family: 'Courier New', monospace;
+  margin-bottom: 0.5rem;
+}
+
+.current-date {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.quote-section {
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quote-text {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.quote-author {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.music-section {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.music-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.section-header h3 {
+  font-size: 1.3rem;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
-.skills-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-}
-
-.skill-category h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+#meting-player {
   margin-bottom: 1rem;
 }
 
-.skills-list {
+.custom-controls {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.skill-item {
+.now-playing {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.album-art {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.album-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.song-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.song-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-artist {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.control-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.play-pause {
+  width: 55px;
+  height: 55px;
+  background: var(--primary-color);
+  font-size: 1.4rem;
+}
+
+.play-pause:hover {
+  background: var(--primary-dark);
+}
+
+.progress-container {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.skill-name {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  font-weight: 500;
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.social-links {
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  border-radius: 3px;
+  transition: width 0.1s ease;
+}
+
+.time-info {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 /* 响应式布局 */
 @media (max-width: 768px) {
   .profile-container {
+    grid-template-columns: 1fr;
     gap: 1.5rem;
+    min-height: auto;
   }
   
-  .main-section,
-  .secondary-section {
-    gap: 1.5rem;
+  .left-panel {
+    padding: 2rem;
   }
   
   .avatar {
@@ -364,52 +709,37 @@ onUnmounted(() => {
     height: 100px;
   }
   
-  .profile-info .name {
+  .name {
+    font-size: 1.8rem;
+  }
+  
+  .current-time {
     font-size: 2rem;
   }
   
-  .title {
-    font-size: 1rem;
-  }
-  
-  .stats {
-    grid-template-columns: 1fr;
-    gap: 0.8rem;
-  }
-  
-  .stat-item {
+  .social-link {
     padding: 0.8rem;
   }
   
-  .stat-number {
-    font-size: 1.5rem;
+  .control-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .play-pause {
+    width: 50px;
+    height: 50px;
   }
 }
 
-/* 横屏特定样式 */
-@media (min-width: 769px) {
-  .profile-container.desktop-horizontal .profile-header {
-    flex-direction: row;
-    text-align: left;
-    align-items: center;
-  }
-  
-  .profile-container.desktop-horizontal .avatar {
-    width: 140px;
-    height: 140px;
-  }
-  
-  .profile-container.desktop-horizontal .about-content {
-    text-align: left;
-  }
-  
-  .profile-container.desktop-horizontal .bio {
-    margin-left: 0;
-    margin-right: 0;
-  }
-  
-  .profile-container.desktop-horizontal .skills-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+/* 隐藏默认的 APlayer 样式 */
+:deep(.aplayer) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+:deep(.aplayer-body) {
+  background: transparent !important;
 }
 </style>

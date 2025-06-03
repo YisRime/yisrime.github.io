@@ -95,32 +95,34 @@ const loadMetingJS = () => {
 }
 
 const initMeting = () => {
-  // 初始化 APlayer
-  metingInstance = new APlayer({
-    container: metingPlayer.value,
-    fixed: false,
-    autoplay: false,
-    theme: '#6366f1',
-    loop: 'all',
-    order: 'random',
-    preload: 'auto',
-    volume: 0.7,
-    mutex: true,
-    audio: [
-      {
-        name: 'Sample Song 1',
-        artist: 'Sample Artist',
-        url: 'https://music.163.com/song/media/outer/url?id=1901371647',
-        cover: '/default-cover.jpg'
-      },
-      {
-        name: 'Sample Song 2',
-        artist: 'Sample Artist 2',
-        url: 'https://music.163.com/song/media/outer/url?id=1901371648',
-        cover: '/default-cover.jpg'
-      }
-    ]
-  })
+  // 使用 MetingJS 加载网易云歌单
+  const metingElement = document.createElement('meting-js')
+  metingElement.setAttribute('server', 'netease')
+  metingElement.setAttribute('type', 'playlist')
+  metingElement.setAttribute('id', '9167231423')
+  metingElement.setAttribute('fixed', 'false')
+  metingElement.setAttribute('autoplay', 'false')
+  metingElement.setAttribute('theme', '#6366f1')
+  metingElement.setAttribute('loop', 'all')
+  metingElement.setAttribute('order', 'random')
+  metingElement.setAttribute('preload', 'auto')
+  metingElement.setAttribute('volume', '0.7')
+  metingElement.setAttribute('mutex', 'true')
+  
+  metingPlayer.value.appendChild(metingElement)
+  
+  // 等待 MetingJS 初始化完成后获取 APlayer 实例
+  setTimeout(() => {
+    const aplayerElement = metingPlayer.value.querySelector('.aplayer')
+    if (aplayerElement && window.aplayers && window.aplayers.length > 0) {
+      metingInstance = window.aplayers[window.aplayers.length - 1]
+      setupPlayerEvents()
+    }
+  }, 2000)
+}
+
+const setupPlayerEvents = () => {
+  if (!metingInstance) return
 
   // 监听播放事件
   metingInstance.on('play', () => {
