@@ -23,9 +23,18 @@ const segmentMapping = {
 const timeDigits = computed(() => {
   const [hour = '00', minute = '00', second = '00'] = currentTime.value.split(':')
   return {
-    hour: [parseInt(hour[0]), parseInt(hour[1])],
-    minute: [parseInt(minute[0]), parseInt(minute[1])],
-    second: [parseInt(second[0]), parseInt(second[1])]
+    hour: [
+      { value: parseInt(hour[0]) || 0, index: 0 },
+      { value: parseInt(hour[1]) || 0, index: 1 }
+    ],
+    minute: [
+      { value: parseInt(minute[0]) || 0, index: 0 },
+      { value: parseInt(minute[1]) || 0, index: 1 }
+    ],
+    second: [
+      { value: parseInt(second[0]) || 0, index: 0 },
+      { value: parseInt(second[1]) || 0, index: 1 }
+    ]
   }
 })
 
@@ -97,133 +106,146 @@ onUnmounted(() => {
 <style scoped>
 .time-display {
   text-align: center;
-  max-width: 200px;
+  max-width: 280px;
   margin: 0 auto;
+  padding: 1rem;
 }
 
 .digital-clock {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .time-section {
-  padding: 0.2rem 0;
+  padding: 0.5rem 0;
 }
 
 .digital-numbers {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
+  gap: 0.8rem;
   font-family: 'Courier New', monospace;
 }
 
 .digit-group {
   display: flex;
-  gap: 0.1rem;
+  gap: 0.2rem;
 }
 
 .digit {
   position: relative;
-  width: 20px;
-  height: 30px;
+  width: 28px;
+  height: 40px;
   display: inline-block;
+  margin: 0 2px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 }
 
 .segment {
   position: absolute;
-  background: rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: all 0.4s ease;
+  border-radius: 2px;
 }
 
 .segment.active {
   background: var(--primary-color);
-  box-shadow: 0 0 6px var(--primary-color);
+  box-shadow: 
+    0 0 8px var(--primary-color),
+    0 0 16px rgba(99, 102, 241, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* 七段数码管样式 */
 .segment-1 { /* 顶部 */
-  top: 0;
-  left: 2px;
-  width: 16px;
-  height: 2px;
+  top: 2px;
+  left: 4px;
+  width: 20px;
+  height: 3px;
 }
 
 .segment-2 { /* 右上 */
-  top: 1px;
-  right: 0;
-  width: 2px;
-  height: 12px;
+  top: 4px;
+  right: 2px;
+  width: 3px;
+  height: 15px;
 }
 
 .segment-3 { /* 右下 */
-  bottom: 1px;
-  right: 0;
-  width: 2px;
-  height: 12px;
+  bottom: 4px;
+  right: 2px;
+  width: 3px;
+  height: 15px;
 }
 
 .segment-4 { /* 底部 */
-  bottom: 0;
-  left: 2px;
-  width: 16px;
-  height: 2px;
+  bottom: 2px;
+  left: 4px;
+  width: 20px;
+  height: 3px;
 }
 
 .segment-5 { /* 左下 */
-  bottom: 1px;
-  left: 0;
-  width: 2px;
-  height: 12px;
+  bottom: 4px;
+  left: 2px;
+  width: 3px;
+  height: 15px;
 }
 
 .segment-6 { /* 左上 */
-  top: 1px;
-  left: 0;
-  width: 2px;
-  height: 12px;
+  top: 4px;
+  left: 2px;
+  width: 3px;
+  height: 15px;
 }
 
 .segment-7 { /* 中间 */
   top: 50%;
-  left: 2px;
-  width: 16px;
-  height: 2px;
+  left: 4px;
+  width: 20px;
+  height: 3px;
   transform: translateY(-50%);
 }
 
 .separator {
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   color: var(--primary-color);
   font-weight: bold;
   display: flex;
   align-items: center;
-  text-shadow: 0 0 6px var(--primary-color);
-  transition: opacity 0.3s ease;
+  text-shadow: 
+    0 0 8px var(--primary-color),
+    0 0 16px rgba(99, 102, 241, 0.6);
+  transition: opacity 0.5s ease;
+  line-height: 1;
 }
 
 .separator.blink {
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 .date-section {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 0.8rem;
+  margin-top: 0.5rem;
 }
 
 .current-date {
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
   font-weight: 500;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {
   .time-display {
     padding: 0.6rem;
-    max-width: 160px;
+    max-width: 240px;
   }
   
   .digit {

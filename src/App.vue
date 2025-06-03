@@ -161,7 +161,6 @@ onUnmounted(() => {
   }
   
   .right-content {
-    margin-left: 0;
     width: 100%;
     min-height: 50vh;
   }
