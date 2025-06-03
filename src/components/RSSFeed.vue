@@ -5,65 +5,26 @@ const rssItems = ref([])
 const isLoading = ref(true)
 const error = ref('')
 
-// RSS源配置
-const rssFeeds = [
-  {
-    name: '雪淞亭',
-    url: 'https://blog.yisrime.link/?feed=rss'
-  }
-]
-
 const fetchRSSFeed = async () => {
   isLoading.value = true
   error.value = ''
   
   try {
-    // 尝试多个RSS代理服务
-    const feedUrl = rssFeeds[0].url
-    const apis = [
-      `https://rss2json.com/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=5`,
-      `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}&format=json`,
-      `https://cors-anywhere.herokuapp.com/${feedUrl}`
-    ]
-    
-    let success = false
-    
-    // 首先尝试rss2json
-    try {
-      const response = await fetch(apis[0])
-      if (response.ok) {
-        const data = await response.json()
-        if (data.status === 'ok' && data.items) {
-          rssItems.value = data.items.map(item => ({
-            title: item.title,
-            link: item.link,
-            pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
-            description: item.description?.replace(/<[^>]*>/g, '').substring(0, 100) + '...'
-          }))
-          success = true
-        }
+    const response = await fetch(`https://rss2json.com/api.json?rss_url=${encodeURIComponent('https://blog.yisrime.link/?feed=rss')}&count=5`)
+    if (response.ok) {
+      const data = await response.json()
+      if (data.status === 'ok' && data.items) {
+        rssItems.value = data.items.map(item => ({
+          title: item.title,
+          link: item.link,
+          pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
+          description: item.description?.replace(/<[^>]*>/g, '').substring(0, 100) + '...'
+        }))
+      } else {
+        throw new Error('RSS解析失败')
       }
-    } catch (e) {
-      console.log('rss2json失败，尝试其他方式')
-    }
-    
-    // 如果第一个失败，显示示例数据
-    if (!success) {
-      console.log('所有RSS服务都不可用，显示示例数据')
-      rssItems.value = [
-        {
-          title: '欢迎访问我的博客',
-          link: 'https://blog.yisrime.link',
-          pubDate: new Date().toLocaleDateString('zh-CN'),
-          description: '这里会显示最新的博客文章，目前RSS服务暂时不可用...'
-        },
-        {
-          title: '关于我',
-          link: 'https://blog.yisrime.link/about',
-          pubDate: new Date().toLocaleDateString('zh-CN'),
-          description: '了解更多关于我的信息和技术分享...'
-        }
-      ]
+    } else {
+      throw new Error('网络请求失败')
     }
   } catch (err) {
     console.error('RSS获取失败:', err)
@@ -71,10 +32,10 @@ const fetchRSSFeed = async () => {
     // 显示示例数据
     rssItems.value = [
       {
-        title: '示例文章标题',
-        link: '#',
-        pubDate: '2024-01-01',
-        description: '这是一个示例文章描述...'
+        title: '欢迎访问我的博客',
+        link: 'https://blog.yisrime.link',
+        pubDate: new Date().toLocaleDateString('zh-CN'),
+        description: '这里会显示最新的博客文章，目前RSS服务暂时不可用...'
       }
     ]
   } finally {
@@ -82,9 +43,7 @@ const fetchRSSFeed = async () => {
   }
 }
 
-onMounted(() => {
-  fetchRSSFeed()
-})
+onMounted(fetchRSSFeed)
 </script>
 
 <template>
@@ -130,14 +89,12 @@ onMounted(() => {
 
 <style scoped>
 .rss-feed {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   padding: 2rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  box-shadow: none;
+  transition: none;
   position: relative;
   overflow: hidden;
   height: 100%;

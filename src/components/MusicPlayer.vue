@@ -90,7 +90,7 @@ onUnmounted(() => {
   border-radius: 16px !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
   font-family: inherit !important;
-  min-height: 400px !important;
+  min-height: 500px !important;
   display: flex !important;
   flex-direction: column !important;
   position: relative !important;
@@ -100,14 +100,13 @@ onUnmounted(() => {
   background: transparent !important;
   flex: 1 !important;
   display: flex !important;
-  flex-direction: row !important;
+  flex-direction: column !important;
   position: relative !important;
   z-index: 1 !important;
   width: 100% !important;
   max-width: 100% !important;
   padding: 0 !important;
   overflow: hidden !important;
-  align-items: stretch !important;
 }
 
 :deep(.aplayer-body::before),
@@ -119,21 +118,17 @@ onUnmounted(() => {
 :deep(.aplayer-pic) {
   position: relative !important;
   z-index: 2 !important;
-  width: 160px !important;
-  min-width: 160px !important;
-  height: 160px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 200px !important;
   flex-shrink: 0 !important;
 }
 
 :deep(.aplayer-info) {
   background: transparent !important;
-  border-bottom: none !important;
-  border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   padding: 16px 20px 12px !important;
-  flex: 1 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
+  order: 2 !important;
 }
 
 :deep(.aplayer-music) {
@@ -151,7 +146,7 @@ onUnmounted(() => {
 
 :deep(.aplayer-controller) {
   background: transparent !important;
-  padding: 16px 20px 12px 20px !important;
+  padding: 20px 24px 16px 24px !important;
   position: relative !important;
   z-index: 20 !important;
   order: 10 !important;
@@ -268,7 +263,7 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  max-height: 120px !important;
+  max-height: 160px !important;
   overflow-y: auto !important;
   position: relative !important;
   z-index: 5 !important;
@@ -372,18 +367,7 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  :deep(.aplayer-body) {
-    flex-direction: column !important;
-  }
-  
-  :deep(.aplayer-pic) {
-    width: 100% !important;
-    height: 120px !important;
-  }
-  
   :deep(.aplayer-info) {
-    border-left: none !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
     padding: 8px 12px !important;
   }
   

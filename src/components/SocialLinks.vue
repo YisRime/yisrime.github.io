@@ -1,29 +1,13 @@
 <script setup>
-import { onMounted } from 'vue'
 import { socialLinksConfig } from '@/config'
 
-const loadedAssets = new Set()
-
-const loadFontAwesome = () => {
-  if (loadedAssets.has('fontawesome') || document.querySelector('link[href*="font-awesome"]')) {
-    return Promise.resolve()
-  }
-
-  return new Promise((resolve) => {
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
-    link.onload = () => {
-      loadedAssets.add('fontawesome')
-      resolve()
-    }
-    document.head.appendChild(link)
-  })
+// 检查并加载Font Awesome
+if (!document.querySelector('link[href*="font-awesome"]')) {
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
+  document.head.appendChild(link)
 }
-
-onMounted(() => {
-  loadFontAwesome()
-})
 </script>
 
 <template>  <div class="social-links">

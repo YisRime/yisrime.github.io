@@ -7,29 +7,15 @@ import HitokotoDisplay from './components/HitokotoDisplay.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
 import RSSFeed from './components/RSSFeed.vue'
 
-// 响应式功能
-const deviceType = ref('')
 const isMobile = ref(false)
 const backgroundImage = ref('')
 
 const updateResponsiveData = () => {
-  const width = window.innerWidth
-  
-  if (width <= 480) {
-    deviceType.value = 'mobile'
-    isMobile.value = true
-  } else if (width <= 768) {
-    deviceType.value = 'tablet'
-    isMobile.value = false
-  } else {
-    deviceType.value = 'desktop'
-    isMobile.value = false
-  }
+  isMobile.value = window.innerWidth <= 768
 }
 
 const loadRandomBackground = () => {
-  const isMobileDevice = window.innerWidth <= 768
-  const apiUrl = isMobileDevice 
+  const apiUrl = window.innerWidth <= 768
     ? 'https://api.fuukei.org/random-img/default/mobile.php'
     : 'https://api.fuukei.org/random-img/default/pc.php'
   
@@ -118,7 +104,7 @@ onUnmounted(() => {
 
 .main-container {
   max-width: none;
-  width: 95%;
+  width: 90%;
   display: flex;
   gap: 3rem;
   align-items: stretch;
@@ -126,9 +112,9 @@ onUnmounted(() => {
 }
 
 .left-content {
-  flex: 0 0 35%;
-  max-width: 380px;
-  min-width: 320px;
+  flex: 0 0 40%;
+  max-width: 450px;
+  min-width: 350px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -136,12 +122,11 @@ onUnmounted(() => {
 }
 
 .right-content {
-  flex: 0 0 60%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 85vh;
   align-self: stretch;
-  margin-left: 2rem;
 }
 
 @media (max-width: 1200px) {

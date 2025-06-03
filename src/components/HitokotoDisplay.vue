@@ -1,47 +1,23 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-const quote = ref({
-  text: '加载中...',
-  author: ''
-})
-
+const quote = ref({ text: '加载中...', author: '' })
 const isLoading = ref(true)
 
 const fetchHitokoto = async () => {
   isLoading.value = true
-  
   try {
-    const response = await fetch('https://v1.hitokoto.cn/', {
-      timeout: 5000
-    })
-    
-    if (!response.ok) {
-      throw new Error('网络请求失败')
-    }
-    
+    const response = await fetch('https://v1.hitokoto.cn/')
     const data = await response.json()
-    quote.value = {
-      text: data.hitokoto,
-      author: data.from || '未知'
-    }  } catch (error) {
-    console.log('获取一言失败:', error)
-    quote.value = {
-      text: '网络请求失败，请稍后再试',
-      author: ''
-    }
+    quote.value = { text: data.hitokoto, author: data.from || '未知' }
+  } catch {
+    quote.value = { text: '网络请求失败，请稍后再试', author: '' }
   } finally {
     isLoading.value = false
   }
 }
 
-const refreshQuote = () => {
-  fetchHitokoto()
-}
-
-onMounted(() => {
-  fetchHitokoto()
-})
+onMounted(fetchHitokoto)
 </script>
 
 <template>
@@ -56,12 +32,10 @@ onMounted(() => {
 <style scoped>
 .hitokoto-display {
   padding: 1.5rem;
-  position: relative;
   text-align: center;
 }
 
 .quote-content {
-  text-align: center;
   margin-bottom: 1rem;
   transition: opacity 0.3s ease;
 }
@@ -76,7 +50,6 @@ onMounted(() => {
   line-height: 1.5;
   margin-bottom: 0.8rem;
   font-style: italic;
-  min-height: 1.5em;
   font-weight: 500;
 }
 
@@ -85,7 +58,6 @@ onMounted(() => {
   color: var(--text-secondary);
   font-weight: 500;
   text-align: right;
-  margin-top: 0.5rem;
 }
 
 @media (max-width: 768px) {

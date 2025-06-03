@@ -21,66 +21,44 @@ const segmentMapping = {
 }
 
 const timeDigits = computed(() => {
-  const time = currentTime.value.split(':')
-  const hour = time[0] || '00'
-  const minute = time[1] || '00'
-  const second = time[2] || '00'
-  
+  const [hour = '00', minute = '00', second = '00'] = currentTime.value.split(':')
   return {
-    hour: [
-      { index: 0, value: parseInt(hour[0]) },
-      { index: 1, value: parseInt(hour[1]) }
-    ],
-    minute: [
-      { index: 0, value: parseInt(minute[0]) },
-      { index: 1, value: parseInt(minute[1]) }
-    ],
-    second: [
-      { index: 0, value: parseInt(second[0]) },
-      { index: 1, value: parseInt(second[1]) }
-    ]
+    hour: [parseInt(hour[0]), parseInt(hour[1])],
+    minute: [parseInt(minute[0]), parseInt(minute[1])],
+    second: [parseInt(second[0]), parseInt(second[1])]
   }
 })
 
-const getSegmentClass = (digit, segment) => {
-  const isActive = segmentMapping[digit] && segmentMapping[digit][segment - 1]
-  return {
-    [`segment-${segment}`]: true,
-    'active': isActive
-  }
-}
+const getSegmentClass = (digit, segment) => ({
+  [`segment-${segment}`]: true,
+  'active': segmentMapping[digit]?.[segment - 1]
+})
 
 const updateTime = () => {
   const now = new Date()
-  
   currentTime.value = now.toLocaleTimeString('zh-CN', { 
     hour12: false,
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'
   })
-  
   currentDate.value = now.toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     weekday: 'long'
   })
-  
   separatorBlink.value = !separatorBlink.value
 }
 
 onMounted(() => {
   updateTime()
-  if (!timeInterval) {
-    timeInterval = setInterval(updateTime, 1000)
-  }
+  timeInterval = setInterval(updateTime, 1000)
 })
 
 onUnmounted(() => {
   if (timeInterval) {
     clearInterval(timeInterval)
-    timeInterval = null
   }
 })
 </script>
@@ -120,7 +98,6 @@ onUnmounted(() => {
 .time-display {
   text-align: center;
   max-width: 200px;
-  margin: 0 auto;
 }
 
 .digital-clock {
