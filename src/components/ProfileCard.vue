@@ -1,142 +1,86 @@
-<template>
-  <div class="profile-container" :class="`device-${deviceType}`">
-    <!-- 左侧主要内容 -->
-    <div class="left-content">
-      <!-- 头像和昵称 -->
-      <ProfileHeader />
-      
-      <!-- 介绍卡片 -->
-      <IntroCard />
-      
-      <!-- 社交链接 -->
-      <SocialLinks />
+<script setup>
+import { profileConfig } from '@/config'
+</script>
+
+<template>  <div class="profile-header">
+    <div class="avatar">
+      <img :src="profileConfig.avatar" :alt="profileConfig.name" />
     </div>
-    
-    <!-- 右侧内容（在大屏幕时显示） -->
-    <div class="right-content" :class="{ 'mobile-stack': isMobile }">
-      <!-- 时间和一言 -->
-      <div class="info-section" :class="{ 'mobile-layout': isMobile }">
-        <TimeDisplay />
-        <QuoteSection />
-      </div>
-      
-      <!-- 音乐播放器 -->
-      <MusicSection />
-    </div>
+    <h1 class="name">{{ profileConfig.name }}</h1>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import ProfileHeader from './ProfileHeader.vue'
-import IntroCard from './IntroCard.vue'
-import SocialLinks from './SocialLinks.vue'
-import TimeDisplay from './TimeDisplay.vue'
-import QuoteSection from './QuoteSection.vue'
-import MusicSection from './MusicSection.vue'
-
-// 响应式功能
-const deviceType = ref('')
-const isMobile = ref(false)
-
-const updateResponsiveData = () => {
-  const width = window.innerWidth
-  
-  if (width <= 480) {
-    deviceType.value = 'mobile'
-    isMobile.value = true
-  } else if (width <= 768) {
-    deviceType.value = 'tablet'
-    isMobile.value = false
-  } else {
-    deviceType.value = 'desktop'
-    isMobile.value = false
-  }
-}
-
-onMounted(() => {
-  updateResponsiveData()
-  window.addEventListener('resize', updateResponsiveData)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateResponsiveData)
-})
-</script>
-
 <style scoped>
-.profile-container {
-  max-width: 1200px;
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.profile-header:hover {
+  transform: translateY(-3px);
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  transition: all 0.3s ease;
+  background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+}
+
+.avatar img {
   width: 100%;
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
-.left-content {
-  flex: 0 0 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+.name {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
 }
 
-.right-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* 时间和一言部分 */
-.info-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-/* 桌面端布局 */
-@media (min-width: 1024px) {
-  .profile-container.device-desktop {
-    flex-direction: row;
-  }
-}
-
-/* 平板端布局 */
-@media (max-width: 1023px) {
-  .profile-container {
-    flex-direction: column;
-    max-width: 500px;
-  }
-  
-  .left-content {
-    flex: none;
-    width: 100%;
-  }
-  
-  .right-content {
-    width: 100%;
-  }
-}
-
-/* 响应式布局 */
 @media (max-width: 768px) {
-  .profile-container {
-    max-width: 100%;
-    padding: 1rem;
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
     gap: 1rem;
+    padding: 1.5rem;
   }
   
-  .left-content {
-    gap: 1rem;
+  .avatar {
+    width: 100px;
+    height: 100px;
   }
   
-  .right-content {
-    gap: 1rem;
+  .name {
+    font-size: 1.8rem;
   }
-  
-  .info-section {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+}
+
+@media (min-width: 769px) and (orientation: landscape) {
+  .profile-header {
+    justify-content: flex-start;
   }
 }
 </style>

@@ -38,7 +38,7 @@ export const socialLinksConfig = [
 ]
 
 export const profileConfig = {
-  name: 'Yis_Rime',
+  name: '苡淞',
   avatar: '/avatar.webp',
   intro: '天山云水 上下一白'
 }
