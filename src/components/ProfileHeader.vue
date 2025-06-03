@@ -137,4 +137,38 @@
     font-size: 1rem;
   }
 }
+
+/* 横屏特殊优化 */
+@media (min-width: 769px) and (orientation: landscape) {
+  .profile-header {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .avatar-container {
+    margin-bottom: 0;
+  }
+  
+  .profile-info {
+    flex: 1;
+  }
+}
+
+/* 竖屏保持居中 */
+@media (min-width: 769px) and (orientation: portrait) {
+  .profile-header {
+    text-align: center;
+  }
+  
+  .avatar {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .profile-info h1 {
+    font-size: 2.8rem;
+  }
+}
 </style>
