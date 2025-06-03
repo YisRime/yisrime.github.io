@@ -79,7 +79,7 @@ onUnmounted(() => {
         
         <!-- 音乐播放器 -->
         <div class="music-section">
-          <div id="aplayer-container"></div>
+          <MusicPlayer />
         </div>
       </div>
       
@@ -147,6 +147,8 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 80vh;
+  align-self: stretch;
 }
 
 .time-corner {

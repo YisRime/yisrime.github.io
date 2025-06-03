@@ -2,85 +2,28 @@
 import { profileConfig } from '@/config'
 </script>
 
-<template>  <div class="profile-header">
-    <div class="avatar">
-      <img :src="profileConfig.avatar" :alt="profileConfig.name" />
-    </div>
-    <h1 class="name">{{ profileConfig.name }}</h1>
+<template>
+  <div class="profile-simple">
+    <h1 class="name">苡淞</h1>
   </div>
 </template>
 
 <style scoped>
-.profile-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  padding: 1rem;
-  transition: all 0.3s ease;
-}
-
-.profile-header:hover {
-  transform: translateY(-3px);
-}
-
-.avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  position: relative;
-  transition: all 0.3s ease;
-  background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
-  padding: 3px;
-  flex-shrink: 0;
-}
-
-.avatar:hover {
-  transform: scale(1.05);
-  border-color: var(--primary-color);
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
+.profile-simple {
+  text-align: center;
 }
 
 .name {
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
   margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {
-  .profile-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .avatar {
-    width: 100px;
-    height: 100px;
-  }
-  
   .name {
-    font-size: 1.8rem;
-  }
-}
-
-@media (min-width: 769px) and (orientation: landscape) {
-  .profile-header {
-    justify-content: flex-start;
+    font-size: 2.5rem;
   }
 }
 </style>

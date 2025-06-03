@@ -44,33 +44,25 @@ onMounted(() => {
 .social-links {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
 }
 
 .social-link {
-  width: 50px;
-  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
   text-decoration: none;
   color: var(--text-primary);
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .social-link:hover {
-  transform: translateY(-3px) scale(1.1);
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
-  border-color: #6366f1;
+  color: var(--primary-color);
+  transform: scale(1.2);
+  text-shadow: 0 0 10px var(--primary-color);
 }
 
 @media (max-width: 768px) {

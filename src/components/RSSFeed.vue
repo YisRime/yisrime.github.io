@@ -104,39 +104,30 @@ onMounted(() => {
 
 <style scoped>
 .rss-feed {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 24px;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  border-radius: 0;
   padding: 2rem;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: none;
+  transition: none;
   position: relative;
   overflow: hidden;
-  height: fit-content;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .rss-feed::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  display: none;
 }
 
 .rss-feed:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(99, 102, 241, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(99, 102, 241, 0.3);
+  transform: none;
+  box-shadow: none;
+  background: transparent;
+  border-color: transparent;
 }
 
 .section-header {
@@ -193,7 +184,10 @@ onMounted(() => {
 }
 
 .rss-content {
-  min-height: 200px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .loading, .error {
@@ -229,19 +223,19 @@ onMounted(() => {
   display: block;
   text-decoration: none;
   color: inherit;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   padding: 1.2rem;
   transition: all 0.3s ease;
-  backdrop-filter: blur(20px);
+  backdrop-filter: none;
 }
 
 .rss-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   border-color: var(--primary-color);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
 }
 
 .item-title {
