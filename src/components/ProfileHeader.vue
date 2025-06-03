@@ -1,106 +1,50 @@
+<script setup>
+import { profileConfig } from '@/config'
+</script>
+
 <template>
   <div class="profile-header">
-    <div class="avatar-container">
-      <div class="avatar">
-        <img src="/avatar.webp" alt="Yis_Rime" />
-        <div class="status-indicator"></div>
-      </div>
-    </div>    <div class="profile-info">
-      <h1 class="name">Yis_Rime</h1>
-      <p class="title">全栈开发者</p>
-      <div class="location">
-        <i class="location-icon">📍</i>
-        <span>中国 • 在线</span>
-      </div>
-      <div class="social-links">
-        <a 
-          v-for="link in socialLinks" 
-          :key="link.name"
-          :href="link.url" 
-          target="_blank" 
-          class="social-icon"
-          :title="link.name"
-        >
-          <i>{{ link.icon }}</i>
-        </a>
-      </div>
+    <div class="avatar">
+      <img :src="profileConfig.avatar" :alt="profileConfig.name" />
+      <div class="status-indicator" :class="profileConfig.status"></div>
     </div>
+    <h1 class="name">{{ profileConfig.name }}</h1>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-
-const socialLinks = ref([
-  {
-    name: 'GitHub',
-    url: 'https://github.com/yisrime',
-    icon: '🚀'
-  },
-  {
-    name: 'Email',
-    url: 'mailto:your.email@example.com',
-    icon: '📧'
-  },
-  {
-    name: 'Twitter',
-    url: 'https://twitter.com/yisrime',
-    icon: '🐦'
-  },
-  {
-    name: 'LinkedIn',
-    url: 'https://linkedin.com/in/yisrime',
-    icon: '💼'
-  },
-  {
-    name: 'Blog',
-    url: 'https://blog.yisrime.com',
-    icon: '📝'
-  },
-  {
-    name: 'Discord',
-    url: 'https://discord.gg/yisrime',
-    icon: '🎮'
-  }
-])
-</script>
-
 <style scoped>
 .profile-header {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-  color: var(--text-primary);
-  transition: all var(--transition-normal);
-  grid-area: header;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .profile-header:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-xl);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.avatar-container {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 1.5rem;
+  transform: translateY(-3px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(99, 102, 241, 0.3);
 }
 
 .avatar {
-  width: 120px;
-  height: 120px;
-  position: relative;
-  margin: 0 auto;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid rgba(255, 255, 255, 0.2);
-  transition: all var(--transition-normal);
+  position: relative;
+  transition: all 0.3s ease;
   background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
   padding: 3px;
+  flex-shrink: 0;
 }
 
 .avatar:hover {
@@ -118,84 +62,37 @@ const socialLinks = ref([
 
 .status-indicator {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
+  bottom: 3px;
+  right: 3px;
+  width: 16px;
+  height: 16px;
   background: #10b981;
   border-radius: 50%;
-  border: 3px solid var(--bg-primary);
+  border: 2px solid var(--bg-primary);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
   0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
   100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
-.profile-info h1 {
-  font-size: 2.5rem;
+.name {
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
   background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.title {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-  margin-bottom: 1rem;
-}
-
-.location {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-.location-icon {
-  font-size: 1rem;
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.social-icon {
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  text-decoration: none;
-  transition: all var(--transition-normal);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 1.2rem;
-}
-
-.social-icon:hover {
-  transform: translateY(-3px) scale(1.1);
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
-  border-color: var(--primary-color);
+  margin: 0;
 }
 
 @media (max-width: 768px) {
   .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
     padding: 1.5rem;
   }
   
@@ -204,46 +101,14 @@ const socialLinks = ref([
     height: 100px;
   }
   
-  .profile-info h1 {
-    font-size: 2rem;
-  }
-  
-  .title {
-    font-size: 1rem;
+  .name {
+    font-size: 1.8rem;
   }
 }
 
-/* 横屏特殊优化 */
 @media (min-width: 769px) and (orientation: landscape) {
   .profile-header {
-    text-align: left;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  }
-  
-  .avatar-container {
-    margin-bottom: 0;
-  }
-  
-  .profile-info {
-    flex: 1;
-  }
-}
-
-/* 竖屏保持居中 */
-@media (min-width: 769px) and (orientation: portrait) {
-  .profile-header {
-    text-align: center;
-  }
-  
-  .avatar {
-    width: 140px;
-    height: 140px;
-  }
-  
-  .profile-info h1 {
-    font-size: 2.8rem;
+    justify-content: flex-start;
   }
 }
 </style>
