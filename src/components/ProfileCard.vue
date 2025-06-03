@@ -1,5 +1,4 @@
 <script setup>
-import { profileConfig } from '@/config'
 </script>
 
 <template>

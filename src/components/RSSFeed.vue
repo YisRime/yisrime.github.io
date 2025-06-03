@@ -131,8 +131,6 @@ onMounted(() => {
 <style scoped>
 .rss-feed {
   background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
   border: none;
   border-radius: 0;
   padding: 2rem;
@@ -143,17 +141,6 @@ onMounted(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.rss-feed::before {
-  display: none;
-}
-
-.rss-feed:hover {
-  transform: none;
-  box-shadow: none;
-  background: transparent;
-  border-color: transparent;
 }
 
 .section-header {
@@ -254,7 +241,6 @@ onMounted(() => {
   border-radius: 0;
   padding: 1.2rem;
   transition: all 0.3s ease;
-  backdrop-filter: none;
 }
 
 .rss-item:hover {

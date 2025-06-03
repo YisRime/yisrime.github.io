@@ -50,9 +50,6 @@ onMounted(() => {
       <div class="quote-text">{{ quote.text }}</div>
       <div class="quote-author" v-if="quote.author">—— {{ quote.author }}</div>
     </div>
-    <button @click="refreshQuote" class="refresh-btn" :disabled="isLoading">
-      <i class="fas fa-sync-alt" :class="{ spinning: isLoading }"></i>
-    </button>
   </div>
 </template>
 
@@ -61,17 +58,6 @@ onMounted(() => {
   padding: 1.5rem;
   position: relative;
   text-align: center;
-}
-
-.hitokoto-display::before {
-  display: none;
-}
-
-.hitokoto-display:hover {
-  transform: none;
-  box-shadow: none;
-  background: transparent;
-  border-color: transparent;
 }
 
 .quote-content {
@@ -98,48 +84,8 @@ onMounted(() => {
   font-size: 0.8rem;
   color: var(--text-secondary);
   font-weight: 500;
-}
-
-.refresh-btn {
-  position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.refresh-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
-  color: var(--text-primary);
-  transform: scale(1.1);
-  border-color: var(--primary-color);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-}
-
-.refresh-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.spinning {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  text-align: right;
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 768px) {

@@ -57,16 +57,13 @@ onUnmounted(() => {
       <div class="left-content">
         <!-- 中央主要内容 -->
         <div class="center-content">
-          <!-- 头像和昵称 -->
-          <ProfileCard />
-          
           <!-- 时间显示 -->
           <div class="time-section">
             <TimeDisplay />
           </div>
-          
-          <!-- 介绍文字 -->
-          <div class="intro-text">天山云水 上下一白</div>
+
+          <!-- 头像和昵称 -->
+          <ProfileCard />
           
           <!-- 社交链接 -->
           <SocialLinks />
@@ -112,7 +109,7 @@ onUnmounted(() => {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  filter: blur(1px);
+  filter: blur(0.5px);
   z-index: -2;
 }
 
@@ -122,9 +119,9 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.15);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: -1;
 }
 
@@ -159,15 +156,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 2rem;
-}
-
-.intro-text {
-  font-size: 1.2rem;
-  color: var(--text-primary);
-  text-align: center;
-  font-weight: 500;
-  letter-spacing: 1px;
-  opacity: 0.9;
 }
 
 .music-section {
@@ -206,10 +194,6 @@ onUnmounted(() => {
   
   .left-content {
     gap: 1rem;
-  }
-  
-  .intro-text {
-    font-size: 1.1rem;
   }
 }
 </style>

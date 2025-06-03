@@ -90,10 +90,24 @@ onUnmounted(() => {
   border-radius: 16px !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
   font-family: inherit !important;
+  min-height: 500px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
 }
 
 :deep(.aplayer-body) {
   background: transparent !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+:deep(.aplayer-pic) {
+  position: relative !important;
+  z-index: 2 !important;
 }
 
 :deep(.aplayer-info) {
@@ -116,7 +130,12 @@ onUnmounted(() => {
 
 :deep(.aplayer-controller) {
   background: transparent !important;
-  padding: 12px 16px 8px 16px !important;
+  padding: 20px 24px 16px 24px !important;
+  position: relative !important;
+  z-index: 20 !important;
+  order: 10 !important;
+  margin-top: auto !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 :deep(.aplayer-bar-wrap) {
@@ -226,8 +245,11 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  max-height: 200px !important;
+  max-height: 160px !important;
   overflow-y: auto !important;
+  position: relative !important;
+  z-index: 5 !important;
+  order: 8 !important;
 }
 
 :deep(.aplayer-list ol) {
@@ -267,8 +289,12 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  max-height: 150px !important;
+  max-height: 120px !important;
   padding: 1rem !important;
+  position: relative !important;
+  z-index: 6 !important;
+  order: 7 !important;
+  flex: 0 0 auto !important;
 }
 
 :deep(.aplayer-lrc p) {
@@ -283,6 +309,21 @@ onUnmounted(() => {
   color: var(--primary-color) !important;
   font-weight: 600 !important;
   text-shadow: 0 0 8px rgba(99, 102, 241, 0.3) !important;
+}
+
+/* 确保控制器始终在最底部 */
+:deep(.aplayer .aplayer-controller) {
+  order: 99 !important;
+  flex-shrink: 0 !important;
+}
+
+/* 调整播放列表和歌词的顺序 */
+:deep(.aplayer .aplayer-lrc) {
+  order: 5 !important;
+}
+
+:deep(.aplayer .aplayer-list) {
+  order: 6 !important;
 }
 
 /* 隐藏所有滚动条 */

@@ -122,17 +122,6 @@ onUnmounted(() => {
   max-width: 200px;
 }
 
-.time-display::before {
-  display: none;
-}
-
-.time-display:hover {
-  transform: none;
-  box-shadow: none;
-  background: transparent;
-  border-color: transparent;
-}
-
 .digital-clock {
   display: flex;
   flex-direction: column;
