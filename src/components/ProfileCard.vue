@@ -66,6 +66,8 @@ const handleAvatarClick = () => {
   color: var(--text-primary);
   margin: 0 0 1.5rem 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+  letter-spacing: 0.5px;
 }
 
 .social-links {

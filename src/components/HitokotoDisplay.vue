@@ -145,7 +145,6 @@ onMounted(() => {
   color: var(--text-primary);
   line-height: 1.5;
   margin-bottom: 0.8rem;
-  font-style: italic;
   font-weight: 500;
 }
 
