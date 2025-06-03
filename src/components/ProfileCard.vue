@@ -5,7 +5,6 @@
     <SkillsSection />
     <MusicPlayer />
     <SocialLinks />
-    <ContactForm />
   </div>
 </template>
 
@@ -16,7 +15,6 @@ import AboutSection from './AboutSection.vue'
 import SkillsSection from './SkillsSection.vue'
 import MusicPlayer from './MusicPlayer.vue'
 import SocialLinks from './SocialLinks.vue'
-import ContactForm from './ContactForm.vue'
 import { useResponsive } from '../composables/useResponsive.js'
 
 const { getDeviceClass, deviceType, orientation, screenSize } = useResponsive()
@@ -71,8 +69,7 @@ onUnmounted(() => {
     "about"
     "skills"
     "music"
-    "social"
-    "contact";
+    "social";
 }
 
 /* 平板端 - 两列布局 */
@@ -85,7 +82,7 @@ onUnmounted(() => {
     "header header"
     "about skills"
     "music music"
-    "social contact";
+    "social social";
 }
 
 /* 竖屏布局 - 窄屏优化 */
@@ -99,8 +96,7 @@ onUnmounted(() => {
     "about"
     "skills"
     "music"
-    "social"
-    "contact";
+    "social";
 }
 
 /* 横屏布局 - 宽屏优化 */
@@ -111,7 +107,7 @@ onUnmounted(() => {
   padding: 2rem;
   grid-template-areas: 
     "header about skills social"
-    "header music music contact";
+    "header music music social";
 }
 
 /* 桌面端 - 三列布局 */
@@ -123,7 +119,7 @@ onUnmounted(() => {
   grid-template-areas: 
     "header header skills"
     "about music music"
-    "social contact contact";
+    "social social social";
 }
 
 /* 响应式媒体查询作为后备 */

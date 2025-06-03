@@ -12,6 +12,12 @@ import ProfileCard from './components/ProfileCard.vue'
 /* App组件特定样式 */
 #app {
   position: relative;
+  background-image: url('/wallpaper.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 #app::before {

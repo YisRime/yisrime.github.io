@@ -2,22 +2,67 @@
   <div class="profile-header">
     <div class="avatar-container">
       <div class="avatar">
-        <img src="/avatar.jpg" alt="Yis_Rime" />
+        <img src="/avatar.webp" alt="Yis_Rime" />
         <div class="status-indicator"></div>
       </div>
-    </div>
-    <div class="profile-info">
+    </div>    <div class="profile-info">
       <h1 class="name">Yis_Rime</h1>
       <p class="title">全栈开发者</p>
       <div class="location">
         <i class="location-icon">📍</i>
         <span>中国 • 在线</span>
       </div>
+      <div class="social-links">
+        <a 
+          v-for="link in socialLinks" 
+          :key="link.name"
+          :href="link.url" 
+          target="_blank" 
+          class="social-icon"
+          :title="link.name"
+        >
+          <i>{{ link.icon }}</i>
+        </a>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const socialLinks = ref([
+  {
+    name: 'GitHub',
+    url: 'https://github.com/yisrime',
+    icon: '🚀'
+  },
+  {
+    name: 'Email',
+    url: 'mailto:your.email@example.com',
+    icon: '📧'
+  },
+  {
+    name: 'Twitter',
+    url: 'https://twitter.com/yisrime',
+    icon: '🐦'
+  },
+  {
+    name: 'LinkedIn',
+    url: 'https://linkedin.com/in/yisrime',
+    icon: '💼'
+  },
+  {
+    name: 'Blog',
+    url: 'https://blog.yisrime.com',
+    icon: '📝'
+  },
+  {
+    name: 'Discord',
+    url: 'https://discord.gg/yisrime',
+    icon: '🎮'
+  }
+])
 </script>
 
 <style scoped>
@@ -117,6 +162,36 @@
 
 .location-icon {
   font-size: 1rem;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.social-icon {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1.2rem;
+}
+
+.social-icon:hover {
+  transform: translateY(-3px) scale(1.1);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+  border-color: var(--primary-color);
 }
 
 @media (max-width: 768px) {
