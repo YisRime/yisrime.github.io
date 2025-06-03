@@ -55,26 +55,26 @@ onUnmounted(() => {
     <div class="main-container">
       <!-- 左侧内容 -->
       <div class="left-content">
-        <!-- 时间显示 -->
-        <div class="time-corner">
-          <TimeDisplay />
-        </div>
-        
         <!-- 中央主要内容 -->
         <div class="center-content">
           <!-- 头像和昵称 -->
           <ProfileCard />
+          
+          <!-- 时间显示 -->
+          <div class="time-section">
+            <TimeDisplay />
+          </div>
           
           <!-- 介绍文字 -->
           <div class="intro-text">天山云水 上下一白</div>
           
           <!-- 社交链接 -->
           <SocialLinks />
-        </div>
-        
-        <!-- 下方一言 -->
-        <div class="bottom-content">
-          <HitokotoDisplay />
+          
+          <!-- 一言 -->
+          <div class="hitokoto-section">
+            <HitokotoDisplay />
+          </div>
         </div>
         
         <!-- 音乐播放器 -->
@@ -112,7 +112,7 @@ onUnmounted(() => {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  filter: blur(3px);
+  filter: blur(1px);
   z-index: -2;
 }
 
@@ -122,9 +122,9 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.3);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(15, 23, 42, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: -1;
 }
 
@@ -152,13 +152,6 @@ onUnmounted(() => {
   align-self: stretch;
 }
 
-.time-corner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-
 .center-content {
   flex: 1;
   display: flex;
@@ -166,7 +159,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  padding-top: 4rem;
 }
 
 .intro-text {
@@ -176,10 +168,6 @@ onUnmounted(() => {
   font-weight: 500;
   letter-spacing: 1px;
   opacity: 0.9;
-}
-
-.bottom-content {
-  margin-top: auto;
 }
 
 .music-section {
@@ -196,12 +184,6 @@ onUnmounted(() => {
     flex: none;
     width: 100%;
     position: relative;
-  }
-  
-  .time-corner {
-    position: relative;
-    top: auto;
-    left: auto;
   }
   
   .center-content {
