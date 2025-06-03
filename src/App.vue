@@ -55,29 +55,20 @@ onUnmounted(() => {
     <div class="main-container">
       <!-- 左侧内容 -->
       <div class="left-content">
-        <!-- 中央主要内容 -->
-        <div class="center-content">
-          <!-- 时间显示 -->
-          <div class="time-section">
-            <TimeDisplay />
-          </div>
+        <!-- 时间显示 -->
+        <TimeDisplay />
 
-          <!-- 头像和昵称 -->
-          <ProfileCard />
-          
-          <!-- 社交链接 -->
-          <SocialLinks />
-          
-          <!-- 一言 -->
-          <div class="hitokoto-section">
-            <HitokotoDisplay />
-          </div>
-        </div>
+        <!-- 头像和昵称 -->
+        <ProfileCard />
+        
+        <!-- 社交链接 -->
+        <SocialLinks />
+        
+        <!-- 一言 -->
+        <HitokotoDisplay />
         
         <!-- 音乐播放器 -->
-        <div class="music-section">
-          <MusicPlayer />
-        </div>
+        <MusicPlayer />
       </div>
       
       <!-- 右侧RSS -->
@@ -126,18 +117,21 @@ onUnmounted(() => {
 }
 
 .main-container {
-  max-width: 1400px;
-  width: 100%;
+  max-width: none;
+  width: 90%;
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
   align-items: stretch;
+  min-height: 85vh;
 }
 
 .left-content {
-  flex: 0 0 400px;
+  flex: 0 0 40%;
+  max-width: 450px;
+  min-width: 350px;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   position: relative;
 }
 
@@ -145,41 +139,41 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  min-height: 85vh;
   align-self: stretch;
 }
 
-.center-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.music-section {
-  margin-top: 1rem;
+@media (max-width: 1200px) {
+  .main-container {
+    width: 95%;
+    gap: 2rem;
+  }
+  
+  .left-content {
+    flex: 0 0 45%;
+    max-width: 400px;
+    min-width: 320px;
+  }
 }
 
 @media (max-width: 1023px) {
   .main-container {
     flex-direction: column;
-    max-width: 500px;
+    width: 95%;
+    gap: 2rem;
   }
   
   .left-content {
     flex: none;
     width: 100%;
+    min-width: unset;
+    max-width: none;
     position: relative;
-  }
-  
-  .center-content {
-    padding-top: 2rem;
   }
   
   .right-content {
     width: 100%;
+    min-height: 50vh;
   }
 }
 
@@ -189,7 +183,8 @@ onUnmounted(() => {
   }
   
   .main-container {
-    gap: 1rem;
+    gap: 1.5rem;
+    width: 98%;
   }
   
   .left-content {

@@ -103,16 +103,32 @@ onUnmounted(() => {
   flex-direction: column !important;
   position: relative !important;
   z-index: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+:deep(.aplayer-body::before),
+:deep(.aplayer-body::after) {
+  display: none !important;
+  content: none !important;
 }
 
 :deep(.aplayer-pic) {
   position: relative !important;
   z-index: 2 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 200px !important;
+  flex-shrink: 0 !important;
 }
 
 :deep(.aplayer-info) {
   background: transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 16px 20px 12px !important;
+  order: 2 !important;
 }
 
 :deep(.aplayer-music) {
@@ -144,12 +160,14 @@ onUnmounted(() => {
   height: 6px !important;
   margin: 8px 0 12px 0 !important;
   position: relative !important;
+  width: 100% !important;
 }
 
 :deep(.aplayer-bar) {
   height: 6px !important;
   border-radius: 6px !important;
   position: relative !important;
+  width: 100% !important;
 }
 
 :deep(.aplayer-loaded) {
@@ -286,29 +304,39 @@ onUnmounted(() => {
 }
 
 :deep(.aplayer-lrc) {
-  background: rgba(255, 255, 255, 0.05) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
   backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
   max-height: 120px !important;
-  padding: 1rem !important;
+  padding: 0.8rem 1rem !important;
   position: relative !important;
   z-index: 6 !important;
   order: 7 !important;
   flex: 0 0 auto !important;
+  overflow-y: auto !important;
+  text-align: center !important;
 }
 
 :deep(.aplayer-lrc p) {
   color: var(--text-secondary) !important;
-  font-size: 0.85rem !important;
-  line-height: 1.5 !important;
-  margin: 4px 0 !important;
-  transition: all 0.3s ease !important;
+  font-size: 0.8rem !important;
+  line-height: 1.6 !important;
+  margin: 2px 0 !important;
+  padding: 2px 0 !important;
+  transition: all 0.4s ease !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 :deep(.aplayer-lrc p.aplayer-lrc-current) {
   color: var(--primary-color) !important;
   font-weight: 600 !important;
-  text-shadow: 0 0 8px rgba(99, 102, 241, 0.3) !important;
+  font-size: 0.85rem !important;
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.4) !important;
+  transform: scale(1.05) !important;
 }
 
 /* 确保控制器始终在最底部 */
