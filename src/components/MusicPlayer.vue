@@ -14,9 +14,17 @@ let metingInstance = null
 
 const loadMetingJS = () => {
   return new Promise((resolve) => {
-    if (document.querySelector('script[src*="aplayer"]')) {
+    if (window.APlayer && window.MetingJSElement) {
       resolve()
       return
+    }
+
+    // 加载CSS
+    if (!document.querySelector('link[href*="aplayer"]')) {
+      const css = document.createElement('link')
+      css.rel = 'stylesheet'
+      css.href = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css'
+      document.head.appendChild(css)
     }
 
     const script = document.createElement('script')
@@ -24,7 +32,9 @@ const loadMetingJS = () => {
     script.onload = () => {
       const metingScript = document.createElement('script')
       metingScript.src = 'https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js'
-      metingScript.onload = resolve
+      metingScript.onload = () => {
+        setTimeout(resolve, 100)
+      }
       document.head.appendChild(metingScript)
     }
     document.head.appendChild(script)
@@ -32,23 +42,37 @@ const loadMetingJS = () => {
 }
 
 const initMeting = async () => {
-  await loadMetingJS()
-  
-  const metingElement = document.createElement('meting-js')
-  Object.entries(musicConfig).forEach(([key, value]) => {
-    metingElement.setAttribute(key, value)
-  })
-  
-  metingPlayer.value.appendChild(metingElement)
-  
-  setTimeout(() => {
-    const aplayerElement = metingPlayer.value.querySelector('.aplayer')
-    if (aplayerElement && window.aplayers && window.aplayers.length > 0) {
-      metingInstance = window.aplayers[window.aplayers.length - 1]
-      setupPlayerEvents()
-      updateSongInfo()
+  try {
+    await loadMetingJS()
+    
+    const metingElement = document.createElement('meting-js')
+    Object.entries(musicConfig).forEach(([key, value]) => {
+      metingElement.setAttribute(key, value)
+    })
+    
+    metingPlayer.value.appendChild(metingElement)
+    
+    // 等待播放器初始化
+    const checkPlayer = () => {
+      const aplayerElement = metingPlayer.value?.querySelector('.aplayer')
+      if (aplayerElement && window.aplayers && window.aplayers.length > 0) {
+        metingInstance = window.aplayers[window.aplayers.length - 1]
+        setupPlayerEvents()
+        updateSongInfo()
+      } else {
+        setTimeout(checkPlayer, 500)
+      }
     }
-  }, 2000)
+    
+    setTimeout(checkPlayer, 1000)
+  } catch (error) {
+    console.error('音乐播放器初始化失败:', error)
+    currentSong.value = {
+      title: '播放器加载失败',
+      artist: '',
+      cover: ''
+    }
+  }
 }
 
 const setupPlayerEvents = () => {
@@ -155,20 +179,38 @@ onUnmounted(() => {
 
 <style scoped>
 .music-section {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 24px;
   padding: 2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.music-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
 }
 
 .music-section:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border-color: rgba(99, 102, 241, 0.3);
 }
 
 .section-header h3 {
@@ -177,6 +219,8 @@ onUnmounted(() => {
   color: var(--text-primary);
   margin-bottom: 1.5rem;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .custom-player {
@@ -195,10 +239,11 @@ onUnmounted(() => {
   position: relative;
   width: 80px;
   height: 80px;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .song-cover img {
@@ -215,13 +260,14 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-size: 1.5rem;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .play-overlay.active {
@@ -240,6 +286,7 @@ onUnmounted(() => {
   background: var(--primary-color);
   border-radius: 2px;
   animation: equalizer 1s infinite ease-in-out;
+  box-shadow: 0 0 8px var(--primary-color);
 }
 
 .equalizer .bar:nth-child(1) { animation-delay: 0.1s; }
@@ -286,7 +333,7 @@ onUnmounted(() => {
   height: 50px;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   color: var(--text-primary);
   font-size: 1.2rem;
   cursor: pointer;
@@ -294,24 +341,28 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .control-btn:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .play-btn {
   width: 60px;
   height: 60px;
-  background: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
   font-size: 1.4rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .play-btn:hover {
-  background: var(--primary-dark);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
   box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
 }
 
@@ -330,6 +381,7 @@ onUnmounted(() => {
   .song-cover {
     width: 70px;
     height: 70px;
+    border-radius: 12px;
   }
   
   .control-btn {

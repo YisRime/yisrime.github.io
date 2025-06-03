@@ -63,6 +63,7 @@ onMounted(() => {
   border: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 1.3rem;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .social-link:hover {
