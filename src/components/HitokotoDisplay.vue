@@ -100,15 +100,9 @@ onMounted(() => {
         <i class="fas fa-exclamation-triangle"></i>
         <span>{{ error }}</span>
       </div>
-      <div v-else>
-        <div class="quote-text">{{ quote.text }}</div>
-        <div class="quote-attribution">
-          <div class="quote-author" v-if="quote.author">
-            —— 《{{ quote.author }}》
-          </div>
-          <div class="quote-who" v-if="quote.who">
-            {{ quote.who }}
-          </div>
+      <div v-else>        <div class="quote-text">{{ quote.text }}</div>
+        <div class="quote-attribution" v-if="quote.author || quote.who">
+          —— {{ quote.who }}《{{ quote.author }}》
         </div>
       </div>
     </div>
