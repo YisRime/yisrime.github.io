@@ -25,10 +25,9 @@ const loadMeting = () => {
     aplayerScript.onload = () => {
       // 加载 MetingJS
       const metingScript = document.createElement('script')
-      metingScript.src = 'https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js'
+      metingScript.src = 'https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js'
       metingScript.onload = () => {
-        window.MetingJSElement = true
-        resolve()
+        setTimeout(resolve, 100)
       }
       document.head.appendChild(metingScript)
     }
@@ -41,22 +40,19 @@ const initMeting = async () => {
     await loadMeting()
     
     if (metingContainer.value) {
-      // 清空容器
-      metingContainer.value.innerHTML = ''
+      // 创建 meting-js 元素
+      const metingElement = document.createElement('meting-js')
+      metingElement.setAttribute('server', musicConfig.server || 'netease')
+      metingElement.setAttribute('type', musicConfig.type || 'playlist')
+      metingElement.setAttribute('id', musicConfig.id || '9167231423')
+      metingElement.setAttribute('theme', musicConfig.theme || '#6366f1')
+      metingElement.setAttribute('auto', musicConfig.auto || 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r')
+      metingElement.setAttribute('mutex', 'true')
+      metingElement.setAttribute('preload', 'auto')
+      metingElement.setAttribute('order', musicConfig.order || 'random')
+      metingElement.setAttribute('volume', musicConfig.volume || '0.7')
       
-      // 创建meting元素
-      const metingEl = document.createElement('meting-js')
-      metingEl.setAttribute('server', musicConfig.server)
-      metingEl.setAttribute('type', musicConfig.type)
-      metingEl.setAttribute('id', musicConfig.id)
-      metingEl.setAttribute('theme', musicConfig.theme)
-      metingEl.setAttribute('autoplay', musicConfig.autoplay)
-      metingEl.setAttribute('loop', musicConfig.loop)
-      metingEl.setAttribute('order', musicConfig.order)
-      metingEl.setAttribute('volume', musicConfig.volume)
-      metingEl.setAttribute('lrc-type', '3')
-      
-      metingContainer.value.appendChild(metingEl)
+      metingContainer.value.appendChild(metingElement)
     }
   } catch (error) {
     console.error('MetingJS 初始化失败:', error)
@@ -82,9 +78,7 @@ onUnmounted(() => {
 
 <style scoped>
 .music-player {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+  margin-top: 1rem;
 }
 
 /* 自定义APlayer样式 */
@@ -96,84 +90,60 @@ onUnmounted(() => {
   border-radius: 16px !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
   font-family: inherit !important;
-  position: relative !important;
+  min-height: 500px !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow: hidden !important;
+  position: relative !important;
 }
 
 :deep(.aplayer-body) {
   background: transparent !important;
+  flex: 1 !important;
   display: flex !important;
   flex-direction: column !important;
   position: relative !important;
-  order: 1 !important;
+  z-index: 1 !important;
 }
 
 :deep(.aplayer-pic) {
-  width: 80px !important;
-  height: 80px !important;
-  margin: 16px auto !important;
-  border-radius: 50% !important;
   position: relative !important;
   z-index: 2 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-}
-
-:deep(.aplayer-pic .aplayer-button) {
-  width: 24px !important;
-  height: 24px !important;
-  border-radius: 50% !important;
-  background: rgba(255, 255, 255, 0.9) !important;
-  opacity: 0 !important;
-  transition: all 0.3s ease !important;
-}
-
-:deep(.aplayer-pic:hover .aplayer-button) {
-  opacity: 1 !important;
 }
 
 :deep(.aplayer-info) {
   background: transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  padding: 16px !important;
-  text-align: center !important;
 }
 
 :deep(.aplayer-music) {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  gap: 4px !important;
-  margin-bottom: 12px !important;
+  color: var(--text-primary) !important;
 }
 
 :deep(.aplayer-title) {
   color: var(--text-primary) !important;
   font-weight: 600 !important;
-  font-size: 1rem !important;
-  margin: 0 !important;
 }
 
 :deep(.aplayer-author) {
   color: var(--text-secondary) !important;
-  font-size: 0.85rem !important;
-  margin: 0 !important;
 }
 
 :deep(.aplayer-controller) {
   background: transparent !important;
-  padding: 16px 20px !important;
+  padding: 20px 24px 16px 24px !important;
+  position: relative !important;
+  z-index: 20 !important;
+  order: 10 !important;
+  margin-top: auto !important;
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  order: 3 !important;
 }
 
 :deep(.aplayer-bar-wrap) {
   background: rgba(255, 255, 255, 0.1) !important;
   border-radius: 6px !important;
   height: 6px !important;
-  margin: 0 0 12px 0 !important;
-  cursor: pointer !important;
+  margin: 8px 0 12px 0 !important;
+  position: relative !important;
 }
 
 :deep(.aplayer-bar) {
@@ -215,42 +185,55 @@ onUnmounted(() => {
   box-shadow: 0 0 16px rgba(99, 102, 241, 0.7), 0 2px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
+:deep(.aplayer-thumb:before) {
+  display: none !important;
+}
+
+:deep(.aplayer-volume-bar) {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+:deep(.aplayer-volume) {
+  background: var(--primary-color) !important;
+}
+
 :deep(.aplayer-time) {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
   color: var(--text-secondary) !important;
   font-size: 0.8rem !important;
   font-weight: 500 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
 }
 
-:deep(.aplayer-time-inner) {
+:deep(.aplayer-time .aplayer-time-inner) {
   color: var(--text-secondary) !important;
-  margin: 0 8px !important;
+  margin: 0 2px !important;
+}
+
+:deep(.aplayer-dtime) {
+  color: var(--text-muted) !important;
+  font-size: 0.8rem !important;
 }
 
 :deep(.aplayer-ptime) {
   color: var(--primary-color) !important;
   font-weight: 600 !important;
-}
-
-:deep(.aplayer-dtime) {
-  color: var(--text-muted) !important;
+  font-size: 0.8rem !important;
 }
 
 :deep(.aplayer-icon) {
   color: var(--text-primary) !important;
   transition: all 0.3s ease !important;
+  font-size: 1rem !important;
   opacity: 0.8 !important;
-  cursor: pointer !important;
-  padding: 4px !important;
-  border-radius: 4px !important;
 }
 
 :deep(.aplayer-icon:hover) {
   color: var(--primary-color) !important;
   opacity: 1 !important;
-  background: rgba(255, 255, 255, 0.1) !important;
+  transform: scale(1.1) !important;
 }
 
 :deep(.aplayer-icon-play),
@@ -258,77 +241,15 @@ onUnmounted(() => {
   font-size: 1.2rem !important;
 }
 
-:deep(.aplayer-volume-wrap) {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-:deep(.aplayer-volume-bar-wrap) {
-  width: 60px !important;
-  height: 6px !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-radius: 3px !important;
-}
-
-:deep(.aplayer-volume-bar) {
-  height: 100% !important;
-  border-radius: 3px !important;
-}
-
-:deep(.aplayer-volume) {
-  background: var(--primary-color) !important;
-  border-radius: 3px !important;
-  height: 100% !important;
-}
-
-/* 歌词样式 */
-:deep(.aplayer-lrc) {
-  background: rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  max-height: 120px !important;
-  padding: 16px !important;
-  order: 2 !important;
-  overflow-y: auto !important;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
-}
-
-:deep(.aplayer-lrc::-webkit-scrollbar) {
-  display: none !important;
-}
-
-:deep(.aplayer-lrc p) {
-  color: var(--text-secondary) !important;
-  font-size: 0.85rem !important;
-  line-height: 1.6 !important;
-  margin: 4px 0 !important;
-  transition: all 0.3s ease !important;
-  text-align: center !important;
-}
-
-:deep(.aplayer-lrc p.aplayer-lrc-current) {
-  color: var(--primary-color) !important;
-  font-weight: 600 !important;
-  text-shadow: 0 0 8px rgba(99, 102, 241, 0.3) !important;
-  transform: scale(1.05) !important;
-}
-
-/* 播放列表样式 */
 :deep(.aplayer-list) {
   background: rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  max-height: 200px !important;
+  max-height: 160px !important;
   overflow-y: auto !important;
-  order: 4 !important;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
-}
-
-:deep(.aplayer-list::-webkit-scrollbar) {
-  display: none !important;
+  position: relative !important;
+  z-index: 5 !important;
+  order: 8 !important;
 }
 
 :deep(.aplayer-list ol) {
@@ -340,12 +261,8 @@ onUnmounted(() => {
   background: transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
   color: var(--text-secondary) !important;
-  padding: 8px 16px !important;
+  padding: 8px 12px !important;
   transition: all 0.3s ease !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
 }
 
 :deep(.aplayer-list li:hover) {
@@ -358,78 +275,88 @@ onUnmounted(() => {
   color: var(--text-primary) !important;
 }
 
-:deep(.aplayer-list-index) {
-  color: var(--text-muted) !important;
-  font-size: 0.75rem !important;
-  min-width: 20px !important;
-}
-
 :deep(.aplayer-list-title) {
   color: var(--text-primary) !important;
   font-weight: 500 !important;
-  flex: 1 !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
 }
 
 :deep(.aplayer-list-author) {
   color: var(--text-muted) !important;
   font-size: 0.8rem !important;
-  margin-left: auto !important;
 }
 
-:deep(.aplayer-list-cur) {
-  width: 3px !important;
-  height: 16px !important;
-  border-radius: 2px !important;
-  margin-right: 4px !important;
+:deep(.aplayer-lrc) {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  max-height: 120px !important;
+  padding: 1rem !important;
+  position: relative !important;
+  z-index: 6 !important;
+  order: 7 !important;
+  flex: 0 0 auto !important;
 }
 
-/* 隐藏不需要的元素 */
-:deep(.aplayer-notice),
-:deep(.aplayer-miniswitcher) {
+:deep(.aplayer-lrc p) {
+  color: var(--text-secondary) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.5 !important;
+  margin: 4px 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+:deep(.aplayer-lrc p.aplayer-lrc-current) {
+  color: var(--primary-color) !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 8px rgba(99, 102, 241, 0.3) !important;
+}
+
+/* 确保控制器始终在最底部 */
+:deep(.aplayer .aplayer-controller) {
+  order: 99 !important;
+  flex-shrink: 0 !important;
+}
+
+/* 调整播放列表和歌词的顺序 */
+:deep(.aplayer .aplayer-lrc) {
+  order: 5 !important;
+}
+
+:deep(.aplayer .aplayer-list) {
+  order: 6 !important;
+}
+
+/* 隐藏所有滚动条 */
+:deep(.aplayer-lrc::-webkit-scrollbar),
+:deep(.aplayer-list::-webkit-scrollbar) {
   display: none !important;
 }
 
+:deep(.aplayer-lrc),
+:deep(.aplayer-list) {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
 @media (max-width: 768px) {
-  .music-player {
-    max-width: 100%;
-  }
-  
-  :deep(.aplayer-pic) {
-    width: 60px !important;
-    height: 60px !important;
-    margin: 12px auto !important;
-  }
-  
   :deep(.aplayer-info) {
-    padding: 12px !important;
+    padding: 8px 12px !important;
   }
   
   :deep(.aplayer-title) {
     font-size: 0.9rem !important;
   }
-  
-  :deep(.aplayer-author) {
+    :deep(.aplayer-author) {
     font-size: 0.8rem !important;
   }
   
-  :deep(.aplayer-controller) {
-    padding: 12px 16px !important;
-  }
-  
   :deep(.aplayer-lrc) {
-    max-height: 100px !important;
-    padding: 12px !important;
+    max-height: 120px !important;
+    padding: 0.8rem !important;
   }
   
   :deep(.aplayer-lrc p) {
     font-size: 0.8rem !important;
-  }
-  
-  :deep(.aplayer-list) {
-    max-height: 150px !important;
   }
 }
 </style>
