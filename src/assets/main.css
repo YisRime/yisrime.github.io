@@ -41,6 +41,7 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: none;
 }
 
 #app {
@@ -50,6 +51,30 @@ body {
   justify-content: center;
   padding: 2rem;
   position: relative;
+}
+
+.cursor {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  mix-blend-mode: screen;
+  opacity: 0.8;
+  box-shadow: 
+    0 0 5px var(--primary-color),
+    0 0 10px var(--primary-color),
+    0 0 20px var(--segment-glow);
+  transition: width 0.2s, height 0.2s, opacity 0.2s;
+}
+
+.link-hover, a:hover ~ .cursor {
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
 }
 
 /* 滚动条样式 */

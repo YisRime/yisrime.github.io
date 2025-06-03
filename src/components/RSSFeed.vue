@@ -7,6 +7,7 @@ const isLoading = ref(true)
 const error = ref('')
 const loadingProgress = ref(0)
 const totalFeeds = ref(configData.rss.feeds.length)
+const currentFeedIndex = ref(0)
 
 const fetchRSSFeed = async (feedUrl) => {
   try {
@@ -36,7 +37,7 @@ const isInViewport = (element) => {
   return rect.top < windowHeight * 0.9 && rect.bottom > windowHeight * 0.1
 }
 
-// 滚动时检查并添加动画
+// 滚动时检查并添加动画，以及检查是否需要加载更多
 const handleScroll = () => {
   const items = document.querySelectorAll('.rss-item')
   
@@ -48,6 +49,49 @@ const handleScroll = () => {
       item.classList.remove('fly-in')
     }
   })
+  
+  // 检查是否滚动到底部，如果是则加载更多内容
+  if (!isLoading.value && currentFeedIndex.value < configData.rss.feeds.length - 1) {
+    const scrollHeight = document.documentElement.scrollHeight
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    const clientHeight = document.documentElement.clientHeight
+    
+    // 当滚动到距离底部100px以内时加载更多内容
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+      loadNextFeed()
+    }
+  }
+}
+
+// 加载下一个RSS源
+const loadNextFeed = async () => {
+  if (isLoading.value || currentFeedIndex.value >= configData.rss.feeds.length - 1) return
+  
+  isLoading.value = true
+  currentFeedIndex.value += 1
+  const feed = configData.rss.feeds[currentFeedIndex.value]
+  
+  try {
+    const items = await fetchRSSFeed(feed.url)
+    
+    if (items.length > 0) {
+      // 为每个item添加来源信息和唯一ID
+      const itemsWithSource = items.map((item, index) => ({
+        ...item,
+        source: feed.name,
+        uniqueId: `${feed.name}-${index}-${Date.now()}`
+      }))
+      
+      // 添加到显示列表中
+      allRssItems.value.push(...itemsWithSource)
+    }
+  } catch (err) {
+    console.error(`获取RSS失败 (${feed.name}):`, err)
+  }
+  
+  // 更新进度
+  loadingProgress.value = currentFeedIndex.value + 1
+  isLoading.value = false
 }
 
 const fetchAllFeeds = async () => {
@@ -55,17 +99,16 @@ const fetchAllFeeds = async () => {
   error.value = ''
   allRssItems.value = []
   loadingProgress.value = 0
+  currentFeedIndex.value = 0
   
-  let hasAnyContent = false
-  
-  for (let i = 0; i < configData.rss.feeds.length; i++) {
-    const feed = configData.rss.feeds[i]
+  // 只加载第一个RSS源
+  if (configData.rss.feeds.length > 0) {
+    const feed = configData.rss.feeds[0]
     
     try {
       const items = await fetchRSSFeed(feed.url)
       
       if (items.length > 0) {
-        hasAnyContent = true
         // 为每个item添加来源信息和唯一ID
         const itemsWithSource = items.map((item, index) => ({
           ...item,
@@ -81,15 +124,10 @@ const fetchAllFeeds = async () => {
     }
     
     // 更新进度
-    loadingProgress.value = i + 1
-    
-    // 添加延迟，避免请求过快
-    if (i < configData.rss.feeds.length - 1) {
-      await new Promise(resolve => setTimeout(resolve, 800))
-    }
+    loadingProgress.value = 1
   }
   
-  if (!hasAnyContent) {
+  if (allRssItems.value.length === 0) {
     error.value = '暂时无法获取RSS内容'
   }
   
