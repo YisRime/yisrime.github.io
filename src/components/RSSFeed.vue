@@ -8,12 +8,8 @@ const error = ref('')
 // RSS源配置
 const rssFeeds = [
   {
-    name: '阮一峰的网络日志',
-    url: 'https://www.ruanyifeng.com/blog/atom.xml'
-  },
-  {
-    name: 'Vue.js 官方博客',
-    url: 'https://blog.vuejs.org/feed.rss'
+    name: '雪淞亭',
+    url: 'https://blog.yisrime.link/?feed=rss'
   }
 ]
 
@@ -108,7 +104,7 @@ onMounted(() => {
 
 <style scoped>
 .rss-feed {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -120,6 +116,7 @@ onMounted(() => {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  height: fit-content;
 }
 
 .rss-feed::before {
@@ -138,7 +135,7 @@ onMounted(() => {
     0 25px 50px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(99, 102, 241, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+  background: rgba(255, 255, 255, 0.12);
   border-color: rgba(99, 102, 241, 0.3);
 }
 

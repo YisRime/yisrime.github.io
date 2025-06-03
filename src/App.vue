@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import ProfileCard from './components/ProfileCard.vue'
-import IntroCard from './components/IntroCard.vue'
 import SocialLinks from './components/SocialLinks.vue'
 import TimeDisplay from './components/TimeDisplay.vue'
 import HitokotoDisplay from './components/HitokotoDisplay.vue'
@@ -53,42 +52,39 @@ onUnmounted(() => {
     <div class="background-image" :style="{ backgroundImage: `url(${backgroundImage})` }"></div>
     <div class="background-overlay"></div>
     
-    <div class="profile-container" :class="`device-${deviceType}`">
-      <!-- 左侧主要内容 -->
+    <div class="main-container">
+      <!-- 左侧内容 -->
       <div class="left-content">
-        <!-- 头像和昵称 -->
-        <ProfileCard />
-        
-        <!-- 介绍卡片 -->
-        <IntroCard />
-        
-        <!-- 社交链接 -->
-        <SocialLinks />
-        
-        <!-- 时间和一言（移动端显示） -->
-        <div class="mobile-info" v-if="isMobile">
+        <!-- 时间显示 -->
+        <div class="time-corner">
           <TimeDisplay />
-          <HitokotoDisplay />
         </div>
         
-        <!-- 音乐播放器（移动端显示） -->
-        <div class="mobile-music" v-if="isMobile">
-          <MusicPlayer />
+        <!-- 中央主要内容 -->
+        <div class="center-content">
+          <!-- 头像和昵称 -->
+          <ProfileCard />
+          
+          <!-- 介绍文字 -->
+          <div class="intro-text">天山云水 上下一白</div>
+          
+          <!-- 社交链接 -->
+          <SocialLinks />
         </div>
-      </div>
-      
-      <!-- 右侧内容（仅桌面端显示） -->
-      <div class="right-content" v-if="!isMobile">
-        <!-- 时间和一言 -->
-        <div class="info-section">
-          <TimeDisplay />
+        
+        <!-- 下方一言 -->
+        <div class="bottom-content">
           <HitokotoDisplay />
         </div>
         
         <!-- 音乐播放器 -->
-        <MusicPlayer />
-        
-        <!-- RSS订阅 -->
+        <div class="music-section">
+          <div id="aplayer-container"></div>
+        </div>
+      </div>
+      
+      <!-- 右侧RSS -->
+      <div class="right-content">
         <RSSFeed />
       </div>
     </div>
@@ -100,7 +96,7 @@ onUnmounted(() => {
   position: relative;
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   padding: 2rem;
 }
@@ -131,51 +127,64 @@ onUnmounted(() => {
   z-index: -1;
 }
 
-.profile-container {
+.main-container {
   max-width: 1200px;
   width: 100%;
   display: flex;
   gap: 2rem;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .left-content {
   flex: 0 0 400px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
+  position: relative;
 }
 
 .right-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
-/* 时间和一言部分 */
-.info-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+.time-corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
 }
 
-.info-section.mobile-layout {
-  grid-template-columns: 1fr;
-  gap: 1rem;
+.center-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding-top: 4rem;
 }
 
-
-/* 桌面端布局 */
-@media (min-width: 1024px) {
-  .profile-container.device-desktop {
-    flex-direction: row;
-  }
+.intro-text {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 1px;
+  opacity: 0.9;
 }
 
-/* 平板端布局 */
+.bottom-content {
+  margin-top: auto;
+}
+
+.music-section {
+  margin-top: 1rem;
+}
+
 @media (max-width: 1023px) {
-  .profile-container {
+  .main-container {
     flex-direction: column;
     max-width: 500px;
   }
@@ -183,6 +192,17 @@ onUnmounted(() => {
   .left-content {
     flex: none;
     width: 100%;
+    position: relative;
+  }
+  
+  .time-corner {
+    position: relative;
+    top: auto;
+    left: auto;
+  }
+  
+  .center-content {
+    padding-top: 2rem;
   }
   
   .right-content {
@@ -190,14 +210,12 @@ onUnmounted(() => {
   }
 }
 
-/* 响应式布局 */
 @media (max-width: 768px) {
   #app {
     padding: 1rem;
   }
   
-  .profile-container {
-    max-width: 100%;
+  .main-container {
     gap: 1rem;
   }
   
@@ -205,8 +223,8 @@ onUnmounted(() => {
     gap: 1rem;
   }
   
-  .right-content {
-    gap: 1rem;
+  .intro-text {
+    font-size: 1.1rem;
   }
 }
 </style>

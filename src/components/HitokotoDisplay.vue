@@ -58,7 +58,7 @@ onMounted(() => {
 
 <style scoped>
 .hitokoto-display {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -88,7 +88,7 @@ onMounted(() => {
     0 20px 40px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(99, 102, 241, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+  background: rgba(255, 255, 255, 0.12);
   border-color: rgba(99, 102, 241, 0.3);
 }
 

@@ -16,7 +16,7 @@ import { profileConfig } from '@/config'
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  padding: 2rem;
+  padding: 1rem;
   transition: all 0.3s ease;
 }
 
@@ -65,7 +65,7 @@ import { profileConfig } from '@/config'
     flex-direction: column;
     text-align: center;
     gap: 1rem;
-    padding: 1.5rem;
+    padding: 1rem;
   }
   
   .avatar {

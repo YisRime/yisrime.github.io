@@ -122,13 +122,14 @@ onUnmounted(() => {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  padding: 1.5rem;
+  border-radius: 12px;
+  padding: 0.8rem;
   text-align: center;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  max-width: 200px;
 }
 
 .time-display::before {
@@ -143,7 +144,7 @@ onUnmounted(() => {
 
 .time-display:hover {
   transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(99, 102, 241, 0.3);
 }
@@ -151,30 +152,30 @@ onUnmounted(() => {
 .digital-clock {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .time-section {
-  padding: 0.5rem 0;
+  padding: 0.2rem 0;
 }
 
 .digital-numbers {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
   font-family: 'Courier New', monospace;
 }
 
 .digit-group {
   display: flex;
-  gap: 0.2rem;
+  gap: 0.1rem;
 }
 
 .digit {
   position: relative;
-  width: 35px;
-  height: 50px;
+  width: 20px;
+  height: 30px;
   display: inline-block;
 }
 
@@ -182,72 +183,72 @@ onUnmounted(() => {
   position: absolute;
   background: rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 .segment.active {
   background: var(--primary-color);
-  box-shadow: 0 0 10px var(--primary-color);
+  box-shadow: 0 0 6px var(--primary-color);
 }
 
 /* 七段数码管样式 */
 .segment-1 { /* 顶部 */
   top: 0;
-  left: 4px;
-  width: 26px;
-  height: 4px;
+  left: 2px;
+  width: 16px;
+  height: 2px;
 }
 
 .segment-2 { /* 右上 */
-  top: 2px;
+  top: 1px;
   right: 0;
-  width: 4px;
-  height: 20px;
+  width: 2px;
+  height: 12px;
 }
 
 .segment-3 { /* 右下 */
-  bottom: 2px;
+  bottom: 1px;
   right: 0;
-  width: 4px;
-  height: 20px;
+  width: 2px;
+  height: 12px;
 }
 
 .segment-4 { /* 底部 */
   bottom: 0;
-  left: 4px;
-  width: 26px;
-  height: 4px;
+  left: 2px;
+  width: 16px;
+  height: 2px;
 }
 
 .segment-5 { /* 左下 */
-  bottom: 2px;
+  bottom: 1px;
   left: 0;
-  width: 4px;
-  height: 20px;
+  width: 2px;
+  height: 12px;
 }
 
 .segment-6 { /* 左上 */
-  top: 2px;
+  top: 1px;
   left: 0;
-  width: 4px;
-  height: 20px;
+  width: 2px;
+  height: 12px;
 }
 
 .segment-7 { /* 中间 */
   top: 50%;
-  left: 4px;
-  width: 26px;
-  height: 4px;
+  left: 2px;
+  width: 16px;
+  height: 2px;
   transform: translateY(-50%);
 }
 
 .separator {
-  font-size: 2rem;
+  font-size: 1.2rem;
   color: var(--primary-color);
   font-weight: bold;
   display: flex;
   align-items: center;
-  text-shadow: 0 0 10px var(--primary-color);
+  text-shadow: 0 0 6px var(--primary-color);
   transition: opacity 0.3s ease;
 }
 
@@ -257,49 +258,50 @@ onUnmounted(() => {
 
 .date-section {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1rem;
+  padding-top: 0.5rem;
 }
 
 .current-date {
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   color: var(--text-secondary);
   font-weight: 500;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 @media (max-width: 768px) {
   .time-display {
-    padding: 1.2rem;
+    padding: 0.6rem;
+    max-width: 160px;
   }
   
   .digit {
-    width: 28px;
-    height: 40px;
+    width: 16px;
+    height: 24px;
   }
   
   .segment-1, .segment-4, .segment-7 {
-    width: 20px;
-    left: 3px;
+    width: 12px;
+    left: 2px;
   }
   
   .segment-2, .segment-3, .segment-5, .segment-6 {
-    width: 3px;
+    width: 2px;
   }
   
   .segment-2, .segment-3 {
-    height: 16px;
+    height: 10px;
   }
   
   .segment-5, .segment-6 {
-    height: 16px;
+    height: 10px;
   }
   
   .separator {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
   
   .current-date {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
   }
 }
 </style>
