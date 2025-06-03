@@ -90,7 +90,7 @@ onUnmounted(() => {
   border-radius: 16px !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
   font-family: inherit !important;
-  min-height: 500px !important;
+  min-height: 400px !important;
   display: flex !important;
   flex-direction: column !important;
   position: relative !important;
@@ -119,9 +119,9 @@ onUnmounted(() => {
 :deep(.aplayer-pic) {
   position: relative !important;
   z-index: 2 !important;
-  width: 200px !important;
-  min-width: 200px !important;
-  height: 200px !important;
+  width: 160px !important;
+  min-width: 160px !important;
+  height: 160px !important;
   flex-shrink: 0 !important;
 }
 
@@ -151,7 +151,7 @@ onUnmounted(() => {
 
 :deep(.aplayer-controller) {
   background: transparent !important;
-  padding: 20px 24px 16px 24px !important;
+  padding: 16px 20px 12px 20px !important;
   position: relative !important;
   z-index: 20 !important;
   order: 10 !important;
@@ -268,7 +268,7 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  max-height: 160px !important;
+  max-height: 120px !important;
   overflow-y: auto !important;
   position: relative !important;
   z-index: 5 !important;
@@ -378,7 +378,7 @@ onUnmounted(() => {
   
   :deep(.aplayer-pic) {
     width: 100% !important;
-    height: 150px !important;
+    height: 120px !important;
   }
   
   :deep(.aplayer-info) {

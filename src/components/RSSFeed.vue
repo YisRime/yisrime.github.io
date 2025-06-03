@@ -130,12 +130,14 @@ onMounted(() => {
 
 <style scoped>
 .rss-feed {
-  background: transparent;
-  border: none;
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
   padding: 2rem;
-  box-shadow: none;
-  transition: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   height: 100%;

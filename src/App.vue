@@ -118,16 +118,16 @@ onUnmounted(() => {
 
 .main-container {
   max-width: none;
-  width: 90%;
+  width: 95%;
   display: flex;
-  gap: 6rem;
+  gap: 3rem;
   align-items: stretch;
   min-height: 85vh;
 }
 
 .left-content {
   flex: 0 0 35%;
-  max-width: 400px;
+  max-width: 380px;
   min-width: 320px;
   display: flex;
   flex-direction: column;
@@ -136,7 +136,7 @@ onUnmounted(() => {
 }
 
 .right-content {
-  flex: 1;
+  flex: 0 0 60%;
   display: flex;
   flex-direction: column;
   min-height: 85vh;
