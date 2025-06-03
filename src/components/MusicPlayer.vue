@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { musicConfig } from '@/config'
+import configData from '@/config.json'
 
+const { musicConfig } = configData
 const metingContainer = ref(null)
 
 const loadMeting = () => {

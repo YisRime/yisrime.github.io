@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { rssConfig } from '@/config'
+import configData from '@/config.json'
+
+const { rssConfig } = configData
 
 const rssItems = ref([])
 const isLoading = ref(true)

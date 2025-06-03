@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { timeDisplayConfig } from '@/config'
+import configData from '@/config.json'
+
+const { timeDisplayConfig } = configData
 
 const currentTime = ref('')
 const currentDate = ref('')

@@ -2,7 +2,9 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import { themeConfig } from '@/config'
+import configData from '@/config.json'
+
+const { themeConfig } = configData
 
 // 动态应用主题配置到 CSS 变量
 const applyThemeConfig = () => {

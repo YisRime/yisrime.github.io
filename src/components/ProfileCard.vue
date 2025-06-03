@@ -1,5 +1,7 @@
 <script setup>
-import { profileConfig, socialLinksConfig, fontConfig } from '@/config'
+import configData from '@/config.json'
+
+const { profileConfig, socialLinksConfig, fontConfig } = configData
 
 // 检查并加载Font Awesome
 if (!document.querySelector('link[href*="font-awesome"]')) {

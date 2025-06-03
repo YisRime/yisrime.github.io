@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { hitokotoConfig } from '@/config'
+import configData from '@/config.json'
+
+const { hitokotoConfig } = configData
 
 const quote = ref({ text: '加载中...', author: '' })
 const isLoading = ref(true)

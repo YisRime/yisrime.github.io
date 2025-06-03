@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { backgroundConfig } from '@/config'
+import configData from '@/config.json'
 import ProfileCard from './components/ProfileCard.vue'
 import TimeDisplay from './components/TimeDisplay.vue'
 import HitokotoDisplay from './components/HitokotoDisplay.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
 import RSSFeed from './components/RSSFeed.vue'
+
+const { backgroundConfig } = configData
 
 // 内联布局配置
 const MOBILE_BREAKPOINT = 768
