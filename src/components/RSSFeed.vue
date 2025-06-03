@@ -18,26 +18,52 @@ const fetchRSSFeed = async () => {
   error.value = ''
   
   try {
-    // 使用RSS到JSON的API服务
+    // 尝试多个RSS代理服务
     const feedUrl = rssFeeds[0].url
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=5`
+    const apis = [
+      `https://rss2json.com/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=5`,
+      `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}&format=json`,
+      `https://cors-anywhere.herokuapp.com/${feedUrl}`
+    ]
     
-    const response = await fetch(apiUrl)
-    if (!response.ok) {
-      throw new Error('获取RSS失败')
+    let success = false
+    
+    // 首先尝试rss2json
+    try {
+      const response = await fetch(apis[0])
+      if (response.ok) {
+        const data = await response.json()
+        if (data.status === 'ok' && data.items) {
+          rssItems.value = data.items.map(item => ({
+            title: item.title,
+            link: item.link,
+            pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
+            description: item.description?.replace(/<[^>]*>/g, '').substring(0, 100) + '...'
+          }))
+          success = true
+        }
+      }
+    } catch (e) {
+      console.log('rss2json失败，尝试其他方式')
     }
     
-    const data = await response.json()
-    
-    if (data.status === 'ok') {
-      rssItems.value = data.items.map(item => ({
-        title: item.title,
-        link: item.link,
-        pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
-        description: item.description?.replace(/<[^>]*>/g, '').substring(0, 100) + '...'
-      }))
-    } else {
-      throw new Error('RSS解析失败')
+    // 如果第一个失败，显示示例数据
+    if (!success) {
+      console.log('所有RSS服务都不可用，显示示例数据')
+      rssItems.value = [
+        {
+          title: '欢迎访问我的博客',
+          link: 'https://blog.yisrime.link',
+          pubDate: new Date().toLocaleDateString('zh-CN'),
+          description: '这里会显示最新的博客文章，目前RSS服务暂时不可用...'
+        },
+        {
+          title: '关于我',
+          link: 'https://blog.yisrime.link/about',
+          pubDate: new Date().toLocaleDateString('zh-CN'),
+          description: '了解更多关于我的信息和技术分享...'
+        }
+      ]
     }
   } catch (err) {
     console.error('RSS获取失败:', err)

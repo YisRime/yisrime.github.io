@@ -99,6 +99,7 @@ onUnmounted(() => {
   align-items: stretch;
   justify-content: center;
   padding: 2rem;
+  width: 100%;
 }
 
 .background-image {
@@ -128,7 +129,7 @@ onUnmounted(() => {
 }
 
 .main-container {
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
   display: flex;
   gap: 2rem;
