@@ -2,8 +2,6 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import configData from '@/config.json'
 
-const { timeDisplayConfig } = configData
-
 const currentTime = ref('')
 const currentDate = ref('')
 const separatorBlink = ref(true)
@@ -26,18 +24,9 @@ const segmentMapping = {
 const timeDigits = computed(() => {
   const [hour = '00', minute = '00', second = '00'] = currentTime.value.split(':')
   return {
-    hour: [
-      { value: parseInt(hour[0]) || 0, index: 0 },
-      { value: parseInt(hour[1]) || 0, index: 1 }
-    ],
-    minute: [
-      { value: parseInt(minute[0]) || 0, index: 0 },
-      { value: parseInt(minute[1]) || 0, index: 1 }
-    ],
-    second: [
-      { value: parseInt(second[0]) || 0, index: 0 },
-      { value: parseInt(second[1]) || 0, index: 1 }
-    ]
+    hour: [hour[0] || '0', hour[1] || '0'].map((char, index) => ({ value: parseInt(char), index })),
+    minute: [minute[0] || '0', minute[1] || '0'].map((char, index) => ({ value: parseInt(char), index })),
+    second: [second[0] || '0', second[1] || '0'].map((char, index) => ({ value: parseInt(char), index }))
   }
 })
 
@@ -48,16 +37,28 @@ const getSegmentClass = (digit, segment) => ({
 
 const updateTime = () => {
   const now = new Date()
-  currentTime.value = now.toLocaleTimeString(timeDisplayConfig.locale, timeDisplayConfig.timeFormat)
-  currentDate.value = now.toLocaleDateString(timeDisplayConfig.locale, timeDisplayConfig.dateFormat)
-  if (timeDisplayConfig.blinkSeparator) {
+  currentTime.value = now.toLocaleTimeString('zh-CN', {
+    hour12: configData.time.hour12,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: configData.time.showSeconds ? '2-digit' : undefined
+  }).replace(/上午|下午/g, '')
+  
+  currentDate.value = now.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+  })
+  
+  if (configData.time.blinkSeparator) {
     separatorBlink.value = !separatorBlink.value
   }
 }
 
 onMounted(() => {
   updateTime()
-  timeInterval = setInterval(updateTime, timeDisplayConfig.updateInterval)
+  timeInterval = setInterval(updateTime, 1000)
 })
 
 onUnmounted(() => {
@@ -133,9 +134,7 @@ onUnmounted(() => {
   position: relative;
   width: 28px;
   height: 40px;
-  display: inline-block;
   margin: 0 2px;
-  background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
 }
 

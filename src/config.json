@@ -1,123 +1,70 @@
 {
-  "socialLinksConfig": [
-    {
-      "name": "GitHub",
-      "url": "https://github.com/yisrime",
-      "icon": "fab fa-github",
-      "color": "#333"
-    },
-    {
-      "name": "Email",
-      "url": "mailto:your.email@example.com",
-      "icon": "fas fa-envelope",
-      "color": "#ea4335"
-    },
-    {
-      "name": "Twitter",
-      "url": "https://twitter.com/yisrime",
-      "icon": "fab fa-twitter",
-      "color": "#1da1f2"
-    },
-    {
-      "name": "LinkedIn",
-      "url": "https://linkedin.com/in/yisrime",
-      "icon": "fab fa-linkedin",
-      "color": "#0077b5"
-    },
-    {
-      "name": "Blog",
-      "url": "https://blog.yisrime.com",
-      "icon": "fas fa-blog",
-      "color": "#ff6b6b"
-    },
-    {
-      "name": "Discord",
-      "url": "https://discord.gg/yisrime",
-      "icon": "fab fa-discord",
-      "color": "#5865f2"
-    }
-  ],
-  "profileConfig": {
+  "profile": {
     "name": "苡淞",
     "avatar": "/avatar.webp",
     "intro": "天山云水 上下一白"
   },
-  "musicConfig": {
+  "socialLinks": [
+    { "name": "Blog", "url": "https://blog.yisrime.link", "icon": "fas fa-blog" },
+    { "name": "Email", "url": "mailto:yisrime@yisrime.link", "icon": "fas fa-envelope" },
+    { "name": "QQ", "url": "tencent://message/?uin=2057249587", "icon": "fab fa-qq" },
+    { "name": "WeChat", "url": "#Yis_Rime", "icon": "fab fa-weixin" },
+    { "name": "Telegram", "url": "https://t.me/YisRime", "icon": "fab fa-telegram" },
+    { "name": "GitHub", "url": "https://github.com/YisRime", "icon": "fab fa-github" },
+    { "name": "Bilibili", "url": "https://space.bilibili.com/1984500810", "icon": "fab fa-bilibili" },
+    { "name": "Weibo", "url": "https://weibo.com/YisRime", "icon": "fab fa-weibo" },
+    { "name": "Twitter", "url": "https://x.com/Yis_Rime", "icon": "fab fa-twitter" }
+  ],
+  "music": {
     "server": "netease",
-    "type": "playlist",
+    "type": "playlist", 
     "id": "9167231423",
-    "theme": "#6366f1",
-    "autoplay": false,
-    "loop": "all",
     "order": "random",
-    "volume": 0.7
+    "loop": "all",
+    "preload": "auto",
+    "autoplay": "true",
+    "volume": "0.25",
+    "mutex": "true",
+    "listfolded": "true"
   },
-  "timeDisplayConfig": {
+  "time": {
     "showSeconds": true,
     "blinkSeparator": true,
-    "updateInterval": 1000,
-    "locale": "zh-CN",
-    "dateFormat": {
-      "year": "numeric",
-      "month": "long",
-      "day": "numeric",
-      "weekday": "long"
-    },
-    "timeFormat": {
-      "hour12": false,
-      "hour": "2-digit",
-      "minute": "2-digit",
-      "second": "2-digit"
-    }
+    "hour12": false
   },
-  "hitokotoConfig": {
-    "apiUrl": "https://v1.hitokoto.cn/",
-    "enableRefresh": true,
-    "autoRefreshInterval": 30000,
-    "categories": []
+  "hitokoto": {
+    "apiUrl": "https://v1.hitokoto.cn/"
   },
-  "rssConfig": {
-    "feedUrl": "https://blog.yisrime.link/?feed=rss",
-    "apiUrl": "https://rss2json.com/api.json",
-    "enableRefresh": true,
-    "autoRefreshInterval": 300000
-  },
-  "backgroundConfig": {
-    "apiUrls": {
-      "desktop": "https://api.fuukei.org/random-img/default/pc.php",
-      "mobile": "https://api.fuukei.org/random-img/default/mobile.php"
-    },
-    "enableBlur": true,
-    "blurAmount": "0.5px",
-    "overlayOpacity": 0.15,
-    "overlayColor": "rgba(15, 23, 42, 0.15)"
-  },
-  "fontConfig": {
-    "enableGoogleFonts": true,
-    "googleFonts": [
-      "Inter:wght@400;500;600;700"
+  "rss": {
+    "feeds": [
+      {
+        "name": "雪淞亭",
+        "url": "https://blog.yisrime.link/?feed=rss"
+      },
+      {
+        "name": "阮一峰的网络日志",
+        "url": "http://www.ruanyifeng.com/blog/atom.xml"
+      },
+      {
+        "name": "少数派",
+        "url": "https://sspai.com/feed"
+      },
+      {
+        "name": "V2EX",
+        "url": "https://www.v2ex.com/index.xml"
+      },
+      {
+        "name": "掘金前端",
+        "url": "https://juejin.cn/rss"
+      }
     ],
-    "fontFamily": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    "cdnUrls": {
-      "fontAwesome": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    }
+    "apiUrl": "https://rss2json.com/api.json"
   },
-  "themeConfig": {
-    "primaryColor": "#6366f1",
-    "primaryDark": "#4f46e5",
-    "primaryLight": "#a5b4fc",
-    "textPrimary": "#f8fafc",
-    "textSecondary": "#cbd5e1",
-    "textMuted": "#64748b",
-    "bgPrimary": "#0f172a",
-    "gradientBg": "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)",
-    "transitionNormal": "0.3s ease-out",
-    "socialHoverGlow": "rgba(99, 102, 241, 0.3)",
-    "socialHoverShadow": "rgba(99, 102, 241, 0.4)",
-    "avatarBorder": "#6366f1",
-    "avatarShadow": "rgba(99, 102, 241, 0.3)",
-    "avatarShadowHover": "rgba(99, 102, 241, 0.4)",
-    "segmentGlow": "rgba(99, 102, 241, 0.6)",
-    "segmentShadow": "rgba(99, 102, 241, 0.4)"
+  "background": {
+    "desktop": "https://api.fuukei.org/random-img/default/pc.php",
+    "mobile": "https://api.fuukei.org/random-img/default/mobile.php"
+  },
+  "theme": {
+    "enableDynamicColors": true
   }
 }

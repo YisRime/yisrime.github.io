@@ -2,37 +2,34 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import configData from '@/config.json'
 
-const { musicConfig } = configData
 const metingContainer = ref(null)
 
 const loadMeting = () => {
   return new Promise((resolve) => {
-    if (window.MetingJSElement) {
-      resolve()
-      return
+    if (window.MetingJSElement) return resolve()
+
+    const loadScript = (src) => {
+      const script = document.createElement('script')
+      script.src = src
+      return new Promise(res => {
+        script.onload = res
+        script.onerror = () => res()
+        document.head.appendChild(script)
+      })
     }
 
     // 加载 CSS
-    if (!document.querySelector('link[href*="meting"]')) {
+    if (!document.querySelector('link[href*="aplayer"]')) {
       const css = document.createElement('link')
       css.rel = 'stylesheet'
       css.href = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css'
       document.head.appendChild(css)
     }
 
-    // 加载 APlayer
-    const aplayerScript = document.createElement('script')
-    aplayerScript.src = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
-    aplayerScript.onload = () => {
-      // 加载 MetingJS
-      const metingScript = document.createElement('script')
-      metingScript.src = 'https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js'
-      metingScript.onload = () => {
-        setTimeout(resolve, 100)
-      }
-      document.head.appendChild(metingScript)
-    }
-    document.head.appendChild(aplayerScript)
+    // 依次加载脚本
+    loadScript('https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js')
+      .then(() => loadScript('https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js'))
+      .then(() => setTimeout(resolve, 100))
   })
 }
 
@@ -41,17 +38,24 @@ const initMeting = async () => {
     await loadMeting()
     
     if (metingContainer.value) {
-      // 创建 meting-js 元素
       const metingElement = document.createElement('meting-js')
-      metingElement.setAttribute('server', musicConfig.server)
-      metingElement.setAttribute('type', musicConfig.type)
-      metingElement.setAttribute('id', musicConfig.id)
-      metingElement.setAttribute('theme', musicConfig.theme)
-      metingElement.setAttribute('auto', musicConfig.auto || 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r')
-      metingElement.setAttribute('mutex', 'true')
-      metingElement.setAttribute('preload', 'auto')
-      metingElement.setAttribute('order', musicConfig.order)
-      metingElement.setAttribute('volume', musicConfig.volume)
+      const attributes = {
+        server: configData.music.server,
+        type: configData.music.type,
+        id: configData.music.id,
+        order: configData.music.order,
+        loop: configData.music.loop,
+        preload: configData.music.preload,
+        autoplay: configData.music.autoplay,
+        volume: parseFloat(configData.music.volume),
+        mutex: configData.music.mutex,
+        listfolded: configData.music.listfolded,
+        auto: 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r'
+      }
+      
+      Object.entries(attributes).forEach(([key, value]) => 
+        metingElement.setAttribute(key, value)
+      )
       
       metingContainer.value.appendChild(metingElement)
     }
@@ -135,7 +139,7 @@ onUnmounted(() => {
 :deep(.aplayer-info) {
   flex: 1;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0) !important;
+  border-bottom: none !important;
   margin-left: 0 !important;
   padding: 0 !important;
   overflow: hidden;
@@ -146,7 +150,7 @@ onUnmounted(() => {
 }
 
 :deep(.aplayer-title) {
-  color: var(--text-primary);
+  color: var(--primary-color);
   font-weight: 600;
   font-size: 0.9rem;
   overflow: hidden;
@@ -183,7 +187,6 @@ onUnmounted(() => {
   width: 16px !important;
   height: 16px !important;
   border-radius: 50% !important;
-  position: absolute !important;
   top: 200% !important;
   transform: translateY(-50%) !important;
   transition: all 0.3s ease !important;
@@ -197,7 +200,7 @@ onUnmounted(() => {
   display: none !important;
 }
 
-/* 音量条 */
+/* 音量条和时间 */
 :deep(.aplayer-volume-bar) {
   background: rgba(255, 255, 255, 0.1) !important;
 }
@@ -206,7 +209,6 @@ onUnmounted(() => {
   background: var(--primary-color) !important;
 }
 
-/* 时间显示 */
 :deep(.aplayer-time) {
   color: var(--text-secondary);
   font-size: 0.8rem;
@@ -236,20 +238,19 @@ onUnmounted(() => {
   font-size: 1.2rem;
 }
 
-/* 播放列表 */
+/* 播放列表和歌词 */
 :deep(.aplayer-list) {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
   max-height: 120px;
   overflow-y: auto;
-  display: none; /* 默认隐藏播放列表 */
+  display: none;
 }
 
 :deep(.aplayer-withlist .aplayer-list) {
-  display: block; /* 展开时显示播放列表 */
+  display: block;
 }
 
-/* 歌词 */
 :deep(.aplayer-lrc::before),
 :deep(.aplayer-lrc::after) {
   display: none !important;

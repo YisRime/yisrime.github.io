@@ -1,35 +1,87 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import configData from '@/config.json'
+import ColorExtractor from '@/utils/colorExtractor.js'
 import ProfileCard from './components/ProfileCard.vue'
 import TimeDisplay from './components/TimeDisplay.vue'
 import HitokotoDisplay from './components/HitokotoDisplay.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
 import RSSFeed from './components/RSSFeed.vue'
 
-const { backgroundConfig } = configData
-
-// 内联布局配置
 const MOBILE_BREAKPOINT = 768
 
 const isMobile = ref(false)
 const backgroundImage = ref('')
+const colorExtractor = new ColorExtractor()
+const showTimeAndMusic = ref(false)
 
 const updateResponsiveData = () => {
   isMobile.value = window.innerWidth <= MOBILE_BREAKPOINT
+  loadRandomBackground()
 }
 
-const loadRandomBackground = () => {
-  const apiUrl = window.innerWidth <= MOBILE_BREAKPOINT
-    ? backgroundConfig.apiUrls.mobile
-    : backgroundConfig.apiUrls.desktop
-  
+const loadRandomBackground = async () => {
+  const apiUrl = isMobile.value ? configData.background.mobile : configData.background.desktop
   backgroundImage.value = apiUrl
+  
+  if (configData.theme.enableDynamicColors) {
+    try {
+      await extractAndApplyColors(apiUrl)
+    } catch (error) {
+      console.warn('颜色提取失败，使用备用颜色:', error)
+      applyFallbackColors()
+    }
+  }
+}
+
+const extractAndApplyColors = async (imageUrl) => {
+  try {
+    const colors = await colorExtractor.extractColorsFromImage(imageUrl)
+    applyThemeColors(colors)
+  } catch (error) {
+    console.warn('无法提取颜色，使用备用方案:', error)
+    applyFallbackColors()
+  }
+}
+
+const applyThemeColors = (colors) => {
+  const root = document.documentElement
+  
+  root.style.setProperty('--primary-color', colors.primaryColor)
+  root.style.setProperty('--primary-dark', colors.primaryDark)
+  root.style.setProperty('--primary-light', colors.primaryLight)
+  root.style.setProperty('--text-primary', colors.textPrimary)
+  root.style.setProperty('--text-secondary', colors.textSecondary)
+  root.style.setProperty('--text-muted', colors.textMuted)
+  root.style.setProperty('--bg-primary', colors.bgPrimary)
+  root.style.setProperty('--gradient-bg', colors.gradientBg)
+  root.style.setProperty('--avatar-shadow', colors.avatarShadow)
+  root.style.setProperty('--avatar-shadow-hover', colors.avatarShadowHover)
+  root.style.setProperty('--segment-glow', colors.segmentGlow)
+}
+
+const applyFallbackColors = () => {
+  const root = document.documentElement
+  
+  root.style.setProperty('--primary-color', '#5DADE2')
+  root.style.setProperty('--primary-dark', '#3498DB')
+  root.style.setProperty('--primary-light', '#85C1E9')
+  root.style.setProperty('--text-primary', '#f8fafc')
+  root.style.setProperty('--text-secondary', '#cbd5e1')
+  root.style.setProperty('--text-muted', '#64748b')
+  root.style.setProperty('--bg-primary', '#0f172a')
+  root.style.setProperty('--gradient-bg', 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)')
+  root.style.setProperty('--avatar-shadow', 'rgba(93, 173, 226, 0.3)')
+  root.style.setProperty('--avatar-shadow-hover', 'rgba(93, 173, 226, 0.4)')
+  root.style.setProperty('--segment-glow', 'rgba(93, 173, 226, 0.6)')
+}
+
+const toggleTimeAndMusic = () => {
+  showTimeAndMusic.value = !showTimeAndMusic.value
 }
 
 onMounted(() => {
   updateResponsiveData()
-  loadRandomBackground()
   window.addEventListener('resize', updateResponsiveData)
 })
 
@@ -47,16 +99,16 @@ onUnmounted(() => {
       <!-- 左侧内容 -->
       <div class="left-content">
         <!-- 时间显示 -->
-        <TimeDisplay />
+        <TimeDisplay v-show="showTimeAndMusic" />
 
         <!-- 头像和昵称 -->
-        <ProfileCard />
+        <ProfileCard @avatar-click="toggleTimeAndMusic" />
         
         <!-- 一言 -->
         <HitokotoDisplay />
         
         <!-- 音乐播放器 -->
-        <MusicPlayer />
+        <MusicPlayer v-show="showTimeAndMusic" />
       </div>
       
       <!-- 右侧RSS -->
@@ -69,7 +121,6 @@ onUnmounted(() => {
 
 <style scoped>
 #app {
-  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: stretch;
@@ -98,10 +149,9 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.15);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: -1;
+  background: rgba(22, 22, 22, 0.1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .main-container {
@@ -134,8 +184,6 @@ onUnmounted(() => {
   width: 55%;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  overflow-y: auto;
 }
 
 @media (max-width: 1200px) {

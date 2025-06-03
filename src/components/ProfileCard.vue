@@ -1,28 +1,24 @@
 <script setup>
 import configData from '@/config.json'
 
-const { profileConfig, socialLinksConfig, fontConfig } = configData
+const emit = defineEmits(['avatar-click'])
 
-// 检查并加载Font Awesome
-if (!document.querySelector('link[href*="font-awesome"]')) {
-  const link = document.createElement('link')
-  link.rel = 'stylesheet'
-  link.href = fontConfig.cdnUrls.fontAwesome
-  document.head.appendChild(link)
+const handleAvatarClick = () => {
+  emit('avatar-click')
 }
 </script>
 
 <template>
   <div class="profile-simple">
-    <div class="avatar">
-      <img :src="profileConfig.avatar" :alt="profileConfig.name" />
+    <div class="avatar" @click="handleAvatarClick">
+      <img :src="configData.profile.avatar" :alt="configData.profile.name" />
     </div>
-    <h1 class="name">{{ profileConfig.name }}</h1>
+    <h1 class="name">{{ configData.profile.name }}</h1>
     
     <!-- 社交链接 -->
     <div class="social-links">
       <a 
-        v-for="link in socialLinksConfig" 
+        v-for="link in configData.socialLinks" 
         :key="link.name"
         :href="link.url" 
         target="_blank" 
@@ -49,6 +45,7 @@ if (!document.querySelector('link[href*="font-awesome"]')) {
   border: 3px solid var(--primary-color);
   box-shadow: 0 8px 24px var(--avatar-shadow);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .avatar:hover {

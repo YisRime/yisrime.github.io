@@ -1,83 +1,149 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import configData from '@/config.json'
 
-const { rssConfig } = configData
-
-const rssItems = ref([])
+const allRssItems = ref([])
 const isLoading = ref(true)
 const error = ref('')
+const loadingProgress = ref(0)
+const totalFeeds = ref(configData.rss.feeds.length)
+const rssContainer = ref(null)
 
-const fetchRSSFeed = async () => {
-  isLoading.value = true
-  error.value = ''
-  
+const fetchRSSFeed = async (feedUrl) => {
   try {
-    const response = await fetch(`${rssConfig.apiUrl}?rss_url=${encodeURIComponent(rssConfig.feedUrl)}`)
-    if (response.ok) {
-      const data = await response.json()
-      if (data.status === 'ok' && data.items) {
-        rssItems.value = data.items.slice(0, 10).map(item => ({
-          title: item.title,
-          link: item.link,
-          pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
-          description: item.description?.replace(/<[^>]*>/g, '') + '...'
-        }))
-      } else {
-        throw new Error('RSS解析失败')
-      }
-    } else {
-      throw new Error('网络请求失败')
-    }
+    const response = await fetch(`${configData.rss.apiUrl}?rss_url=${encodeURIComponent(feedUrl)}&count=50`)
+    if (!response.ok) throw new Error('网络请求失败')
+    
+    const data = await response.json()
+    if (data.status !== 'ok' || !data.items) throw new Error('RSS解析失败')
+    
+    return data.items.map(item => ({
+      title: item.title,
+      link: item.link,
+      pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
+      description: item.description?.replace(/<[^>]*>/g, ''),
+      source: data.feed?.title || '未知来源'
+    }))
   } catch (err) {
     console.error('RSS获取失败:', err)
-    error.value = '暂时无法获取RSS内容'
-    rssItems.value = []
-  } finally {
-    isLoading.value = false
+    return []
   }
 }
 
-onMounted(fetchRSSFeed)
+// 检查元素是否进入视口
+const isInViewport = (element) => {
+  const rect = element.getBoundingClientRect()
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight
+  return rect.top < windowHeight * 0.9 && rect.bottom > windowHeight * 0.1
+}
+
+// 滚动时检查并添加动画
+const handleScroll = () => {
+  const items = document.querySelectorAll('.rss-item')
+  
+  items.forEach((item) => {
+    if (isInViewport(item)) {
+      item.classList.add('fly-in')
+    } else {
+      // 元素离开视口时移除动画类，允许重复触发
+      item.classList.remove('fly-in')
+    }
+  })
+}
+
+const fetchAllFeeds = async () => {
+  isLoading.value = true
+  error.value = ''
+  allRssItems.value = []
+  loadingProgress.value = 0
+  
+  let hasAnyContent = false
+  
+  for (let i = 0; i < configData.rss.feeds.length; i++) {
+    const feed = configData.rss.feeds[i]
+    
+    try {
+      const items = await fetchRSSFeed(feed.url)
+      
+      if (items.length > 0) {
+        hasAnyContent = true
+        // 为每个item添加来源信息和唯一ID
+        const itemsWithSource = items.map((item, index) => ({
+          ...item,
+          source: feed.name,
+          uniqueId: `${feed.name}-${index}-${Date.now()}`
+        }))
+        
+        // 实时添加到显示列表中
+        allRssItems.value.push(...itemsWithSource)
+      }
+    } catch (err) {
+      console.error(`获取RSS失败 (${feed.name}):`, err)
+    }
+    
+    // 更新进度
+    loadingProgress.value = i + 1
+    
+    // 添加延迟，避免请求过快
+    if (i < configData.rss.feeds.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 800))
+    }
+  }
+  
+  if (!hasAnyContent) {
+    error.value = '暂时无法获取RSS内容'
+  }
+  
+  isLoading.value = false
+}
+
+onMounted(() => {
+  fetchAllFeeds()
+  window.addEventListener('scroll', handleScroll)
+  // 初始检查已在视口中的元素
+  setTimeout(handleScroll, 100)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
   <div class="rss-feed">
-    <div class="section-header">
-      <h3>最新文章</h3>
-      <button @click="fetchRSSFeed" class="refresh-btn" :disabled="isLoading">
-        <i class="fas fa-sync-alt" :class="{ spinning: isLoading }"></i>
-      </button>
+    <div v-if="isLoading && allRssItems.length === 0" class="loading">
+      <div class="loading-spinner"></div>
+      <span>正在加载RSS内容...</span>
     </div>
     
-    <div class="rss-content">
-      <div v-if="isLoading" class="loading">
-        <div class="loading-spinner"></div>
-        <span>加载中...</span>
-      </div>
-      
-      <div v-else-if="error" class="error">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span>{{ error }}</span>
-      </div>
-      
-      <div v-else class="rss-items">
-        <a 
-          v-for="item in rssItems" 
-          :key="item.link"
-          :href="item.link"
-          target="_blank"
-          class="rss-item"
-        >
-          <div class="item-content">
-            <h4 class="item-title">{{ item.title }}</h4>
-            <p class="item-description">{{ item.description }}</p>
-            <div class="item-meta">
-              <span class="item-date">{{ item.pubDate }}</span>
-            </div>
-          </div>
-        </a>
-      </div>
+    <div v-else-if="error && allRssItems.length === 0" class="error">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>{{ error }}</span>
+    </div>
+    
+    <div 
+      v-for="(item, index) in allRssItems" 
+      :key="item.uniqueId || item.link"
+      class="rss-item"
+    >
+      <a 
+        :href="item.link"
+        target="_blank"
+        class="item-link"
+      >
+        <div class="item-header">
+          <span class="item-source">{{ item.source }}</span>
+          <span class="item-separator">/</span>
+          <span class="item-date">{{ item.pubDate }}</span>
+        </div>
+        <h4 class="item-title">{{ item.title }}</h4>
+        <p class="item-description">{{ item.description }}</p>
+      </a>
+    </div>
+    
+    <div v-if="isLoading && allRssItems.length > 0" class="loading-more">
+      <div class="loading-spinner small"></div>
+      <span>加载更多内容中... ({{ loadingProgress }}/{{ totalFeeds }})</span>
     </div>
   </div>
 </template>
@@ -91,70 +157,7 @@ onMounted(fetchRSSFeed)
   box-shadow: none;
   transition: none;
   position: relative;
-  overflow: hidden;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.section-header h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.refresh-btn {
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.refresh-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
-  color: var(--text-primary);
-  transform: scale(1.1);
-  border-color: var(--primary-color);
-  box-shadow: 0 4px 12px var(--avatar-shadow);
-}
-
-.refresh-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.spinning {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.rss-content {
-  flex: 1;
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 }
 
 .loading, .error {
@@ -178,34 +181,67 @@ onMounted(fetchRSSFeed)
 
 .error {
   color: #ef4444;
-}
-
-.rss-items {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
 }
 
 .rss-item {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.5s ease;
+  margin-bottom: 1.5rem;
+}
+
+.item-link {
   display: block;
   text-decoration: none;
   color: inherit;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 1.2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
 }
 
-.rss-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: none;
+.item-link:hover {
+  transform: translateX(10px);
+  padding-left: 10px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.item-link:hover .item-title {
+  color: var(--primary-color);
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.item-source {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  font-weight: 600;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.item-separator {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.item-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .item-title {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 0.5rem 0;
@@ -217,7 +253,7 @@ onMounted(fetchRSSFeed)
 }
 
 .item-description {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.5;
   margin: 0 0 0.75rem 0;
@@ -227,28 +263,55 @@ onMounted(fetchRSSFeed)
   overflow: hidden;
 }
 
-.item-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.item-date {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
 @media (max-width: 768px) {
   .rss-feed {
     padding: 1.5rem;
   }
   
   .item-title {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
   }
   
   .item-description {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
+}
+
+.loading-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loading-spinner.small {
+  width: 16px;
+  height: 16px;
+  border-width: 1.5px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes flyIn {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fly-in {
+  animation: flyIn 0.3s ease forwards;
 }
 </style>
