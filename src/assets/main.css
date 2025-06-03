@@ -15,6 +15,10 @@
   
   /* 动画 */
   --transition-normal: 0.3s ease-out;
+  
+  /* 头像相关颜色 */
+  --avatar-shadow: rgba(99, 102, 241, 0.3);
+  --avatar-shadow-hover: rgba(99, 102, 241, 0.4);
 }
 
 * {

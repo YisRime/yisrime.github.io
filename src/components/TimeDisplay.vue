@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { timeDisplayConfig } from '@/config'
 
 const currentTime = ref('')
 const currentDate = ref('')
@@ -45,24 +46,16 @@ const getSegmentClass = (digit, segment) => ({
 
 const updateTime = () => {
   const now = new Date()
-  currentTime.value = now.toLocaleTimeString('zh-CN', { 
-    hour12: false,
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  })
-  currentDate.value = now.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    weekday: 'long'
-  })
-  separatorBlink.value = !separatorBlink.value
+  currentTime.value = now.toLocaleTimeString(timeDisplayConfig.locale, timeDisplayConfig.timeFormat)
+  currentDate.value = now.toLocaleDateString(timeDisplayConfig.locale, timeDisplayConfig.dateFormat)
+  if (timeDisplayConfig.blinkSeparator) {
+    separatorBlink.value = !separatorBlink.value
+  }
 }
 
 onMounted(() => {
   updateTime()
-  timeInterval = setInterval(updateTime, 1000)
+  timeInterval = setInterval(updateTime, timeDisplayConfig.updateInterval)
 })
 
 onUnmounted(() => {
@@ -155,7 +148,7 @@ onUnmounted(() => {
   background: var(--primary-color);
   box-shadow: 
     0 0 8px var(--primary-color),
-    0 0 16px rgba(99, 102, 241, 0.6),
+    0 0 16px var(--segment-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -219,7 +212,7 @@ onUnmounted(() => {
   align-items: center;
   text-shadow: 
     0 0 8px var(--primary-color),
-    0 0 16px rgba(99, 102, 241, 0.6);
+    0 0 16px var(--segment-glow);
   transition: opacity 0.5s ease;
   line-height: 1;
 }

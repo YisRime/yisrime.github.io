@@ -269,7 +269,7 @@ onUnmounted(() => {
   color: var(--primary-color);
   font-weight: 600;
   font-size: 0.85rem;
-  text-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  text-shadow: 0 0 10px var(--segment-glow);
   transform: scale(1.05);
 }
 

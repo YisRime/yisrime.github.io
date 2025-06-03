@@ -1,23 +1,36 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { hitokotoConfig } from '@/config'
 
 const quote = ref({ text: '加载中...', author: '' })
 const isLoading = ref(true)
+let autoRefreshInterval = null
 
 const fetchHitokoto = async () => {
   isLoading.value = true
   try {
-    const response = await fetch('https://v1.hitokoto.cn/')
+    const response = await fetch(hitokotoConfig.apiUrl)
     const data = await response.json()
     quote.value = { text: data.hitokoto, author: data.from || '未知' }
   } catch {
-    quote.value = { text: '网络请求失败，请稍后再试', author: '' }
+    quote.value = { text: hitokotoConfig.fallbackText, author: hitokotoConfig.fallbackAuthor }
   } finally {
     isLoading.value = false
   }
 }
 
-onMounted(fetchHitokoto)
+onMounted(() => {
+  fetchHitokoto()
+  if (hitokotoConfig.enableRefresh && hitokotoConfig.autoRefreshInterval > 0) {
+    autoRefreshInterval = setInterval(fetchHitokoto, hitokotoConfig.autoRefreshInterval)
+  }
+})
+
+onUnmounted(() => {
+  if (autoRefreshInterval) {
+    clearInterval(autoRefreshInterval)
+  }
+})
 </script>
 
 <template>

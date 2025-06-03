@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { rssConfig } from '@/config'
 
 const rssItems = ref([])
 const isLoading = ref(true)
@@ -10,11 +11,11 @@ const fetchRSSFeed = async () => {
   error.value = ''
   
   try {
-    const response = await fetch(`https://rss2json.com/api.json?rss_url=${encodeURIComponent('https://blog.yisrime.link/?feed=rss')}`)
+    const response = await fetch(`${rssConfig.apiUrl}?rss_url=${encodeURIComponent(rssConfig.feedUrl)}`)
     if (response.ok) {
       const data = await response.json()
       if (data.status === 'ok' && data.items) {
-        rssItems.value = data.items.map(item => ({
+        rssItems.value = data.items.slice(0, rssConfig.maxItems).map(item => ({
           title: item.title,
           link: item.link,
           pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
@@ -30,14 +31,7 @@ const fetchRSSFeed = async () => {
     console.error('RSS获取失败:', err)
     error.value = '暂时无法获取RSS内容'
     // 显示示例数据
-    rssItems.value = [
-      {
-        title: '欢迎访问我的博客',
-        link: 'https://blog.yisrime.link',
-        pubDate: new Date().toLocaleDateString('zh-CN'),
-        description: '这里会显示最新的博客文章，目前RSS服务暂时不可用...'
-      }
-    ]
+    rssItems.value = rssConfig.fallbackItems
   } finally {
     isLoading.value = false
   }
@@ -138,7 +132,7 @@ onMounted(fetchRSSFeed)
   color: var(--text-primary);
   transform: scale(1.1);
   border-color: var(--primary-color);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 4px 12px var(--avatar-shadow);
 }
 
 .refresh-btn:disabled {

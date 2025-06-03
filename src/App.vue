@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { backgroundConfig, layoutConfig } from '@/config'
 import ProfileCard from './components/ProfileCard.vue'
-import SocialLinks from './components/SocialLinks.vue'
 import TimeDisplay from './components/TimeDisplay.vue'
 import HitokotoDisplay from './components/HitokotoDisplay.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
@@ -11,13 +11,13 @@ const isMobile = ref(false)
 const backgroundImage = ref('')
 
 const updateResponsiveData = () => {
-  isMobile.value = window.innerWidth <= 768
+  isMobile.value = window.innerWidth <= layoutConfig.breakpoints.mobile
 }
 
 const loadRandomBackground = () => {
-  const apiUrl = window.innerWidth <= 768
-    ? 'https://api.fuukei.org/random-img/default/mobile.php'
-    : 'https://api.fuukei.org/random-img/default/pc.php'
+  const apiUrl = window.innerWidth <= layoutConfig.breakpoints.mobile
+    ? backgroundConfig.apiUrls.mobile
+    : backgroundConfig.apiUrls.desktop
   
   backgroundImage.value = apiUrl
 }
@@ -46,9 +46,6 @@ onUnmounted(() => {
 
         <!-- 头像和昵称 -->
         <ProfileCard />
-        
-        <!-- 社交链接 -->
-        <SocialLinks />
         
         <!-- 一言 -->
         <HitokotoDisplay />
