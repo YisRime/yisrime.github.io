@@ -80,6 +80,7 @@ onUnmounted(() => {
 .music-player {
   margin-top: 1rem;
   width: 55%;
+  min-width: 400px;
 }
 
 /* 播放器主容器 */
