@@ -185,11 +185,7 @@ onUnmounted(() => {
 <style scoped>
 .rss-feed {
   background: transparent;
-  border: none;
-  border-radius: 0;
   padding: 2rem;
-  box-shadow: none;
-  transition: none;
   position: relative;
   width: 100%;
 }
@@ -225,9 +221,6 @@ onUnmounted(() => {
   color: inherit;
   padding: 0.8rem 0;
   transition: all 0.3s ease;
-}
-
-.item-link {
   position: relative;
 }
 

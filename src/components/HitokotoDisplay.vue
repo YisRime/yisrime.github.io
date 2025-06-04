@@ -96,12 +96,12 @@ onMounted(() => {
 
 <style scoped>
 .hitokoto-display {
-  padding: 1.5rem;
+  padding: 0.5rem;
   text-align: center;
 }
 
 .quote-content {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   transition: opacity 0.3s ease;
 }
 

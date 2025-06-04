@@ -39,13 +39,11 @@ const handleAvatarClick = () => {
 .avatar {
   width: 120px;
   height: 120px;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 0.8rem;
   border-radius: 50%;
-  overflow: hidden;
   border: 3px solid var(--primary-color);
   box-shadow: 0 8px 24px var(--avatar-shadow);
   transition: all 0.3s ease;
-  cursor: pointer;
 }
 
 .avatar:hover {
@@ -85,7 +83,6 @@ const handleAvatarClick = () => {
   color: var(--text-primary);
   transition: all var(--transition-normal);
   font-size: 1.5rem;
-  cursor: pointer;
 }
 
 .social-link:hover {
@@ -100,8 +97,6 @@ const handleAvatarClick = () => {
   }
   
   .social-link {
-    width: 45px;
-    height: 45px;
     font-size: 1.1rem;
   }
 }

@@ -93,21 +93,24 @@ onUnmounted(() => {
   <div id="app">
     <div class="background-image" :style="{ backgroundImage: `url(${backgroundImage})` }"></div>
     <div class="background-overlay"></div>
-    
-    <div class="main-container">
+      <div class="main-container">
       <!-- 左侧内容 -->
       <div class="left-content">
-        <!-- 时间显示 -->
-        <TimeDisplay v-show="showTimeAndMusic" />
-
-        <!-- 头像和昵称 -->
-        <ProfileCard @avatar-click="toggleTimeAndMusic" />
+        <!-- 顶部区域 -->
+        <div class="top-section">
+          <TimeDisplay v-show="showTimeAndMusic" />
+        </div>
         
-        <!-- 一言 -->
-        <HitokotoDisplay />
+        <!-- 中心区域 -->
+        <div class="center-section">
+          <ProfileCard @avatar-click="toggleTimeAndMusic" />
+          <HitokotoDisplay />
+        </div>
         
-        <!-- 音乐播放器 -->
-        <MusicPlayer v-show="showTimeAndMusic" />
+        <!-- 底部区域 -->
+        <div class="bottom-section">
+          <MusicPlayer v-show="showTimeAndMusic" />
+        </div>
       </div>
       
       <!-- 右侧RSS -->
@@ -172,10 +175,40 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
   padding: 2rem;
   overflow-y: auto;
   z-index: 10;
+}
+
+.top-section {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  top: 25%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom-section {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
 .right-content {
@@ -208,6 +241,22 @@ onUnmounted(() => {
     flex: none;
   }
   
+  .top-section {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin-bottom: 1rem;
+  }
+  
+  .bottom-section {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 1rem;
+  }
+  
   .right-content {
     width: 100%;
     min-height: 50vh;
@@ -221,7 +270,6 @@ onUnmounted(() => {
   
   .main-container {
     gap: 1.5rem;
-    width: 100%;
   }
   
   .left-content {

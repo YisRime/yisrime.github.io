@@ -79,7 +79,7 @@ onUnmounted(() => {
 <style scoped>
 .music-player {
   margin-top: 1rem;
-  width: 60%;
+  width: 55%;
 }
 
 /* 播放器主容器 */

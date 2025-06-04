@@ -95,19 +95,18 @@ onUnmounted(() => {
 <style scoped>
 .time-display {
   text-align: center;
-  width: 280px;
+  max-width: 280px;
   margin: 0 auto;
-  padding: 1rem;
 }
 
 .digital-clock {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .time-section {
-  padding: 0.5rem 0;
+  padding: 0.3rem 0;
 }
 
 .digital-numbers {
@@ -210,7 +209,7 @@ onUnmounted(() => {
 }
 
 .date-section {
-  padding-top: 0.8rem;
+  padding-top: 0.3rem;
   margin-top: 0.5rem;
 }
 
@@ -225,7 +224,7 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .time-display {
     padding: 0.6rem;
-    width: 240px;
+    max-width: 240px;
   }
   
   .digit {
