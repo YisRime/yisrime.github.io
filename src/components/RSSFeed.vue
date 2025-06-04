@@ -9,19 +9,39 @@ const loadingProgress = ref(0)
 const totalFeeds = ref(configData.rss.feeds.length)
 const currentFeedIndex = ref(0)
 
+// 清理 HTML 标签和特殊字符的函数
+const cleanHtmlText = (text) => {
+  if (!text) return ''
+  
+  return text
+    // 移除所有 HTML 标签
+    .replace(/<[^>]*>/g, '')
+    // 解码常见的 HTML 实体
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    // 移除其他 HTML 实体
+    .replace(/&[a-zA-Z0-9#]+;/g, '')
+    // 移除多余的空白字符
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 const fetchRSSFeed = async (feedUrl) => {
   try {
     const response = await fetch(`${configData.rss.apiUrl}?rss_url=${encodeURIComponent(feedUrl)}&count=50`)
     if (!response.ok) throw new Error('网络请求失败')
-    
-    const data = await response.json()
+      const data = await response.json()
     if (data.status !== 'ok' || !data.items) throw new Error('RSS解析失败')
     
     return data.items.map(item => ({
-      title: item.title,
+      title: cleanHtmlText(item.title),
       link: item.link,
       pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
-      description: item.description?.replace(/<[^>]*>/g, ''),
+      description: cleanHtmlText(item.description),
       source: data.feed?.title || '未知来源'
     }))
   } catch (err) {
