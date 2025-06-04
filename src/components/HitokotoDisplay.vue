@@ -114,6 +114,7 @@ onMounted(fetchHitokoto)
   margin-bottom: 0.5rem;
   transition: opacity 0.3s ease;
   text-align: center;
+  min-height: 80px;
 }
 
 .quote-content.loading {
@@ -121,10 +122,9 @@ onMounted(fetchHitokoto)
 }
 
 .quote-text {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--text-primary);
   line-height: 1.6;
-  margin-bottom: 0.8rem;
   font-weight: 500;
   white-space: normal;
   max-width: 100%;
@@ -145,7 +145,7 @@ onMounted(fetchHitokoto)
 }
 
 :deep(.attribution) {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   font-weight: 400;
   text-align: right;

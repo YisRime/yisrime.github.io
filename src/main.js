@@ -9,76 +9,75 @@ const applyBaseTheme = () => {
 
 // 初始化鼠标跟踪
 const initMouseCursor = () => {
+  let cursor = null
+  
   // 创建光标元素
-  const cursor = document.createElement('div')
+  const createCursor = () => {
+    if (cursor) return cursor
+    
+    cursor = document.createElement('div')
+    cursor.className = 'cursor'
+    document.body.appendChild(cursor)
+    return cursor
+  }
   
-  cursor.className = 'cursor'
+  // 检查是否为可交互元素
+  const isInteractiveElement = (target) => {
+    return target.closest('a, button, .avatar, .social-link, .rss-item, .item-link')
+  }
   
-  document.body.appendChild(cursor)
-  
-  // 鼠标移动事件
-  document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px'
-    cursor.style.top = e.clientY + 'px'
-  })
-  
-  // 链接悬停效果
-  document.addEventListener('mouseover', (e) => {
-    const target = e.target
-    if (target.tagName.toLowerCase() === 'a' || 
-        target.tagName.toLowerCase() === 'button' ||
-        target.classList.contains('avatar') ||
-        target.classList.contains('social-link') ||
-        target.classList.contains('rss-item') ||
-        target.classList.contains('item-link') ||
-        target.parentElement?.tagName.toLowerCase() === 'a' ||
-        target.parentElement?.classList.contains('social-link') ||
-        target.closest('a') ||
-        target.closest('button') ||
-        target.closest('.social-link') ||
-        target.closest('.avatar')) {
-      cursor.classList.add('link-hover')
+  // 事件监听器
+  const handlers = {
+    mousemove: (e) => {
+      const c = cursor || createCursor()
+      c.style.left = e.clientX + 'px'
+      c.style.top = e.clientY + 'px'
+    },
+    
+    mouseover: (e) => {
+      const c = cursor || createCursor()
+      if (isInteractiveElement(e.target)) {
+        c.classList.add('link-hover')
+      }
+    },
+    
+    mouseout: (e) => {
+      if (cursor && isInteractiveElement(e.target)) {
+        cursor.classList.remove('link-hover')
+      }
+    },
+    
+    mousedown: () => {
+      const c = cursor || createCursor()
+      c.style.transform = 'translate(-50%, -50%) scale(0.8)'
+    },
+    
+    mouseup: () => {
+      const c = cursor || createCursor()
+      c.style.transform = 'translate(-50%, -50%) scale(1)'
+    },
+    
+    mouseleave: () => cursor && (cursor.style.opacity = '0'),
+    mouseenter: () => {
+      const c = cursor || createCursor()
+      c.style.opacity = '1'
     }
-  })
+  }
   
-  document.addEventListener('mouseout', (e) => {
-    const target = e.target
-    if (target.tagName.toLowerCase() === 'a' || 
-        target.tagName.toLowerCase() === 'button' ||
-        target.classList.contains('avatar') ||
-        target.classList.contains('social-link') ||
-        target.classList.contains('rss-item') ||
-        target.classList.contains('item-link') ||
-        target.parentElement?.tagName.toLowerCase() === 'a' ||
-        target.parentElement?.classList.contains('social-link') ||
-        target.closest('a') ||
-        target.closest('button') ||
-        target.closest('.social-link') ||
-        target.closest('.avatar')) {
-      cursor.classList.remove('link-hover')
-    }
-  })
-  
-  // 鼠标按下效果
-  document.addEventListener('mousedown', () => {
-    cursor.style.transform = 'translate(-50%, -50%) scale(0.8)'
-  })
-  
-  document.addEventListener('mouseup', () => {
-    cursor.style.transform = 'translate(-50%, -50%) scale(1)'
-  })
-  
-  // 当鼠标离开窗口时隐藏光标
-  document.addEventListener('mouseleave', () => {
-    cursor.style.opacity = '0'
-  })
-  
-  document.addEventListener('mouseenter', () => {
-    cursor.style.opacity = '1'
+  // 注册事件监听器
+  Object.entries(handlers).forEach(([event, handler]) => {
+    document.addEventListener(event, handler)
   })
 }
 
 applyBaseTheme()
-initMouseCursor()
+
+// 确保页面完全加载后再初始化鼠标
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMouseCursor)
+} else {
+  // 使用 setTimeout 确保 Vue 应用挂载完成
+  setTimeout(initMouseCursor, 100)
+}
 
 createApp(App).mount('#app')
