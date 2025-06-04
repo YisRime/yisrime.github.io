@@ -48,6 +48,8 @@ const updateTime = () => {
     day: 'numeric',
     weekday: 'long'
   })
+  // 根据秒数的奇偶性来控制闪烁
+  separatorBlink.value = now.getSeconds() % 2 === 0
 }
 
 onMounted(() => {
@@ -66,18 +68,19 @@ onUnmounted(() => {
   <div class="time-display">
     <div class="digital-clock">
       <div class="time-section">
-        <div class="digital-numbers">          <span class="digit-group">
+        <div class="digital-numbers">
+          <span class="digit-group">
             <span class="digit" v-for="digit in timeDigits.hour" :key="`h${digit.index}`" :data-digit="digit.value">
               <span class="segment" v-for="segment in 7" :key="segment" :class="getSegmentClass(digit.value, segment)"></span>
             </span>
           </span>
-          <span class="separator">:</span>
+          <span class="separator" :class="{ 'blink': !separatorBlink }">:</span>
           <span class="digit-group">
             <span class="digit" v-for="digit in timeDigits.minute" :key="`m${digit.index}`" :data-digit="digit.value">
               <span class="segment" v-for="segment in 7" :key="segment" :class="getSegmentClass(digit.value, segment)"></span>
             </span>
           </span>
-          <span class="separator">:</span>
+          <span class="separator" :class="{ 'blink': !separatorBlink }">:</span>
           <span class="digit-group">
             <span class="digit" v-for="digit in timeDigits.second" :key="`s${digit.index}`" :data-digit="digit.value">
               <span class="segment" v-for="segment in 7" :key="segment" :class="getSegmentClass(digit.value, segment)"></span>
@@ -206,6 +209,11 @@ onUnmounted(() => {
     0 0 8px var(--primary-color),
     0 0 16px var(--segment-glow);
   line-height: 1;
+  transition: opacity 0.3s ease;
+}
+
+.separator.blink {
+  opacity: 0.3;
 }
 
 .date-section {
