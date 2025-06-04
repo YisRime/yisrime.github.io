@@ -224,7 +224,6 @@ onUnmounted(() => {
   text-decoration: none;
   color: inherit;
   padding: 0.8rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
 }
 

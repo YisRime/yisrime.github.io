@@ -144,7 +144,6 @@ onUnmounted(() => {
     0 0 8px var(--primary-color),
     0 0 16px var(--segment-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* 七段数码管样式 */
@@ -211,7 +210,6 @@ onUnmounted(() => {
 }
 
 .date-section {
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: 0.8rem;
   margin-top: 0.5rem;
 }
@@ -234,7 +232,8 @@ onUnmounted(() => {
     width: 16px;
     height: 24px;
   }
-    .segment-1, .segment-4, .segment-7 {
+
+  .segment-1, .segment-4, .segment-7 {
     width: 12px;
     left: 2px;
     height: 3px;
