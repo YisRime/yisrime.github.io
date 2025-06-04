@@ -320,6 +320,8 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .rss-feed {
     padding: 1.5rem;
+    margin: 0 auto;
+    max-width: 100%;
   }
   
   .item-title {
@@ -328,6 +330,11 @@ onUnmounted(() => {
   
   .item-description {
     font-size: 0.85rem;
+  }
+  
+  .item-link:hover {
+    transform: none;
+    padding-left: 0.8rem;
   }
 }
 

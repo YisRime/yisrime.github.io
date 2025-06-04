@@ -87,6 +87,13 @@ a, button, input, select, textarea, [role="button"], [tabindex], .avatar, .socia
   opacity: 0.9;
 }
 
+/* 移动端隐藏光标 */
+@media (max-width: 768px) {
+  .cursor {
+    display: none !important;
+  }
+}
+
 /* 滚动条样式 */
 ::-webkit-scrollbar {
   width: 8px;
