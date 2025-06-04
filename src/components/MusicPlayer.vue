@@ -285,6 +285,10 @@ onUnmounted(() => {
 
 /* 响应式 */
 @media (max-width: 768px) {
+  .music-player {
+    min-width: 300px;
+  }
+  
   :deep(.aplayer-body) {
     flex-direction: column;
     text-align: center;
