@@ -45,11 +45,13 @@ const createTypedEffect = async (quoteData) => {
   
   typedInstance.value = new Typed(quoteTextRef.value, {
     strings: [fullText],
-    typeSpeed: 100,
-    backSpeed: 50,
+    typeSpeed: 80,
+    backSpeed: 40,
     backDelay: 3000,
     startDelay: 1000,
-    loop: true
+    loop: true,
+    showCursor: true,
+    cursorChar: '|'
   })
 }
 
@@ -111,6 +113,7 @@ onMounted(fetchHitokoto)
 .quote-content {
   margin-bottom: 0.5rem;
   transition: opacity 0.3s ease;
+  text-align: center;
 }
 
 .quote-content.loading {
@@ -120,12 +123,28 @@ onMounted(fetchHitokoto)
 .quote-text {
   font-size: 0.95rem;
   color: var(--text-primary);
-  line-height: 1.5;
+  line-height: 1.6;
   margin-bottom: 0.8rem;
   font-weight: 500;
+  white-space: normal;
+  max-width: 100%;
+  display: inline-block;
 }
 
-.attribution {
+:deep(.typed-cursor) {
+  display: inline !important;
+  color: var(--primary-color);
+  animation: typewriter-cursor 1s infinite;
+  vertical-align: baseline;
+  margin-left: 0 !important;
+}
+
+@keyframes typewriter-cursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+:deep(.attribution) {
   font-size: 0.8rem;
   color: var(--text-secondary);
   font-weight: 400;
@@ -138,10 +157,6 @@ onMounted(fetchHitokoto)
   .quote-text {
     font-size: 0.9rem;
   }
-}
-
-.typed-cursor {
-  display: none !important;
 }
 
 </style>
