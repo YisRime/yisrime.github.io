@@ -148,7 +148,6 @@ onUnmounted(() => {
 <template>
   <div class="rss-feed">
     <div v-if="isLoading && allRssItems.length === 0" class="loading">
-      <div class="loading-spinner"></div>
       <span>正在加载RSS内容...</span>
     </div>
     
@@ -178,7 +177,6 @@ onUnmounted(() => {
     </div>
     
     <div v-if="isLoading && allRssItems.length > 0" class="loading-more">
-      <div class="loading-spinner small"></div>
       <span>加载更多内容中... ({{ loadingProgress }}/{{ totalFeeds }})</span>
     </div>
   </div>
@@ -206,15 +204,6 @@ onUnmounted(() => {
   height: 200px;
 }
 
-.loading-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-top: 2px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
 .error {
   color: #ef4444;
   background: rgba(239, 68, 68, 0.1);
@@ -227,22 +216,37 @@ onUnmounted(() => {
   opacity: 0;
   transform: translateX(30px);
   transition: all 0.5s ease;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .item-link {
   display: block;
   text-decoration: none;
   color: inherit;
-  padding: 1rem 0;
+  padding: 0.8rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+}
+
+.item-link {
+  position: relative;
 }
 
 .item-link:hover {
   transform: translateX(10px);
   padding-left: 10px;
-  border-left: 3px solid var(--primary-color);
+}
+
+.item-link:hover::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: var(--primary-color);
+  border-radius: 8px;
 }
 
 .item-link:hover .item-title {
@@ -324,13 +328,6 @@ onUnmounted(() => {
   font-size: 0.85rem;
   padding: 1rem;
   margin-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.loading-spinner.small {
-  width: 16px;
-  height: 16px;
-  border-width: 1.5px;
 }
 
 @keyframes spin {

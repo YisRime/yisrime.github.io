@@ -28,7 +28,6 @@
   },
   "time": {
     "showSeconds": true,
-    "blinkSeparator": true,
     "hour12": false
   },
   "hitokoto": {

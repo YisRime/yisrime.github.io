@@ -44,6 +44,16 @@ body {
   cursor: none;
 }
 
+/* 隐藏所有元素的默认鼠标指针 */
+*, *::before, *::after {
+  cursor: none !important;
+}
+
+/* 确保所有可点击元素也隐藏默认指针 */
+a, button, input, select, textarea, [role="button"], [tabindex], .avatar, .social-link {
+  cursor: none !important;
+}
+
 #app {
   min-height: 100vh;
   display: flex;
@@ -71,7 +81,7 @@ body {
   transition: width 0.2s, height 0.2s, opacity 0.2s;
 }
 
-.link-hover, a:hover ~ .cursor {
+.cursor.link-hover {
   width: 18px;
   height: 18px;
   opacity: 0.9;

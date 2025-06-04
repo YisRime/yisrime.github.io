@@ -42,17 +42,12 @@ const updateTime = () => {
     minute: '2-digit',
     second: configData.time.showSeconds ? '2-digit' : undefined
   }).replace(/上午|下午/g, '')
-  
-  currentDate.value = now.toLocaleDateString('zh-CN', {
+    currentDate.value = now.toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     weekday: 'long'
   })
-  
-  if (configData.time.blinkSeparator) {
-    separatorBlink.value = !separatorBlink.value
-  }
 }
 
 onMounted(() => {
@@ -71,19 +66,18 @@ onUnmounted(() => {
   <div class="time-display">
     <div class="digital-clock">
       <div class="time-section">
-        <div class="digital-numbers">
-          <span class="digit-group">
+        <div class="digital-numbers">          <span class="digit-group">
             <span class="digit" v-for="digit in timeDigits.hour" :key="`h${digit.index}`" :data-digit="digit.value">
               <span class="segment" v-for="segment in 7" :key="segment" :class="getSegmentClass(digit.value, segment)"></span>
             </span>
           </span>
-          <span class="separator" :class="{ blink: separatorBlink }">:</span>
+          <span class="separator">:</span>
           <span class="digit-group">
             <span class="digit" v-for="digit in timeDigits.minute" :key="`m${digit.index}`" :data-digit="digit.value">
               <span class="segment" v-for="segment in 7" :key="segment" :class="getSegmentClass(digit.value, segment)"></span>
             </span>
           </span>
-          <span class="separator" :class="{ blink: separatorBlink }">:</span>
+          <span class="separator">:</span>
           <span class="digit-group">
             <span class="digit" v-for="digit in timeDigits.second" :key="`s${digit.index}`" :data-digit="digit.value">
               <span class="segment" v-for="segment in 7" :key="segment" :class="getSegmentClass(digit.value, segment)"></span>
@@ -139,7 +133,7 @@ onUnmounted(() => {
 
 .segment {
   position: absolute;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
   transition: all 0.4s ease;
   border-radius: 2px;
 }
@@ -158,20 +152,20 @@ onUnmounted(() => {
   top: 2px;
   left: 4px;
   width: 20px;
-  height: 3px;
+  height: 4px;
 }
 
 .segment-2 { /* 右上 */
   top: 4px;
   right: 2px;
-  width: 3px;
+  width: 4px;
   height: 15px;
 }
 
 .segment-3 { /* 右下 */
   bottom: 4px;
   right: 2px;
-  width: 3px;
+  width: 4px;
   height: 15px;
 }
 
@@ -179,20 +173,20 @@ onUnmounted(() => {
   bottom: 2px;
   left: 4px;
   width: 20px;
-  height: 3px;
+  height: 4px;
 }
 
 .segment-5 { /* 左下 */
   bottom: 4px;
   left: 2px;
-  width: 3px;
+  width: 4px;
   height: 15px;
 }
 
 .segment-6 { /* 左上 */
   top: 4px;
   left: 2px;
-  width: 3px;
+  width: 4px;
   height: 15px;
 }
 
@@ -200,25 +194,20 @@ onUnmounted(() => {
   top: 50%;
   left: 4px;
   width: 20px;
-  height: 3px;
+  height: 4px;
   transform: translateY(-50%);
 }
 
 .separator {
   font-size: 1.8rem;
   color: var(--primary-color);
-  font-weight: bold;
+  font-weight: 900;
   display: flex;
   align-items: center;
   text-shadow: 
     0 0 8px var(--primary-color),
     0 0 16px var(--segment-glow);
-  transition: opacity 0.5s ease;
   line-height: 1;
-}
-
-.separator.blink {
-  opacity: 0.2;
 }
 
 .date-section {
@@ -245,14 +234,14 @@ onUnmounted(() => {
     width: 16px;
     height: 24px;
   }
-  
-  .segment-1, .segment-4, .segment-7 {
+    .segment-1, .segment-4, .segment-7 {
     width: 12px;
     left: 2px;
+    height: 3px;
   }
   
   .segment-2, .segment-3, .segment-5, .segment-6 {
-    width: 2px;
+    width: 3px;
   }
   
   .segment-2, .segment-3 {

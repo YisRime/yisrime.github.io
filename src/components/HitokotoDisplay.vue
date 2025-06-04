@@ -1,10 +1,8 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import configData from '@/config.json'
+import { ref, onMounted } from 'vue'
 
 const quote = ref({ text: '加载中...', author: '', who: '' })
 const isLoading = ref(true)
-const error = ref('')
 
 // 备用API列表
 const apiList = [
@@ -16,7 +14,6 @@ const apiList = [
 const fetchHitokoto = async (retryCount = 0) => {
   if (retryCount === 0) {
     isLoading.value = true
-    error.value = ''
   }
   
   try {
@@ -61,11 +58,9 @@ const fetchHitokoto = async (retryCount = 0) => {
       author = data.source || ''
       who = ''
     } else {
-      throw new Error('无法解析API响应')
-    }
+      throw new Error('无法解析API响应')    }
     
     quote.value = { text, author, who }
-    error.value = ''
     
   } catch (err) {
     console.error(`获取一言失败 (尝试 ${retryCount + 1}):`, err)
@@ -74,17 +69,13 @@ const fetchHitokoto = async (retryCount = 0) => {
     if (retryCount < apiList.length - 1 && err.name !== 'AbortError') {
       return fetchHitokoto(retryCount + 1)
     }
-    
-    // 所有API都失败，显示错误信息
-    error.value = '暂时无法获取一言内容'
+      // 所有API都失败，使用备用内容
     quote.value = { 
       text: '天与山与云与水 上下一白', 
-      author: '湖心亭看雪'
-    }
-  } finally {
-    if (retryCount === 0) {
-      isLoading.value = false
-    }
+      author: '湖心亭看雪',
+      who: ''
+    }  } finally {
+    isLoading.value = false
   }
 }
 
@@ -93,17 +84,11 @@ onMounted(() => {
 })
 </script>
 
-<template>
-  <div class="hitokoto-display">
+<template>  <div class="hitokoto-display">
     <div class="quote-content" :class="{ loading: isLoading }">
-      <div v-if="error" class="error-message">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span>{{ error }}</span>
-      </div>
-      <div v-else>        <div class="quote-text">{{ quote.text }}</div>
-        <div class="quote-attribution" v-if="quote.author || quote.who">
-          —— {{ quote.who }}《{{ quote.author }}》
-        </div>
+      <div class="quote-text">{{ quote.text }}</div>
+      <div class="quote-attribution" v-if="quote.author || quote.who">
+        —— {{ quote.who }}《{{ quote.author }}》
       </div>
     </div>
   </div>
@@ -122,16 +107,6 @@ onMounted(() => {
 
 .quote-content.loading {
   opacity: 0.6;
-}
-
-.error-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  color: #ef4444;
-  font-size: 0.85rem;
-  margin-bottom: 0.8rem;
 }
 
 .quote-text {
