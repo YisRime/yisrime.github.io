@@ -1,13 +1,13 @@
 {
   "profile": {
     "name": "苡淞",
-    "avatar": "https://r2.yisrime.link/Yis_Rime_H.webp"
+    "avatar": "https://r2.yisrime.link/Yis_Rime_Head.webp"
   },
   "socialLinks": [
     { "name": "Blog", "url": "https://blog.yisrime.link", "icon": "fas fa-blog" },
     { "name": "Email", "url": "mailto:yisrime@yisrime.link", "icon": "fas fa-envelope" },
-    { "name": "QQ", "url": "tencent://message/?uin=2057249587", "icon": "fab fa-qq" },
-    { "name": "WeChat", "url": "#Yis_Rime", "icon": "fab fa-weixin" },
+    { "name": "QQ", "url": "https://qm.qq.com/q/xv2JfmCSHK", "icon": "fab fa-qq" },
+    { "name": "WeChat", "url": "https://u.wechat.com/MPf6iyGnbxtFi_rxKsHQFCM", "icon": "fab fa-weixin" },
     { "name": "Telegram", "url": "https://t.me/YisRime", "icon": "fab fa-telegram" },
     { "name": "GitHub", "url": "https://github.com/YisRime", "icon": "fab fa-github" },
     { "name": "Bilibili", "url": "https://space.bilibili.com/1984500810", "icon": "fab fa-bilibili" },
