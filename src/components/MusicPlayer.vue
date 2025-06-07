@@ -57,8 +57,7 @@ const initMeting = async () => {
         autoplay: configData.music.autoplay,
         volume: configData.music.volume,
         mutex: configData.music.mutex,
-        listfolded: configData.music.listfolded,
-        auto: 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r'
+        listfolded: configData.music.listfolded
       }).forEach(([key, value]) => metingElement.setAttribute(key, value))
       
       metingContainer.value.appendChild(metingElement)
