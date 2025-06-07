@@ -27,17 +27,15 @@ const loadMeting = () => {
       }
     }
 
-    // 延迟加载资源
-    setTimeout(() => {
-      loadCSS('https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css')
-      
-      Promise.all([
-        loadScript('https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'),
-        loadScript('https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js')
-      ]).then(() => {
-        setTimeout(resolve, 100)
-      }).catch(() => resolve())
-    }, 500)
+    // 立即加载资源
+    loadCSS('https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css')
+    
+    Promise.all([
+      loadScript('https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'),
+      loadScript('https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js')
+    ]).then(() => {
+      setTimeout(resolve, 100)
+    }).catch(() => resolve())
   })
 }
 
