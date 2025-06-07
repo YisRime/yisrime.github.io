@@ -4,6 +4,12 @@ import configData from '@/config.json'
 
 const metingContainer = ref(null)
 
+// 备选API列表
+const metingApis = [
+  "https://api.injahow.cn/meting/",
+  "https://netease-cloud-music-api.vercel.app/"
+]
+
 const loadMeting = () => {
   return new Promise((resolve) => {
     if (window.MetingJSElement) return resolve()
@@ -45,6 +51,19 @@ const initMeting = async () => {
     
     if (metingContainer.value) {
       const metingElement = document.createElement('meting-js')
+      
+      // 尝试使用备选API
+      let apiUsed = false
+      for (const api of metingApis) {
+        try {
+          metingElement.setAttribute('api', api)
+          apiUsed = true
+          break
+        } catch (error) {
+          console.warn(`API ${api} 不可用，尝试下一个...`)
+        }
+      }
+      
       Object.entries({
         server: configData.music.server,
         type: configData.music.type,
