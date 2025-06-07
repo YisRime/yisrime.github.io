@@ -11,7 +11,12 @@ const handleAvatarClick = () => {
 <template>
   <div class="profile-simple">
     <div class="avatar" @click="handleAvatarClick">
-      <img :src="configData.profile.avatar" :alt="configData.profile.name" />
+      <img 
+        :src="configData.profile.avatar" 
+        :alt="configData.profile.name" 
+        loading="eager"
+        fetchpriority="high"
+      />
     </div>
     <h1 class="name">{{ configData.profile.name }}</h1>
     

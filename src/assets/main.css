@@ -1,5 +1,3 @@
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
-
 :root {
   /* 主色调 */
   --primary-color: #6366f1;
@@ -21,6 +19,7 @@
   /* 头像相关颜色 */
   --avatar-shadow: rgba(99, 102, 241, 0.3);
   --avatar-shadow-hover: rgba(99, 102, 241, 0.4);
+  --segment-glow: rgba(99, 102, 241, 0.6);
 }
 
 * {
@@ -42,6 +41,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   cursor: none;
+  margin: 0;
+  padding: 0;
 }
 
 /* 隐藏所有元素的默认鼠标指针 */

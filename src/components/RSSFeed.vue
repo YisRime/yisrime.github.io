@@ -32,7 +32,7 @@ const cleanHtmlText = (text) => {
 
 const fetchRSSFeed = async (feedUrl) => {
   try {
-    const response = await fetch(`${configData.rss.apiUrl}?rss_url=${encodeURIComponent(feedUrl)}&count=50`)
+    const response = await fetch(`${configData.rss.apiUrl}?rss_url=${encodeURIComponent(feedUrl)}`)
     if (!response.ok) throw new Error('网络请求失败')
       const data = await response.json()
     if (data.status !== 'ok' || !data.items) throw new Error('RSS解析失败')

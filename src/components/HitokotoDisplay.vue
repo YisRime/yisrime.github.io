@@ -60,7 +60,7 @@ const fetchHitokoto = async (retryCount = 0) => {
   
   try {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000)
+    const timeoutId = setTimeout(() => controller.abort(), 8000)
     
     const response = await fetch(apiList[retryCount % apiList.length], {
       signal: controller.signal,

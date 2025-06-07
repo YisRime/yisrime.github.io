@@ -9,6 +9,9 @@ const applyBaseTheme = () => {
 
 // 初始化鼠标跟踪
 const initMouseCursor = () => {
+  // 移动端不需要自定义光标
+  if (window.innerWidth <= 768) return
+  
   let cursor = null
   
   // 创建光标元素
