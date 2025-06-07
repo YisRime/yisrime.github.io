@@ -78,9 +78,31 @@ const initMeting = async () => {
       }).forEach(([key, value]) => metingElement.setAttribute(key, value))
       
       metingContainer.value.appendChild(metingElement)
+      
+      // 添加全局错误监听器来忽略播放器相关错误
+      window.addEventListener('error', (event) => {
+        if (event.filename && (
+          event.filename.includes('aplayer') ||
+          event.filename.includes('meting') ||
+          event.message.toLowerCase().includes('aplayer') ||
+          event.message.toLowerCase().includes('meting')
+        )) {
+          event.preventDefault()
+          return false
+        }
+      })
+      
+      window.addEventListener('unhandledrejection', (event) => {
+        if (event.reason && (
+          event.reason.toString().toLowerCase().includes('aplayer') ||
+          event.reason.toString().toLowerCase().includes('meting') ||
+          event.reason.toString().toLowerCase().includes('music')
+        )) {
+          event.preventDefault()
+        }
+      })
     }
   } catch (error) {
-    console.error('MetingJS 初始化失败:', error)
   }
 }
 

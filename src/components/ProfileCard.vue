@@ -1,11 +1,44 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import configData from '@/config.json'
 
 const emit = defineEmits(['avatar-click'])
+const iconsLoaded = ref(false)
 
 const handleAvatarClick = () => {
   emit('avatar-click')
 }
+
+// 检测字体图标是否加载完成
+const checkIconsLoaded = () => {
+  const checkInterval = setInterval(() => {
+    const testIcon = document.createElement('i')
+    testIcon.className = 'fas fa-blog'
+    testIcon.style.position = 'absolute'
+    testIcon.style.visibility = 'hidden'
+    document.body.appendChild(testIcon)
+    
+    const computedStyle = window.getComputedStyle(testIcon)
+    const fontFamily = computedStyle.getPropertyValue('font-family')
+    
+    document.body.removeChild(testIcon)
+    
+    if (fontFamily.includes('Font Awesome') || fontFamily.includes('FontAwesome')) {
+      iconsLoaded.value = true
+      clearInterval(checkInterval)
+    }
+  }, 100)
+  
+  // 5秒后停止检测
+  setTimeout(() => {
+    clearInterval(checkInterval)
+    iconsLoaded.value = true
+  }, 5000)
+}
+
+onMounted(() => {
+  checkIconsLoaded()
+})
 </script>
 
 <template>
@@ -19,8 +52,7 @@ const handleAvatarClick = () => {
       />
     </div>
     <h1 class="name">{{ configData.profile.name }}</h1>
-    
-    <!-- 社交链接 -->
+      <!-- 社交链接 -->
     <div class="social-links">
       <a 
         v-for="link in configData.socialLinks" 
@@ -30,7 +62,8 @@ const handleAvatarClick = () => {
         class="social-link"
         :title="link.name"
       >
-        <i :class="link.icon"></i>
+        <i v-if="iconsLoaded" :class="link.icon"></i>
+        <span v-else class="icon-placeholder">{{ link.name.charAt(0) }}</span>
       </a>
     </div>
   </div>
@@ -94,6 +127,19 @@ const handleAvatarClick = () => {
   color: var(--primary-color);
   transform: scale(1.2);
   text-shadow: 0 0 10px var(--primary-color);
+}
+
+.icon-placeholder {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  text-align: center;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {

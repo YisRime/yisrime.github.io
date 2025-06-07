@@ -39,21 +39,78 @@
       .avatar{width:120px;height:120px;margin:0 auto 0.8rem;border-radius:50%;border:3px solid var(--primary-color);box-shadow:0 8px 24px var(--avatar-shadow);transition:all 0.3s ease;background:var(--bg-primary)}
       .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
     </style>
-    
-    <!-- 延迟加载字体图标 -->
+      <!-- 智能延迟加载字体图标 -->
     <script>
+      let fontAwesomeLoaded = false;
+      
       const loadFontAwesome = () => {
-        if (!document.querySelector('link[href*="font-awesome"]')) {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
-          document.head.appendChild(link);
-        }
+        if (fontAwesomeLoaded || document.querySelector('link[href*="font-awesome"]')) return;
+        
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
+        link.crossOrigin = 'anonymous';
+        link.onload = () => { fontAwesomeLoaded = true; };
+        document.head.appendChild(link);
       };
+      
+      // 使用交叉观察器延迟加载
+      const observeIconElements = () => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !fontAwesomeLoaded) {
+              loadFontAwesome();
+              observer.disconnect();
+            }
+          });
+        }, { 
+          rootMargin: '100px 0px',
+          threshold: 0.1 
+        });
+        
+        // 观察可能包含图标的元素
+        const iconContainers = document.querySelectorAll('.social-links, .rss-feed, [class*="fa"]');
+        iconContainers.forEach(el => observer.observe(el));
+        
+        // 备用延迟加载（3秒后）
+        setTimeout(() => {
+          if (!fontAwesomeLoaded) {
+            loadFontAwesome();
+            observer.disconnect();
+          }
+        }, 100);
+      };
+      
+      // 在用户交互或滚动时加载
+      const loadOnInteraction = () => {
+        const events = ['scroll', 'mousemove', 'touchstart', 'keydown'];
+        const loadOnce = () => {
+          if (!fontAwesomeLoaded) {
+            loadFontAwesome();
+            events.forEach(event => 
+              document.removeEventListener(event, loadOnce, { passive: true })
+            );
+          }
+        };
+        
+        events.forEach(event => 
+          document.addEventListener(event, loadOnce, { passive: true })
+        );
+      };
+      
+      // 初始化延迟加载策略
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadFontAwesome);
+        document.addEventListener('DOMContentLoaded', () => {
+          setTimeout(() => {
+            observeIconElements();
+            loadOnInteraction();
+          }, 100);
+        });
       } else {
-        setTimeout(loadFontAwesome, 100);
+        setTimeout(() => {
+          observeIconElements();
+          loadOnInteraction();
+        }, 100);
       }
     </script>
   </head>
