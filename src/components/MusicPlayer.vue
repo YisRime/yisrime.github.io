@@ -7,7 +7,7 @@ const metingContainer = ref(null)
 // 备选API列表
 const metingApis = [
   "https://api.injahow.cn/meting/",
-  "https://netease-cloud-music-api.vercel.app/"
+  "https://meting-api.vercel.app/"
 ]
 
 const loadMeting = () => {
@@ -52,17 +52,8 @@ const initMeting = async () => {
     if (metingContainer.value) {
       const metingElement = document.createElement('meting-js')
       
-      // 尝试使用备选API
-      let apiUsed = false
-      for (const api of metingApis) {
-        try {
-          metingElement.setAttribute('api', api)
-          apiUsed = true
-          break
-        } catch (error) {
-          console.warn(`API ${api} 不可用，尝试下一个...`)
-        }
-      }
+      // 使用更稳定的默认API
+      metingElement.setAttribute('api', metingApis[0])
       
       Object.entries({
         server: configData.music.server,
@@ -85,7 +76,8 @@ const initMeting = async () => {
           event.filename.includes('aplayer') ||
           event.filename.includes('meting') ||
           event.message.toLowerCase().includes('aplayer') ||
-          event.message.toLowerCase().includes('meting')
+          event.message.toLowerCase().includes('meting') ||
+          event.message.toLowerCase().includes('failed to fetch')
         )) {
           event.preventDefault()
           return false
@@ -96,13 +88,15 @@ const initMeting = async () => {
         if (event.reason && (
           event.reason.toString().toLowerCase().includes('aplayer') ||
           event.reason.toString().toLowerCase().includes('meting') ||
-          event.reason.toString().toLowerCase().includes('music')
+          event.reason.toString().toLowerCase().includes('music') ||
+          event.reason.toString().toLowerCase().includes('failed to fetch')
         )) {
           event.preventDefault()
         }
       })
     }
   } catch (error) {
+    console.warn('音乐播放器初始化失败，将继续加载其他内容')
   }
 }
 

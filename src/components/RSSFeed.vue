@@ -30,22 +30,91 @@ const cleanHtmlText = (text) => {
     .trim()
 }
 
-const fetchRSSFeed = async (feedUrl) => {
+// RSS API 备选列表
+const rssApis = [
+  'https://api.rss2json.com/v1/api.json',
+  'https://rss2json.com/api.json',
+  'https://feed2json.org/convert',
+  'https://api.allorigins.win/get'
+]
+
+const fetchRSSFeed = async (feedUrl, retryCount = 0) => {
+  // 如果所有API都失败，返回空数组
+  if (retryCount >= rssApis.length) {
+    console.warn('所有RSS API都失败，跳过此源')
+    return []
+  }
+
+  const currentApi = rssApis[retryCount]
+  
   try {
-    const response = await fetch(`${configData.rss.apiUrl}?rss_url=${encodeURIComponent(feedUrl)}`)
-    if (!response.ok) throw new Error('网络请求失败')
-      const data = await response.json()
-    if (data.status !== 'ok' || !data.items) throw new Error('RSS解析失败')
+    let response, data
     
-    return data.items.map(item => ({
-      title: cleanHtmlText(item.title),
-      link: item.link,
-      pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
-      description: cleanHtmlText(item.description),
-      source: data.feed?.title || '未知来源'
+    // 根据不同API构造请求URL
+    if (currentApi.includes('allorigins')) {
+      const proxyUrl = `${currentApi}?url=${encodeURIComponent(feedUrl)}`
+      response = await fetch(proxyUrl, {
+        headers: { 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(10000)
+      })
+      
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      
+      const proxyData = await response.json()
+      if (!proxyData.contents) throw new Error('代理API返回无效数据')
+      
+      // 简单的RSS解析（仅作为最后的备用方案）
+      const rssText = proxyData.contents
+      return parseRSSText(rssText, feedUrl)
+      
+    } else {
+      // 标准RSS2JSON API
+      const apiUrl = `${currentApi}?rss_url=${encodeURIComponent(feedUrl)}&count=10`
+      response = await fetch(apiUrl, {
+        headers: { 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(10000)
+      })
+      
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      
+      data = await response.json()
+      if (data.status !== 'ok' || !data.items) throw new Error('RSS解析失败')
+      
+      return data.items.slice(0, 10).map(item => ({
+        title: cleanHtmlText(item.title),
+        link: item.link,
+        pubDate: new Date(item.pubDate).toLocaleDateString('zh-CN'),
+        description: cleanHtmlText(item.description || item.content),
+        source: data.feed?.title || '未知来源'
+      }))
+    }
+    
+  } catch (err) {
+    console.error(`RSS API ${retryCount + 1} 失败:`, err.message)
+    
+    // 尝试下一个API
+    return fetchRSSFeed(feedUrl, retryCount + 1)
+  }
+}
+
+// 简单的RSS文本解析器（备用方案）
+const parseRSSText = (rssText, feedUrl) => {
+  try {
+    const parser = new DOMParser()
+    const xmlDoc = parser.parseFromString(rssText, 'text/xml')
+    
+    const items = xmlDoc.querySelectorAll('item')
+    const feedTitle = xmlDoc.querySelector('channel > title')?.textContent || '未知来源'
+    
+    return Array.from(items).slice(0, 10).map(item => ({
+      title: cleanHtmlText(item.querySelector('title')?.textContent || '无标题'),
+      link: item.querySelector('link')?.textContent || feedUrl,
+      pubDate: new Date(item.querySelector('pubDate')?.textContent || Date.now()).toLocaleDateString('zh-CN'),
+      description: cleanHtmlText(item.querySelector('description')?.textContent || ''),
+      source: feedTitle
     }))
   } catch (err) {
-    console.error('RSS获取失败:', err)
+    console.error('RSS文本解析失败:', err)
     return []
   }
 }
